@@ -1,9 +1,7 @@
 {
   "name": "js-data-dao",
-  "scripts": {
-    "start": "node server/bin/www"
-  },
-  "version": "0.0.3",
+  "main": "lib/index.ts",
+  "version": "0.0.4",
   "description": "js-data-dao",
   "license": "MIT",
   "repository": "",
