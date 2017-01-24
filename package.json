@@ -1,5 +1,5 @@
 {
-  "name": "mapeandoes-api",
+  "name": "js-data-dao",
   "scripts": {
     "start": "node server/bin/www"
   },
