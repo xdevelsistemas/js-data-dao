@@ -3,7 +3,7 @@
   "scripts": {
     "start": "node server/bin/www"
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "js-data-dao",
   "license": "MIT",
   "repository": "",
