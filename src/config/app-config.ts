@@ -11,37 +11,37 @@ export class AppConfig {
     private _jwtConfig: any
     private _usersTable: string
 
-    constructor () {
+    constructor() {
         this._mainCompany = process.env.MAIN_COMPANY
         this._isProd = (process.env.NODE_ENV === 'production')
         this._cryptoAlgorithm = process.env.CRYPTO_ALGORITHM || 'aes192'
         this._cryptoPassword = process.env.CRYPTO_PASSWORD
-        this._expirationDays = Number.parseInt(process.env.EXPIRATION_DAYS,10) || 3
+        this._expirationDays = Number.parseInt(process.env.EXPIRATION_DAYS, 10) || 3
         this._usersTable = process.env.USERS_TABLE || 'users'
         this._jwtConfig = {
             strategy: 'jwt',
             secret: process.env.APP_JWT_SECRET,
-            session: { session: ( process.env.APP_JWT_SESSION || false as boolean) }
+            session: { session: (process.env.APP_JWT_SESSION || false as boolean) }
         }
     }
 
-    getMainCompany (): string {
+    getMainCompany(): string {
         return this._mainCompany
     }
 
-    getIsProd (): boolean {
+    getIsProd(): boolean {
         return this._isProd
     }
 
-    getCryptoAlgorithm (): string {
+    getCryptoAlgorithm(): string {
         return this._cryptoAlgorithm
     }
 
-    getCryptoPassword (): string {
+    getCryptoPassword(): string {
         return this._cryptoPassword
     }
 
-    getExpirationDays (): number {
+    getExpirationDays(): number {
         return this._expirationDays
     }
 

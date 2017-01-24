@@ -1,3 +1,4 @@
+
 export class MailConfig {
     private _from: string
     private _email: string
@@ -13,7 +14,7 @@ export class MailConfig {
         this._user = process.env.EMAIL_USER
         this._password = process.env.EMAIL_PASS
         this._host = process.env.EMAIL_HOST
-        this._port = Number.parseInt(process.env.EMAIL_PORT,10)
+        this._port = Number.parseInt(process.env.EMAIL_PORT, 10)
         this._layoutPath = process.env.LAYOUT_PATH
     }
 
