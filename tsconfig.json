@@ -1,0 +1,20 @@
+{
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "declaration": true,
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators":true,
+        "target": "es6",
+        "module": "commonjs",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "noImplicitThis" : true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters" : false
+    },
+    "exclude": [
+        "node_modules",
+        "jspm_packages"
+    ]
+}

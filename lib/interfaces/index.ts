@@ -1,0 +1,6 @@
+export {IBaseUser} from './ibase-user'
+export {IBaseModel} from './ibase-model'
+export {IResultSearch} from './iresult-search'
+export {IDAO} from './idao'
+export {IForgot} from './iforgot'
+export {IPersistController} from './ipersist-controller'
