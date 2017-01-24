@@ -6,7 +6,9 @@
   "license": "MIT",
   "repository": "",
   "author": "Clayton Santos da Silva",
-  "install": "npm i && tsc",
+  "scripts": {
+    "builder:compile" : "gulp ts"
+  },
   "keywords": [
     ""
   ],
