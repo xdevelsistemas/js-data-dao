@@ -4,8 +4,8 @@
     "start": "node server/bin/www"
   },
   "version": "0.0.1",
-  "description": "API do mapeando-es",
-  "license": "",
+  "description": "js-data-dao",
+  "license": "MIT",
   "repository": "",
   "author": "Clayton Santos da Silva",
   "keywords": [
