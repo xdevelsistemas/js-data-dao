@@ -1,12 +1,14 @@
 {
   "name": "js-data-dao",
   "main": "index.d.ts",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "js-data-dao",
   "license": "MIT",
   "repository": "",
   "author": "Clayton Santos da Silva",
-  "install": "npm i && tsc",
+  "scripts": {
+    "builder:compile" : "gulp ts"
+  },
   "keywords": [
     ""
   ],
