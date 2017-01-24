@@ -8,9 +8,8 @@ export class AppConfig {
     private _cryptoAlgorithm: string
     private _cryptoPassword: string
     private _expirationDays: number
-
+    private _jwtConfig: any
     private _usersTable: string
-
 
     constructor () {
         this._mainCompany = process.env.MAIN_COMPANY
@@ -19,6 +18,11 @@ export class AppConfig {
         this._cryptoPassword = process.env.CRYPTO_PASSWORD
         this._expirationDays = Number.parseInt(process.env.EXPIRATION_DAYS,10) || 3
         this._usersTable = process.env.USERS_TABLE || 'users'
+        this._jwtConfig = {
+            strategy: 'jwt',
+            secret: process.env.APP_JWT_SECRET,
+            session: { session: ( process.env.APP_JWT_SESSION || false as boolean) }
+        }
     }
 
     getMainCompany (): string {
@@ -43,5 +47,9 @@ export class AppConfig {
 
     getUsersTable(): string {
         return this._usersTable
+    }
+
+    getJwtConfig(): any {
+        return this._jwtConfig
     }
 }

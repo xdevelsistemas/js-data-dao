@@ -1,6 +1,6 @@
 import { Passport } from 'passport'
-import { jwtConfig } from '../config/jwt'
+import { AppConfig } from '../config/app-config'
 
-export const authenticate: Function = (passport: Passport) => {
-    return passport.authenticate(jwtConfig.strategy, jwtConfig.session)
+export const authenticate: Function = (passport: Passport, appConfig: AppConfig) => {
+    return passport.authenticate(appConfig.getJwtConfig().strategy, appConfig.getJwtConfig().session)
 }

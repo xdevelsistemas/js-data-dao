@@ -1,9 +1,8 @@
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt'
-import { AppConfig } from '../config/app-config'
 import { IBaseUser } from '../interfaces'
 import { Request, Response } from 'express'
 import { APIError, ServiceLib } from '../services'
-import { jwtConfig } from '../config/jwt'
+import { AppConfig } from '../config/app-config'
 import * as Bluebird from 'bluebird'
 import {Passport} from 'passport'
 import * as jwt from 'jsonwebtoken'
@@ -12,7 +11,7 @@ import * as _ from 'lodash'
 
 export const passportJwt = (store: JSData.DS, passport: Passport, appConfig: AppConfig): Passport => {
     let params: StrategyOptions = {
-        secretOrKey: jwtConfig.secret,
+        secretOrKey: appConfig.getJwtConfig().secret,
         jwtFromRequest: ExtractJwt.fromAuthHeader()
     }
 
@@ -62,7 +61,7 @@ export const jwtGenerator = (store: JSData.DS, appConfig: AppConfig) => (req: Re
                 let encryptedPassword: boolean = resp[1]
                 if (encryptedPassword) {
                     delete user.password
-                    return res.status(200).json(`JWT ${jwt.sign(user, jwtConfig.secret, { expiresIn: '3 days' })}`)
+                    return res.status(200).json(`JWT ${jwt.sign(user, appConfig.getJwtConfig().secret, { expiresIn: '3 days' })}`)
                 }
                 throw 'Invalid password'
             })

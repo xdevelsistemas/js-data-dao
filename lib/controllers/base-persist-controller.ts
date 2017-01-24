@@ -3,7 +3,6 @@ import { APIError } from '../services'
 import { IDAO, IBaseModel, IResultSearch, IPersistController } from '../interfaces'
 import { Request, Response } from 'express'
 
-
 export class BasePersistController<T extends IBaseModel> implements IPersistController<T> {
     collection: IDAO<T>
     public constructor(collection: IDAO<T>) {
