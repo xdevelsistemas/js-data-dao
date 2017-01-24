@@ -1,11 +1,12 @@
 {
   "name": "js-data-dao",
   "main": "index.d.ts",
-  "version": "0.0.11",
+  "version": "0.0.14",
   "description": "js-data-dao",
   "license": "MIT",
   "repository": "",
   "author": "Clayton Santos da Silva",
+  "install": "npm i && tsc",
   "keywords": [
     ""
   ],

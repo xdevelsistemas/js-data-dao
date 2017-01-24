@@ -6,21 +6,5 @@
   "parser": "babel-eslint",
   "parserOptions": {
       "sourceType": "module"
-  },
-  "rulesDirectory": ["node_modules/tslint-eslint-rules/dist/rules"],
-   "rules": {
-       "no-constant-condition": true,
-       "align": [true, "parameters", "statements"],
-       "max-line-length": [
-         240
-       ],
-       "jsdoc-format": true,
-       "semicolon": [true, "never"],
-       "typedef-whitespace": [true,
-         {
-           "property-declaration": "nospace",
-           "variable-declaration": "nospace"
-         }
-       ]
-   }
+  }
 }

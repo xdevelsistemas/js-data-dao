@@ -65,11 +65,11 @@ export class ServiceLib {
         return allCorrect
     }
 
-    static hashPassword(password: string): Promise<string> {
+    static hashPassword(password: string): string {
         return bcrypt.hash(password, bcryptjs.genSaltSync(10))
     }
 
-    static comparePassword(password: string, encryptedPassword: string): Promise<boolean> {
+    static comparePassword(password: string, encryptedPassword: string): boolean {
         return bcrypt.compare(password, encryptedPassword)
     }
 
