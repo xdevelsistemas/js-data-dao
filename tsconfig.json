@@ -1,5 +1,4 @@
 {
-    "typescript.tsdk": "node_modules/typescript/lib",
     "declaration": true,
     "compilerOptions": {
         "emitDecoratorMetadata": true,
