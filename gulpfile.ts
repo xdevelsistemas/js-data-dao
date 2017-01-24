@@ -5,7 +5,8 @@ import * as tslint from 'gulp-tslint'
 import * as path from 'path'
 import * as sourcemaps from 'gulp-sourcemaps'
 import * as mocha from 'gulp-mocha'
-let serverPath = 'lib'
+let serverPath = 'src'
+let outPath = 'lib'
 let serverCompiled = ['**/*.js', '**/*.js.map', '**/*.d.ts'].map(el => serverPath + el)
 let istanbul = require('gulp-istanbul')
 let remapIstanbul = require('remap-istanbul/lib/gulpRemapIstanbul')
@@ -16,19 +17,19 @@ let serverTS = [serverPath + '/**/*.ts']
 let runTest = () => gulp.src([`${serverPath}/**/*.Spec.js`]) // take our transpiled test source
   .pipe(mocha({ timeout: 64000 })) // runs tests
 
-let tsConpile = () => gulp
+let tsCompile = () => gulp
   .src(serverTS)
   .pipe(sourcemaps.init({ loadMaps: true }))
   .pipe(tsProject())
   .pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: path.join(__dirname, serverPath) }))
-  .pipe(gulp.dest(serverPath))
+  .pipe(gulp.dest(outPath))
 
 gulp.task('default', ['ts'], function () {
   return gulp.watch(`${serverPath}/**/*.ts`, ['ts-inc'])
 })
 
 gulp.task('ts-inc', function () {
-  return tsConpile()
+  return tsCompile()
 })
 
 gulp.task('tslint', () =>
@@ -40,7 +41,7 @@ gulp.task('tslint', () =>
 )
 
 gulp.task('ts', ['clean'], function () {
-  return tsConpile()
+  return tsCompile()
 })
 
 gulp.task('clean', function () {

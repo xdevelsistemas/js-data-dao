@@ -11,8 +11,12 @@
         "noImplicitThis" : true,
         "noImplicitReturns": true,
         "noUnusedLocals": true,
-        "noUnusedParameters" : false
+        "noUnusedParameters" : false,
+        "outDir": "lib/"
     },
+    "files": [
+        "./src/index.ts"
+    ],
     "exclude": [
         "node_modules",
         "jspm_packages"

@@ -1,7 +1,7 @@
 {
   "name": "js-data-dao",
-  "main": "lib/index.ts",
-  "version": "0.0.4",
+  "main": "lib/index",
+  "version": "0.0.5",
   "description": "js-data-dao",
   "license": "MIT",
   "repository": "",
