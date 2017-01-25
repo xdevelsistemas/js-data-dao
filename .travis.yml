@@ -13,7 +13,7 @@ before_script:
 deploy:
   skip_cleanup: true
   provider: script
-  script: /bin/sh ./publish.sh
+  script: /bin/bash ./publish.sh
   on:
     tags: true
     all_branches: false
