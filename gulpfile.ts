@@ -2,7 +2,7 @@ import * as gulp from 'gulp'
 import * as ts from 'gulp-typescript'
 let clean = require('gulp-clean')
 import * as tslint from 'gulp-tslint'
-import * as path from 'path'
+// import * as path from 'path'
 import * as sourcemaps from 'gulp-sourcemaps'
 import * as mocha from 'gulp-mocha'
 let serverPath = 'lib'
@@ -20,7 +20,7 @@ let tsCompile = () => gulp
   .src(serverTS)
   .pipe(sourcemaps.init({ loadMaps: true }))
   .pipe(tsProject())
-  .pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: path.join(__dirname, serverPath) }))
+  .pipe(sourcemaps.write('.', { includeContent: false }))
   .pipe(gulp.dest(serverPath))
 
 gulp.task('default', ['ts'], function () {
