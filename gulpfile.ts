@@ -6,8 +6,7 @@ import * as path from 'path'
 import * as sourcemaps from 'gulp-sourcemaps'
 import * as mocha from 'gulp-mocha'
 let serverPath = 'src'
-let outPath = 'lib'
-// let serverCompiled = ['**/*.js', '**/*.js.map', '**/*.d.ts'].map(el => outPath + el)
+let serverCompiled = ['**/*.js', '**/*.js.map', '**/*.d.ts'].map(el => serverPath + el)
 let istanbul = require('gulp-istanbul')
 let remapIstanbul = require('remap-istanbul/lib/gulpRemapIstanbul')
 
@@ -22,7 +21,7 @@ let tsCompile = () => gulp
   .pipe(sourcemaps.init({ loadMaps: true }))
   .pipe(tsProject())
   .pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: path.join(__dirname, serverPath) }))
-  .pipe(gulp.dest(outPath))
+  .pipe(gulp.dest(serverPath))
 
 gulp.task('default', ['ts'], function () {
   return gulp.watch(`${serverPath}/**/*.ts`, ['ts-inc'])
@@ -46,7 +45,7 @@ gulp.task('ts', ['clean'], function () {
 
 gulp.task('clean', function () {
   return gulp
-    .src(outPath, { read: false })
+    .src(serverCompiled, { read: false })
     .pipe(clean())
 })
 
