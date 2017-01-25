@@ -1,6 +1,6 @@
 {
   "name": "js-data-dao",
-  "main": "src/index.js",
+  "main": "es/index.js",
   "typings": "index.d.ts",
   "version": "0.0.17",
   "description": "js-data-dao",
