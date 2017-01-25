@@ -1,6 +1,6 @@
 {
   "name": "js-data-dao",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "dependencies": {
     "@prodest/mapeandoes-typings": {
       "version": "1.0.1",
@@ -905,6 +905,9 @@
     "boxen": {
       "version": "0.6.0",
       "dependencies": {
+        "camelcase": {
+          "version": "2.1.1"
+        },
         "object-assign": {
           "version": "4.1.0"
         }
@@ -1143,11 +1146,17 @@
       "dev": true
     },
     "camelcase": {
-      "version": "2.1.1"
+      "version": "4.0.0"
     },
     "camelcase-keys": {
       "version": "2.1.0",
-      "dev": true
+      "dev": true,
+      "dependencies": {
+        "camelcase": {
+          "version": "2.1.1",
+          "dev": true
+        }
+      }
     },
     "capture-stack-trace": {
       "version": "1.0.0"
@@ -1549,6 +1558,16 @@
     },
     "dotenv": {
       "version": "2.0.0"
+    },
+    "dts-generator": {
+      "version": "2.0.0",
+      "dev": true,
+      "dependencies": {
+        "bluebird": {
+          "version": "3.3.3",
+          "dev": true
+        }
+      }
     },
     "duplexer2": {
       "version": "0.0.2",
@@ -2871,7 +2890,7 @@
       }
     },
     "glob": {
-      "version": "7.0.5",
+      "version": "7.0.0",
       "dev": true
     },
     "glob-base": {
@@ -4219,6 +4238,10 @@
       "dependencies": {
         "debug": {
           "version": "2.2.0",
+          "dev": true
+        },
+        "glob": {
+          "version": "7.0.5",
           "dev": true
         },
         "ms": {

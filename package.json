@@ -1,8 +1,8 @@
 {
   "name": "js-data-dao",
-  "main": "es/index.js",
+  "main": "lib/index.js",
   "typings": "index.d.ts",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "js-data-dao",
   "license": "MIT",
   "repository": "https://github.com/xdevelsistemas/js-data-dao",
@@ -25,6 +25,7 @@
     "bcryptjs": "2.4.0",
     "bluebird": "^3.4.7",
     "body-parser": "^1.15.2",
+    "camelcase": "^4.0.0",
     "cookie-parser": "^1.4.3",
     "cpf_cnpj": "0.2.0",
     "crypto": "^0.0.3",
