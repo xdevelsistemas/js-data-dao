@@ -8,8 +8,8 @@ import * as JSData from 'js-data'
 export class ForgotController {
     forgot: ForgotDAO
 
-    constructor(store: JSData.DS, mailConfig: MailConfig, appConfig: AppConfig) {
-        this.forgot = new ForgotDAO(store,mailConfig,appConfig)
+    constructor(store: JSData.DS, appConfig: AppConfig) {
+        this.forgot = new ForgotDAO(store,appConfig)
     }
 
     /**

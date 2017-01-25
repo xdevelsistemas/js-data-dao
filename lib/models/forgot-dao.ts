@@ -12,10 +12,10 @@ export class ForgotDAO {
     private _sendMail: SendMail
     private _serviceLib: ServiceLib
     private _appConfig: AppConfig
-    constructor(store: JSData.DS, mailConfig: MailConfig, appConfig: AppConfig) {
+    constructor(store: JSData.DS, appConfig: AppConfig) {
         this.storedb = store
         this._appConfig = appConfig
-        this._sendMail = new SendMail(mailConfig)
+        this._sendMail = new SendMail(appConfig.mailConfig)
         this._serviceLib = new ServiceLib(appConfig)
     }
 

@@ -11,10 +11,10 @@ export class SignUpDAO {
     private _mailConfig: MailConfig
     private _serviceLib: ServiceLib
     private _appConfig: AppConfig
-    constructor(store: JSData.DS, appConfig: AppConfig, mailConfig: MailConfig) {
+    constructor(store: JSData.DS, appConfig: AppConfig) {
         this.storedb = store
         this._appConfig = appConfig
-        this._mailConfig = new MailConfig()
+        this._mailConfig = appConfig.mailConfig
         this._serviceLib = new ServiceLib(appConfig)
     }
 

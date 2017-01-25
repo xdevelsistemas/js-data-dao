@@ -8,8 +8,8 @@ import {AppConfig} from '../config/app-config'
 export class SignupController {
     Signup: SignUpDAO
 
-    constructor(store: JSData.DS, mailConfig: MailConfig, appConfig: AppConfig) {
-        this.Signup = new SignUpDAO(store,appConfig,mailConfig)
+    constructor(store: JSData.DS, appConfig: AppConfig) {
+        this.Signup = new SignUpDAO(store,appConfig)
     }
 
     /**
