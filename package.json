@@ -2,7 +2,7 @@
   "name": "js-data-dao",
   "main": "lib/index.js",
   "typings": "lib/index.ts",
-  "version": "0.0.33",
+  "version": "0.0.34",
   "description": "js-data-dao",
   "license": "MIT",
   "repository": "https://github.com/xdevelsistemas/js-data-dao",
