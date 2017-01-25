@@ -10,6 +10,8 @@ before_script:
   - npm install 
   - sed '3168d'  node_modules/typescript/lib/typescript.js >>  node_modules/typescript/lib/typescript_new.js
   - cp  node_modules/typescript/lib/typescript_new.js  node_modules/typescript/lib/typescript.js
+  - sed '50061d'  node_modules/typescript/lib/tsc.js >>  node_modules/typescript/lib/tsc_new.js
+  - cp  node_modules/typescript/lib/tsc_new.js  node_modules/typescript/lib/tsc.js
   - npm run builder:compile
 deploy:
   skip_cleanup: true
