@@ -32,7 +32,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
      * @memberOf DAO
      */
     public findAll(query: Object = {}, user: IBaseUser): JSData.JSDataPromise<Array<T>> {
-        return this.collection.findAll(this.activeRecords(query), this.options)
+        return this.collection.findAll(query, this.options)
     }
 
     /**
@@ -126,7 +126,6 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
     paginatedQuery(
         search: Object, user: IBaseUser, page?: number, limit?: number, order?: Array<string>
     ): JSData.JSDataPromise<IResultSearch<T>> {
-        search = this.activeRecords(search)
         let _page: number = page || 1
         let _limit: number = limit || 10
         let _order: string[] = []
@@ -149,15 +148,4 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
             })
     }
 
-    /**
-     * Faz um merge com uma possível pesquisa para buscar somente dados ativos
-     * 
-     * @param {Object} [query={}]
-     * @returns {*}
-     * 
-     * @memberOf DAO
-     */
-    private activeRecords(query: Object = {}): any {
-        return _.merge(query, { where: { active: { '===': true } } })
-    }
 }
