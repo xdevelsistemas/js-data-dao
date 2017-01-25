@@ -14,7 +14,9 @@
     "xdevel"
   ],
   "files": [
-    "lib/**/*"
+    "lib/**/*.ts",
+    "lib/**/*.js",
+    "lib/**/*.js.map"
   ],
   "dependencies": {
     "aws-sdk": "^2.7.20",
