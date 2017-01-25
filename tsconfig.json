@@ -13,8 +13,7 @@
         "noUnusedParameters" : false
     },
     "files": [
-        "./index.d.ts",
-        "./lib/**/*.ts"
+        "lib/index.ts"
     ],
     "exclude": [
         "node_modules",
