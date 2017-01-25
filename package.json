@@ -8,7 +8,7 @@
   "repository": "https://github.com/xdevelsistemas/js-data-dao",
   "author": "Clayton Santos da Silva",
   "scripts": {
-    "builder:compile": "gulp ts"
+    "builder:compile": "node node_modules/typescript/lib/tsc.js"
   },
   "keywords": [
     "xdevel"
