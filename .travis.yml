@@ -11,6 +11,7 @@ before_script:
   - gulp tslint
   - node_modules/.bin/dts-generator --project .  --out index.d.ts
 deploy:
+  skip_cleanup: true
   provider: script
   script: publish.sh
   on:
