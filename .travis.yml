@@ -6,7 +6,9 @@ node_js:
   - "6"
   - "7"
 before_script:
+  - npm install -g gulp-cli 
   - npm install 
+  - gulp tslint
   - node_modules/.bin/dts-generator --project .  --out index.d.ts
 deploy:
   provider: script
