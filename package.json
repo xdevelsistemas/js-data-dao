@@ -16,6 +16,7 @@
   "files": [
     "es/**/*.js",
     "es/**/*.js.map",
+    "src/**/*.ts",
     "index.d.ts"
   ],
   "dependencies": {
