@@ -10,7 +10,7 @@ before_script:
   - npm install 
   - sed '3168d'  node_modules/typescript/lib/typescript.js >>  node_modules/typescript/lib/typescript_new.js
   - cp  node_modules/typescript/lib/typescript_new.js  node_modules/typescript/lib/typescript.js
-  - gulp ts
+  - npm run builder:compile
 deploy:
   skip_cleanup: true
   provider: npm

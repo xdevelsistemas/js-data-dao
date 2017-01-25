@@ -5,7 +5,7 @@ export class DatabaseConfig {
     private _adapterOptions: IDefaultAdapterOptions
     private _adapter: JSData.IDSAdapter
     private _database: string
-    public contructor() {
+    public constructor() {
         this._adapterOptions = { default: true }
         this._database = 'rethinkdb'
         this._adapter = new DSRethinkDBAdapter({
