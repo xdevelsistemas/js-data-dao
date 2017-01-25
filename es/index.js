@@ -1,4 +1,5 @@
 "use strict";
+
 const Config = require('./config');
 exports.Config = Config;
 const Controllers = require('./controllers');

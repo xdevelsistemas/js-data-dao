@@ -2,7 +2,7 @@
   "name": "js-data-dao",
   "main": "es/index.js",
   "typings": "index.d.ts",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "js-data-dao",
   "license": "MIT",
   "repository": "https://github.com/xdevelsistemas/js-data-dao",
@@ -16,6 +16,7 @@
   "files": [
     "es/**/*.js",
     "es/**/*.js.map",
+    "src/**/*.ts",
     "index.d.ts"
   ],
   "dependencies": {
