@@ -5,13 +5,17 @@
   "version": "0.0.17",
   "description": "js-data-dao",
   "license": "MIT",
-  "repository": "",
+  "repository": "https://github.com/xdevelsistemas/js-data-dao",
   "author": "Clayton Santos da Silva",
   "scripts": {
     "builder:compile" : "gulp ts"
   },
   "keywords": [
-    ""
+    "xdevel"
+  ],
+  "files": [
+    "es/**/*.js",
+    "es/**/*.js.map"
   ],
   "dependencies": {
     "aws-sdk": "^2.7.20",
