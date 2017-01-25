@@ -1,7 +1,7 @@
 {
   "name": "js-data-dao",
   "main": "lib/index.js",
-  "typings": "index.d.ts",
+  "typings": "lib/index.ts",
   "version": "0.0.29",
   "description": "js-data-dao",
   "license": "MIT",
@@ -14,9 +14,7 @@
     "xdevel"
   ],
   "files": [
-    "lib/**/*.js",
-    "lib/**/*.js.map",
-    "index.d.ts"
+    "lib/**/*"
   ],
   "dependencies": {
     "aws-sdk": "^2.7.20",
