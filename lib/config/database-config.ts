@@ -1,5 +1,5 @@
 import * as JSData from 'js-data'
-import {IRethinkConfig, IDefaultAdapterOptions} from '../interfaces'
+import {IDefaultAdapterOptions} from '../interfaces'
 const DSRethinkDBAdapter = require('js-data-rethinkdb')
 export class DatabaseConfig {
     private _adapterOptions: IDefaultAdapterOptions

@@ -1,4 +1,3 @@
-import { MailConfig } from '../config/mail-config'
 import { AppConfig } from '../config/app-config'
 import { Request, Response, Router, NextFunction } from 'express'
 import { ForgotController } from '../controllers'
@@ -10,9 +9,9 @@ export class ForgotRouter extends BaseRouter {
     store: JSData.DS
     router: Router
 
-    constructor (store: JSData.DS, appConfig: AppConfig, mailConfig: MailConfig) {
+    constructor (store: JSData.DS, appConfig: AppConfig) {
         super()
-        this.controller = new ForgotController(store, mailConfig, appConfig)
+        this.controller = new ForgotController(store, appConfig)
         this.store = store
         this.router = Router()
         this.routers()

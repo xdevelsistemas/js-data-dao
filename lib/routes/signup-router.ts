@@ -1,4 +1,3 @@
-import { MailConfig } from '../config/mail-config'
 import { AppConfig } from '../config/app-config'
 import { Request, Response, Router, NextFunction } from 'express'
 import { SignupController } from '../controllers'
@@ -10,9 +9,9 @@ export class SignupRouter extends BaseRouter {
     store: JSData.DS
     router: Router
 
-    constructor (store: JSData.DS, appConfig: AppConfig, mailConfig: MailConfig) {
+    constructor (store: JSData.DS, appConfig: AppConfig) {
         super()
-        this.controller = new SignupController(store, mailConfig, appConfig)
+        this.controller = new SignupController(store, appConfig)
         this.store = store
         this.router = Router()
         this.routers()

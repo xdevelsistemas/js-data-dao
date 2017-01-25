@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express'
 import { ForgotDAO } from '../models/forgot-dao'
 import { APIError } from '../services'
 import {AppConfig} from '../config/app-config'
-import {MailConfig} from '../config/mail-config'
 import * as JSData from 'js-data'
 
 export class ForgotController {

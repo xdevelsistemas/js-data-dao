@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express'
 import { SignUpDAO } from '../models/signup-dao'
 import { APIError } from '../services'
 import * as JSData from 'js-data'
-import {MailConfig} from '../config/mail-config'
 import {AppConfig} from '../config/app-config'
 
 export class SignupController {

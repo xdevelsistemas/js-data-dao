@@ -4,7 +4,6 @@ import {SendMail} from '../services/sendmail'
 import * as Bluebird from 'bluebird'
 import * as JSData from 'js-data'
 import * as _ from 'lodash'
-import {MailConfig} from '../config/mail-config'
 import {AppConfig} from '../config/app-config'
 
 export class ForgotDAO {

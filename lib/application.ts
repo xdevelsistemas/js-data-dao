@@ -1,12 +1,9 @@
 import * as JSData from 'js-data'
 import { Request, Response } from 'express'
 import * as express from 'express'
-import * as path from 'path'
-import * as favicon from 'serve-favicon'
 import * as logger from 'morgan'
 import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
-import {DatabaseConfig} from './config/database-config'
 /**
  * Passport
  */
@@ -15,13 +12,7 @@ import * as passport from 'passport'
 import * as Auth from './auth'
 import * as Config from './config'
 import * as Services from './services'
-
-/**
- * importacao das rotas
- */
-import * as routes from './routes'
-
-class Application {
+export class Application {
     app: express.Application
     store: JSData.DS
     passport: Passport
