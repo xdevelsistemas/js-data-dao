@@ -8,7 +8,7 @@ node_js:
 before_script:
   - npm install -g gulp-cli 
   - npm install 
-  - gulp tslint
+  - gulp ts
 deploy:
   skip_cleanup: true
   provider: npm
