@@ -3,10 +3,6 @@ node_modules/
 rethinkdb_data/
 .vscode
 .idea
-interfaces/*.js
-interfaces/*.js.map
-lib/**/*.js
-lib/**/*.js.map
 gulpfile.js
 gulpfile.js.map
 typings
