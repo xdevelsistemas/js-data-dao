@@ -25,6 +25,7 @@
     "bcryptjs": "2.4.0",
     "bluebird": "^3.4.7",
     "body-parser": "^1.15.2",
+    "camelcase": "^4.0.0",
     "cookie-parser": "^1.4.3",
     "cpf_cnpj": "0.2.0",
     "crypto": "^0.0.3",
