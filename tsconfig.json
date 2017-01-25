@@ -10,11 +10,11 @@
         "noImplicitThis" : true,
         "noImplicitReturns": true,
         "noUnusedLocals": true,
-        "noUnusedParameters" : false,
-        "outDir": "lib/"
+        "noUnusedParameters" : false
     },
     "files": [
-        "./index.d.ts"
+        "./index.d.ts",
+        "./lib/**/*.ts"
     ],
     "exclude": [
         "node_modules",

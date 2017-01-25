@@ -2,13 +2,13 @@
   "name": "js-data-dao",
   "main": "es/index.js",
   "typings": "index.d.ts",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "js-data-dao",
   "license": "MIT",
   "repository": "https://github.com/xdevelsistemas/js-data-dao",
   "author": "Clayton Santos da Silva",
   "scripts": {
-    "builder:compile" : "gulp ts"
+    "builder:compile": "gulp ts"
   },
   "keywords": [
     "xdevel"
@@ -102,6 +102,7 @@
     "builder-ts-library-dev": "^0.0.6",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
+    "dts-generator": "^2.0.0",
     "gulp": "^3.9.0",
     "gulp-clean": "^0.3.1",
     "gulp-develop-server": "^0.5.0",

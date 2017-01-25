@@ -5,7 +5,7 @@ import * as tslint from 'gulp-tslint'
 import * as path from 'path'
 import * as sourcemaps from 'gulp-sourcemaps'
 import * as mocha from 'gulp-mocha'
-let serverPath = 'src'
+let serverPath = 'lib'
 let serverCompiled = ['**/*.js', '**/*.js.map', '**/*.d.ts'].map(el => serverPath + el)
 let istanbul = require('gulp-istanbul')
 let remapIstanbul = require('remap-istanbul/lib/gulpRemapIstanbul')

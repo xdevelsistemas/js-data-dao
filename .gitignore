@@ -46,3 +46,6 @@ jspm_packages
 .DS_Store
 .env
 out
+lib/**/*.js
+lib/**/*.js.map
+index.d.ts
