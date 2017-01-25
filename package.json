@@ -15,7 +15,8 @@
   ],
   "files": [
     "es/**/*.js",
-    "es/**/*.js.map"
+    "es/**/*.js.map",
+    "index.d.ts"
   ],
   "dependencies": {
     "aws-sdk": "^2.7.20",
