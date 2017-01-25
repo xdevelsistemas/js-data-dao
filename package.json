@@ -14,9 +14,8 @@
     "xdevel"
   ],
   "files": [
-    "es/**/*.js",
-    "es/**/*.js.map",
-    "src/**/*.ts",
+    "lib/**/*.js",
+    "lib/**/*.js.map",
     "index.d.ts"
   ],
   "dependencies": {
