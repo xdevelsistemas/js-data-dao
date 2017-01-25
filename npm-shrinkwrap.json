@@ -1,6 +1,6 @@
 {
   "name": "js-data-dao",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "dependencies": {
     "@prodest/mapeandoes-typings": {
       "version": "1.0.1",
