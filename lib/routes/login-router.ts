@@ -4,22 +4,22 @@ import { jwtGenerator } from '../auth/passport'
 import * as JSData from 'js-data'
 
 export class LoginRouter {
-    store: JSData.DS
-    router: Router
-    appConfig: AppConfig
+  store: JSData.DS
+  router: Router
+  appConfig: AppConfig
 
-    constructor (store: JSData.DS, appConfig: AppConfig) {
-        this.store = store
-        this.router = Router()
-        this.routers()
-    }
+  constructor(store: JSData.DS, appConfig: AppConfig) {
+    this.store = store
+    this.router = Router()
+    this.routers()
+  }
 
-    public routers() {
-        this.router.post('/', (req: Request, res: Response, next: NextFunction): JSData.JSDataPromise<Response> =>
-            jwtGenerator(this.store, this.appConfig)(req, res, next))
-    }
+  public routers() {
+    this.router.post('/', (req: Request, res: Response, next: NextFunction): JSData.JSDataPromise<Response> =>
+      jwtGenerator(this.store, this.appConfig)(req, res, next))
+  }
 
-    public getRouter(): Router {
-        return this.router
-    }
+  public getRouter(): Router {
+    return this.router
+  }
 }
