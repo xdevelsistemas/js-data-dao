@@ -8,8 +8,6 @@ node_js:
 before_script:
   - npm install -g gulp-cli 
   - npm install 
-  - sed '3168d'  node_modules/typescript/lib/typescript.js >>  node_modules/typescript/lib/typescript_new.js
-  - cp  node_modules/typescript/lib/typescript_new.js  node_modules/typescript/lib/typescript.js
   - npm run builder:compile
 deploy:
   skip_cleanup: true
