@@ -5,7 +5,7 @@ import { IPersistController } from '../interfaces'
 import * as JSData from 'js-data'
 
 export class BaseRouter {
-  respond(t: JSData.JSDataPromise<any>, res: Response): JSData.JSDataPromise<Response> {
+  respond(t: Promise<any>, res: Response): Promise<Response> {
     return t
       .then((u) => res.json(u))
       .catch((err: APIError) => res.status(err.statusCode).json(err.error))
@@ -16,7 +16,7 @@ export class PersistRouter<M extends IBaseModel, C extends IPersistController<M>
   controller: C
   router: Router
 
-  constructor(store: JSData.DS, controller: C) {
+  constructor(store: JSData.DataStore, controller: C) {
     super()
     this.controller = controller
     this.router = Router()

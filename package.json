@@ -2,7 +2,7 @@
   "name": "js-data-dao",
   "main": "lib/index.js",
   "typings": "lib/index.ts",
-  "version": "0.0.42",
+  "version": "1.0.0",
   "description": "js-data-dao",
   "license": "MIT",
   "repository": "https://github.com/xdevelsistemas/js-data-dao",
@@ -19,7 +19,8 @@
     "lib/**/*.js.map"
   ],
   "dependencies": {
-    "js-data": "^2.10.0"
+    "js-data": "3.0.0-rc.5",
+    "js-data-rethinkdb": "3.0.0-rc.3"
   },
   "devDependencies": {
     "@types/bluebird": "^3.0.37",
@@ -33,7 +34,6 @@
     "@types/gulp-mocha": "^0.0.29",
     "@types/gulp-sourcemaps": "^0.0.29",
     "@types/handlebars": "^4.0.31",
-    "@types/js-data": "^2.8.31",
     "@types/jsonwebtoken": "^7.2.0",
     "@types/lodash": "^4.14.50",
     "@types/morgan": "^1.7.32",

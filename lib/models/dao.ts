@@ -7,11 +7,11 @@ import { IBaseModel } from '../interfaces/ibase-model'
 import * as _ from 'lodash'
 
 export class DAO<T extends IBaseModel> implements IDAO<T> {
-  public collection: JSData.DSResourceDefinition<T>
-  public options: JSData.DSFilterArg
+  public collection: JSData.Mapper
+  public options: any
   public exclude: Array<string>
 
-  constructor(currentModel: JSData.DSResourceDefinition<T>, joins: any[] = [], exclude: Array<string> = []) {
+  constructor(currentModel: JSData.Mapper, joins: any[] = [], exclude: Array<string> = []) {
     if (!currentModel) {
       throw Error('classe não instanciada corretamente')
     }
@@ -27,11 +27,11 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @param {Object} [query={}]
    * @param {*} user
-   * @returns {JSData.JSDataPromise<Array<T>>}
+   * @returns {Promise<Array<T>>}
    *
    * @memberOf DAO
    */
-  public findAll(query: Object = {}, user: IBaseUser): JSData.JSDataPromise<Array<T>> {
+  public findAll(query: Object = {}, user: IBaseUser): Promise<Array<T>> {
     return this.collection.findAll(query, this.options)
   }
 
@@ -40,11 +40,11 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @param {string} id
    * @param {*} user
-   * @returns {JSData.JSDataPromise<T>}
+   * @returns {Promise<T>}
    *
    * @memberOf DAO
    */
-  public find(id: string, user: IBaseUser): JSData.JSDataPromise<T> {
+  public find(id: string, user: IBaseUser): Promise<T> {
     return this.collection.find(id, this.options)
       .then((register: T) => {
         if (register.active) {
@@ -60,11 +60,11 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @param {T} obj
    * @param {*} user
-   * @returns {JSData.JSDataPromise<T>}
+   * @returns {Promise<T>}
    *
    * @memberOf DAO
    */
-  public create(obj: T, user: IBaseUser): JSData.JSDataPromise<T> {
+  public create(obj: T, user: IBaseUser): Promise<T> {
     throw new APIError('Nao implementado', 500)
     // return this.collection.create(obj)
   }
@@ -75,11 +75,11 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @param {string} id
    * @param {T} obj
    * @param {*} user
-   * @returns {JSData.JSDataPromise<T>}
+   * @returns {Promise<T>}
    *
    * @memberOf DAO
    */
-  public update(id: string, user: IBaseUser, obj: T): JSData.JSDataPromise<T> {
+  public update(id: string, user: IBaseUser, obj: T): Promise<T> {
     if (!ServiceLib.validateFields(obj, Object.keys(obj), this.exclude)) {
       throw 'Alguns dados são obrigatórios, corrija-os e tente novamente'
     }
@@ -91,11 +91,11 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @param {string} id
    * @param {*} user
-   * @returns {JSData.JSDataPromise<boolean>}
+   * @returns {Promise<boolean>}
    *
    * @memberOf DAO
    */
-  public delete(id: string, user: IBaseUser): JSData.JSDataPromise<boolean> {
+  public delete(id: string, user: IBaseUser): Promise<boolean> {
     // return this.collection.destroy(id)
     //     .then(() => true)
     //     .catch(() => false)
@@ -119,13 +119,13 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @param {number} [page]
    * @param {number} [limit]
    * @param {Array<string>} [order]
-   * @returns {JSData.JSDataPromise<IResultSearch<T>>}
+   * @returns {Promise<IResultSearch<T>>}
    *
    * @memberOf DAO
    */
   paginatedQuery(
     search: Object, user: IBaseUser, page?: number, limit?: number, order?: Array<string>
-  ): JSData.JSDataPromise<IResultSearch<T>> {
+  ): Promise<IResultSearch<T>> {
     let _page: number = page || 1
     let _limit: number = limit || 10
     let _order: string[] = []
