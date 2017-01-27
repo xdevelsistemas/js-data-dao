@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "js-data": "3.0.0-rc.5",
-    "js-data-rethinkdb": "3.0.0-rc.3"
+    "js-data-rethinkdb": "https://github.com/xdevelsistemas/js-data-rethinkdb#stable"
   },
   "devDependencies": {
     "@types/bluebird": "^3.0.37",
