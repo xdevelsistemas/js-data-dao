@@ -7,11 +7,11 @@ import * as _ from 'lodash'
 import { AppConfig } from '../config/app-config'
 
 export class ForgotDAO {
-  storedb: JSData.DS
+  storedb: JSData.DataStore
   private _sendMail: SendMail
   private _serviceLib: ServiceLib
   private _appConfig: AppConfig
-  constructor(store: JSData.DS, appConfig: AppConfig) {
+  constructor(store: JSData.DataStore, appConfig: AppConfig) {
     this.storedb = store
     this._appConfig = appConfig
     this._sendMail = new SendMail(appConfig.mailConfig)
@@ -28,8 +28,8 @@ export class ForgotDAO {
    */
   public sendForgotMail(obj: IForgot): any {
     let filterEmail: any = { where: { email: { '===': obj.email } } }
-    return this.storedb.findAll<IBaseUser>(this._appConfig.getUsersTable(), filterEmail)
-      .then((users: Array<IBaseUser>) => {
+    return this.storedb.findAll(this._appConfig.getUsersTable(), filterEmail)
+      .then((users: IBaseUser[]) => {
         if (_.isEmpty(users)) {
           throw 'Usuário não encontrado'
         } else if (!ServiceLib.emailValidator(obj.email)) {
@@ -49,7 +49,7 @@ export class ForgotDAO {
    *
    * @memberOf ForgotDAO
    */
-  public validaToken(params: any): JSData.JSDataPromise<IBaseUser> {
+  public validaToken(params: any): Promise<IBaseUser> {
     let tokenDecrypted: string = this._serviceLib.decrypt(params.token)
     let data: any = JSON.parse(tokenDecrypted)
     let today: Date = new Date()
@@ -60,7 +60,7 @@ export class ForgotDAO {
         }
       }
     }
-    return this.storedb.findAll<IBaseUser>(this._appConfig.getUsersTable(), filterUser)
+    return this.storedb.findAll(this._appConfig.getUsersTable(), filterUser)
       .then((users: Array<IBaseUser>) => {
         let user: IBaseUser = _.head(users)
         if (_.isEmpty(user)) {
@@ -84,7 +84,7 @@ export class ForgotDAO {
    *
    * @memberOf ForgotDAO
    */
-  public resetPassword(params: any, obj: IBaseUser): JSData.JSDataPromise<boolean> {
+  public resetPassword(params: any, obj: IBaseUser): Promise<boolean> {
     let data: any = JSON.parse(this._serviceLib.decrypt(params.token))
     let today: Date = new Date()
     let filterUser: any = {
@@ -94,7 +94,7 @@ export class ForgotDAO {
         }
       }
     }
-    return this.storedb.findAll<IBaseUser>(this._appConfig.getUsersTable(), filterUser)
+    return this.storedb.findAll(this._appConfig.getUsersTable(), filterUser)
       .then((users: Array<IBaseUser>) => {
         let user: IBaseUser = _.head(users)
         if (_.isEmpty(user)) {
@@ -117,7 +117,7 @@ export class ForgotDAO {
         let user: IBaseUser = resp[0]
         let passwordEncrypted: string = resp[1]
         user.password = passwordEncrypted
-        return this.storedb.update<IBaseUser>(this._appConfig.getUsersTable(), user.id, user)
+        return this.storedb.update(this._appConfig.getUsersTable(), user.id, user)
       })
       .then(() => true)
   }

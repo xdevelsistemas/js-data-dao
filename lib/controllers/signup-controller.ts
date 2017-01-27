@@ -7,7 +7,7 @@ import { AppConfig } from '../config/app-config'
 export class SignupController {
   Signup: SignUpDAO
 
-  constructor(store: JSData.DS, appConfig: AppConfig) {
+  constructor(store: JSData.DataStore, appConfig: AppConfig) {
     this.Signup = new SignUpDAO(store, appConfig)
   }
 
@@ -17,11 +17,11 @@ export class SignupController {
    * @param {Request} req
    * @param {Response} res
    * @param {NextFunction} next
-   * @returns {JSData.JSDataPromise<any>}
+   * @returns {Promise<any>}
    *
    * @memberOf SignupController
    */
-  public validaToken(req: Request, res: Response, next: NextFunction): JSData.JSDataPromise<any> {
+  public validaToken(req: Request, res: Response, next: NextFunction): Promise<any> {
     return this.Signup.validaToken(req.params)
       .then((dados: any) => {
         res.status(200)
@@ -38,11 +38,11 @@ export class SignupController {
    * @param {Request} req
    * @param {Response} res
    * @param {NextFunction} next
-   * @returns {JSData.JSDataPromise<any>}
+   * @returns {Promise<any>}
    *
    * @memberOf SignupController
    */
-  public registerPassword(req: Request, res: Response, next: NextFunction): JSData.JSDataPromise<any> {
+  public registerPassword(req: Request, res: Response, next: NextFunction): Promise<any> {
     return this.Signup.registerPassword(req.params, req.body)
       .then((dados: any) => {
         res.status(200)

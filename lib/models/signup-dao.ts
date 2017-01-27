@@ -7,11 +7,11 @@ import { MailConfig } from '../config/mail-config'
 import { ServiceLib } from '../services/service-lib'
 
 export class SignUpDAO {
-  storedb: JSData.DS
+  storedb: JSData.DataStore
   private _mailConfig: MailConfig
   private _serviceLib: ServiceLib
   private _appConfig: AppConfig
-  constructor(store: JSData.DS, appConfig: AppConfig) {
+  constructor(store: JSData.DataStore, appConfig: AppConfig) {
     this.storedb = store
     this._appConfig = appConfig
     this._mailConfig = appConfig.mailConfig
@@ -22,10 +22,10 @@ export class SignUpDAO {
    * Valida o token e retorna o user com email do token
    *
    * @param {*} params
-   * @returns {JSData.JSDataPromise<IBaseUser>}
+   * @returns {Promise<IBaseUser>}
    * @memberOf SignUpDAO
    */
-  public validaToken(params: any): JSData.JSDataPromise<IBaseUser> {
+  public validaToken(params: any): Promise<IBaseUser> {
     let tokenDecrypted: string = this._serviceLib.decrypt(params.token)
     let data: any = JSON.parse(tokenDecrypted)
     let today: Date = new Date()
@@ -36,7 +36,7 @@ export class SignUpDAO {
         }
       }
     }
-    return this.storedb.findAll<IBaseUser>(this._appConfig.getUsersTable(), filterUser)
+    return this.storedb.findAll(this._appConfig.getUsersTable(), filterUser)
       .then((users: Array<IBaseUser>) => {
         let user: IBaseUser = _.head(users)
         if (_.isEmpty(user)) {
@@ -56,11 +56,11 @@ export class SignUpDAO {
    *
    * @param {*} params
    * @param {*} obj
-   * @returns {JSData.JSDataPromise<IBaseUser>}
+   * @returns {Promise<IBaseUser>}
    *
    * @memberOf SignUpDAO
    */
-  public registerPassword(params: any, obj: any): JSData.JSDataPromise<boolean> {
+  public registerPassword(params: any, obj: any): Promise<boolean> {
     let data: any = JSON.parse(this._serviceLib.decrypt(params.token))
     let today: Date = new Date()
     let filterUser: any = {
@@ -70,7 +70,7 @@ export class SignUpDAO {
         }
       }
     }
-    return this.storedb.findAll<IBaseUser>(this._appConfig.getUsersTable(), filterUser)
+    return this.storedb.findAll(this._appConfig.getUsersTable(), filterUser)
       .then((users: Array<IBaseUser>) => {
         let user: IBaseUser = _.head(users)
         if (_.isEmpty(user)) {
@@ -93,7 +93,7 @@ export class SignUpDAO {
         let user: IBaseUser = resp[0]
         let passwordEncrypted: string = resp[1]
         user.password = passwordEncrypted
-        return this.storedb.update<IBaseUser>(this._appConfig.getUsersTable(), user.id, user)
+        return this.storedb.update(this._appConfig.getUsersTable(), user.id, user)
       })
       .then(() => true)
   }

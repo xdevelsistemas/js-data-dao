@@ -10,7 +10,7 @@ import * as _ from 'lodash'
 const ExtractJwt = require('passport-jwt').ExtractJwt
 const Strategy = require('passport-jwt').Strategy
 
-export const passportJwt = (store: JSData.DS, passport: any, appConfig: AppConfig): any => {
+export const passportJwt = (store: JSData.DataStore, passport: any, appConfig: AppConfig): any => {
   let params = {
     secretOrKey: appConfig.getJwtConfig().secret,
     jwtFromRequest: ExtractJwt.fromAuthHeader()
@@ -19,9 +19,9 @@ export const passportJwt = (store: JSData.DS, passport: any, appConfig: AppConfi
   passport.use(new Strategy(params, (token: any, done: Function) => {
     // Login buscando os dados do usuário junto do client.
     // Isso facilitará na hora de filtrar por clients e equipments do usuário logado
-    let options: JSData.DSFilterArg = { with: ['clients'] }
+    let options: any = { with: ['clients'] }
     // TOdo Erro ao relacionar user com client
-    store.find<IBaseUser>(appConfig.getUsersTable(), token.id, options)
+    store.find(appConfig.getUsersTable(), token.id, options)
       .then((user: IBaseUser) => {
         if (user) {
           if (!user.active) {
@@ -39,15 +39,15 @@ export const passportJwt = (store: JSData.DS, passport: any, appConfig: AppConfi
   return passport
 }
 
-export const jwtGenerator = (store: JSData.DS, appConfig: AppConfig) => (req: Request, res: Response, nex: Function): JSData.JSDataPromise<Response> => {
+export const jwtGenerator = (store: JSData.DataStore, appConfig: AppConfig) => (req: Request, res: Response, nex: Function): Promise<Response> => {
   let { email, password } = req.body
   if (email && password) {
-    let options: JSData.DSFilterArg = {
+    let options: any = {
       email: {
         '===': email
       }
     }
-    return store.findAll<IBaseUser>(appConfig.getUsersTable(), options)
+    return store.findAll(appConfig.getUsersTable(), options)
       .then((users: Array<IBaseUser>) => {
         let user: IBaseUser = _.head(users)
         if (_.isEmpty(user)) {
@@ -66,9 +66,9 @@ export const jwtGenerator = (store: JSData.DS, appConfig: AppConfig) => (req: Re
         }
         throw 'Invalid password'
       })
-      .catch(err => {
+      .catch((err: Error) => {
         // throw new APIError(err, 401)
-        let { statusCode, error } = new APIError(err, 401)
+        let { statusCode, error } = new APIError(err.message, 401)
         return res.status(statusCode).json(error)
       })
   } else {

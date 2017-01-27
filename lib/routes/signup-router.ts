@@ -6,10 +6,10 @@ import * as JSData from 'js-data'
 
 export class SignupRouter extends BaseRouter {
   controller: SignupController
-  store: JSData.DS
+  store: JSData.DataStore
   router: Router
 
-  constructor(store: JSData.DS, appConfig: AppConfig) {
+  constructor(store: JSData.DataStore, appConfig: AppConfig) {
     super()
     this.controller = new SignupController(store, appConfig)
     this.store = store

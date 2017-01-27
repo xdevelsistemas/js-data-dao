@@ -1,4 +1,3 @@
-import * as JSData from 'js-data'
 import { APIError } from '../services'
 import { IDAO, IBaseModel, IResultSearch, IPersistController } from '../interfaces'
 import * as express from 'express'
@@ -28,21 +27,21 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
   public constructor(collection: IDAO<T>) {
     this.collection = collection
   }
-  public find(req: Request, res: express.Response, next?: express.NextFunction): JSData.JSDataPromise<T> {
+  public find(req: Request, res: express.Response, next?: express.NextFunction): Promise<T> {
     return this.collection.find(req.params.id, req.user)
-      .then(reg => {
+      .then((reg: T) => {
         delete (reg as any).password
         res.status(200)
         return reg
       })
-      .catch(error => {
-        throw new APIError(error, 400)
+      .catch((error: Error) => {
+        throw new APIError(error.message, 400)
       })
   }
 
-  public findAll(req: Request, res: express.Response, next?: express.NextFunction): JSData.JSDataPromise<T[]> {
+  public findAll(req: Request, res: express.Response, next?: express.NextFunction): Promise<T[]> {
     return this.collection.findAll(req.query, req.user)
-      .then(regs => {
+      .then((regs: T[]) => {
         regs.map(reg => {
           delete (reg as any).password
           return reg
@@ -50,36 +49,36 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status(200)
         return regs
       })
-      .catch(error => {
-        throw new APIError(error, 400)
+      .catch((err : Error) => {
+        throw new APIError(err.message, 400)
       })
   }
 
-  public create(req: Request, res: express.Response, next?: express.NextFunction): JSData.JSDataPromise<T> {
+  public create(req: Request, res: express.Response, next?: express.NextFunction): Promise<T> {
     return this.collection.create(req.body, req.user)
-      .then(reg => {
+      .then((reg: T) => {
         delete (reg as any).password
         res.status(201)
         return reg
       })
-      .catch(error => {
-        throw new APIError(error, 400)
+      .catch((error: Error) => {
+        throw new APIError(error.message, 400)
       })
   }
 
-  public update(req: Request, res: express.Response, next?: express.NextFunction): JSData.JSDataPromise<T> {
+  public update(req: Request, res: express.Response, next?: express.NextFunction): Promise<T> {
     return this.collection.update(req.params.id, req.body, req.user)
-      .then(reg => {
+      .then((reg: T) => {
         delete (reg as any).password
         res.status(200)
         return reg
       })
-      .catch(error => {
-        throw new APIError(error, 400)
+      .catch((error: Error) => {
+        throw new APIError(error.message, 400)
       })
   }
 
-  public delete(req: Request, res: express.Response, next?: express.NextFunction): JSData.JSDataPromise<boolean> {
+  public delete(req: Request, res: express.Response, next?: express.NextFunction): Promise<boolean> {
     return this.collection.delete(req.params.id, req.user)
       .then((isDeleted) => {
         res.status(200)
@@ -90,7 +89,7 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
       })
   }
 
-  public query(req: Request, res: express.Response, next?: express.NextFunction): JSData.JSDataPromise<IResultSearch<T>> {
+  public query(req: Request, res: express.Response, next?: express.NextFunction): Promise<IResultSearch<T>> {
     return this.collection.paginatedQuery(req.body, req.user, req.query.page, req.query.limit)
       .then((result) => {
         result.result.map(reg => {

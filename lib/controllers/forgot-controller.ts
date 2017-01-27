@@ -7,7 +7,7 @@ import * as JSData from 'js-data'
 export class ForgotController {
   forgot: ForgotDAO
 
-  constructor(store: JSData.DS, appConfig: AppConfig) {
+  constructor(store: JSData.DataStore, appConfig: AppConfig) {
     this.forgot = new ForgotDAO(store, appConfig)
   }
 
@@ -17,11 +17,11 @@ export class ForgotController {
    * @param {Request} req
    * @param {Response} res
    * @param {NextFunction} [next]
-   * @returns {JSData.JSDataPromise<IUser>}
+   * @returns {Promise<IUser>}
    *
    * @memberOf ForgotController
    */
-  public sendMail(req: Request, res: Response, next?: NextFunction): JSData.JSDataPromise<any> {
+  public sendMail(req: Request, res: Response, next?: NextFunction): Promise<any> {
     return this.forgot.sendForgotMail(req.body)
       .then(() => {
         res.status(200)
@@ -38,11 +38,11 @@ export class ForgotController {
    * @param {Request} req
    * @param {Response} res
    * @param {NextFunction} next
-   * @returns {JSData.JSDataPromise<any>}
+   * @returns {Promise<any>}
    *
    * @memberOf ForgotController
    */
-  public validaToken(req: Request, res: Response, next: NextFunction): JSData.JSDataPromise<any> {
+  public validaToken(req: Request, res: Response, next: NextFunction): Promise<any> {
     return this.forgot.validaToken(req.params)
       .then((dados: any) => {
         res.status(200)
@@ -59,11 +59,11 @@ export class ForgotController {
    * @param {Request} req
    * @param {Response} res
    * @param {NextFunction} next
-   * @returns {JSData.JSDataPromise<any>}
+   * @returns {Promise<any>}
    *
    * @memberOf ForgotController
    */
-  public resetPassword(req: Request, res: Response, next: NextFunction): JSData.JSDataPromise<any> {
+  public resetPassword(req: Request, res: Response, next: NextFunction): Promise<any> {
     return this.forgot.resetPassword(req.params, req.body)
       .then((dados: any) => {
         res.status(200)

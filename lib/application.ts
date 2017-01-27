@@ -13,13 +13,13 @@ import * as Config from './config'
 import * as Services from './services'
 export class Application {
   app: express.Application
-  store: JSData.DS
+  store: JSData.DataStore
   passport: any
   appConfig: Config.AppConfig
 
-  routes: (app: express.Application, store: JSData.DS, passport: any, appConfig: Config.AppConfig) => express.Application
+  routes: (app: express.Application, store: JSData.DataStore, passport: any, appConfig: Config.AppConfig) => express.Application
 
-  constructor(cfg: Config.AppConfig, routes: (app: express.Application, store: JSData.DS, passport: any, appConfig: Config.AppConfig) => express.Application) {
+  constructor(cfg: Config.AppConfig, routes: (app: express.Application, store: JSData.DataStore, passport: any, appConfig: Config.AppConfig) => express.Application) {
     this.app = express()
     this.appConfig = cfg
     /**
@@ -69,11 +69,11 @@ export class Application {
    *
    *
    */
-  handleJSData(): JSData.DS {
+  handleJSData(): JSData.DataStore {
     /**
      * Definindo o adaptador JSData para o projeto
      */
-    const store: JSData.DS = new JSData.DS()
+    const store: JSData.DataStore = new JSData.DataStore()
     store.registerAdapter(this.appConfig.dbConfig.getDatabase(),
       this.appConfig.dbConfig.getAdapter(),
       this.appConfig.dbConfig.getAdapterOptions()
@@ -81,14 +81,14 @@ export class Application {
     return store
   }
 
-  handlePassport(app: express.Application, store: JSData.DS, passport: any): express.Application {
+  handlePassport(app: express.Application, store: JSData.DataStore, passport: any): express.Application {
     // required for passport
     this.passport = Auth.passportJwt(store, passport, this.appConfig)
     app.use(this.passport.initialize())
     return app
   }
 
-  handleRoutes(app: express.Application, store: JSData.DS, passport: any): express.Application {
+  handleRoutes(app: express.Application, store: JSData.DataStore, passport: any): express.Application {
     /**
      * chamada no index para chamar todas as rotas
      */

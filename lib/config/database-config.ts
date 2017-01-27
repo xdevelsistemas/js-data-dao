@@ -1,14 +1,13 @@
-import * as JSData from 'js-data'
 import { IDefaultAdapterOptions } from '../interfaces'
-const DSRethinkDBAdapter = require('js-data-rethinkdb')
+import * as JSDataRethink from 'js-data-rethinkdb'
 export class DatabaseConfig {
   private _adapterOptions: IDefaultAdapterOptions
-  private _adapter: JSData.IDSAdapter
+  private _adapter: JSDataRethink.RethinkDBAdapter
   private _database: string
   public constructor() {
     this._adapterOptions = { default: true }
     this._database = 'rethinkdb'
-    this._adapter = new DSRethinkDBAdapter({
+    this._adapter = new JSDataRethink.RethinkDBAdapter({
       host: process.env.SERVER_RETHINKDB_HOST || 'localhost',
       port: process.env.SERVER_RETHINKDB_PORT || 28015,
       db: process.env.SERVER_RETHINKDB_DB || 'appserver'
