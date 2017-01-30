@@ -17,11 +17,7 @@ export const passportJwt = (store: JSData.DataStore, passport: any, appConfig: A
   }
 
   passport.use(new Strategy(params, (token: any, done: Function) => {
-    // Login buscando os dados do usuário junto do client.
-    // Isso facilitará na hora de filtrar por clients e equipments do usuário logado
-    let options: any = { with: ['clients'] }
-    // TOdo Erro ao relacionar user com client
-    store.find(appConfig.getUsersTable(), token.id, options)
+    store.find(appConfig.getUsersTable(), token.id)
       .then((user: IBaseUser) => {
         if (user) {
           if (!user.active) {
