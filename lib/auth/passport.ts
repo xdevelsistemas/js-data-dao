@@ -17,11 +17,7 @@ export const passportJwt = (store: JSData.DataStore, passport: any, appConfig: A
   }
 
   passport.use(new Strategy(params, (token: any, done: Function) => {
-    // Login buscando os dados do usuário junto do client.
-    // Isso facilitará na hora de filtrar por clients e equipments do usuário logado
-    let options: any = { with: ['clients'] }
-    // TOdo Erro ao relacionar user com client
-    store.find(appConfig.getUsersTable(), token.id, options)
+    store.find(appConfig.getUsersTable(), token.id)
       .then((user: IBaseUser) => {
         if (user) {
           if (!user.active) {
@@ -29,13 +25,23 @@ export const passportJwt = (store: JSData.DataStore, passport: any, appConfig: A
           } else {
             let u = user
             u.isAdmin = u.companyAlias === appConfig.getMainCompany()
-            return done(null, u)
+            return done(null, {
+              id: u.id,
+              name: u.name,
+              companyAlias: u.companyAlias,
+              email: u.email,
+              username: u.username,
+              isAdmin: u.isAdmin
+            })
           }
         } else {
           return done(new APIError('Unauthorized', 401), null)
         }
       })
   }))
+
+  passport.serializeUser((user: IBaseUser, done: Function) => done(null, user))
+  passport.deserializeUser((user: IBaseUser, done: Function) => done(null, user))
   return passport
 }
 
