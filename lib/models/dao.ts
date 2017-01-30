@@ -101,7 +101,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
         }
         let newObj: T = register
         newObj.active = false
-        return this.collection.update(id, newObj).then(() => true)
+        return this.collection.destroy(id).then(() => true)
       })
   }
 

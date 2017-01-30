@@ -38,6 +38,12 @@ interface ITestSimpeClass extends IBaseModel {
   name: string
 }
 
+interface ITestComplexClass extends IBaseModel {
+  name: string
+  simpleClassId: string
+  simpleClass: ITestSimpeClass
+}
+
 /**
  * class for unit test
  *
@@ -51,6 +57,26 @@ class TestSimpleClass extends BaseModel implements ITestSimpeClass {
   constructor(obj: ITestSimpeClass) {
     super(obj)
     this.name = obj.name
+  }
+}
+
+
+/**
+ *
+ *
+ * @class TestComplexClass
+ * @extends {BaseModel}
+ * @implements {ITestComplexClass}
+ */
+class TestComplexClass extends BaseModel implements ITestComplexClass {
+  name: string
+  simpleClassId: string
+  simpleClass: ITestSimpeClass
+
+  constructor(obj: ITestComplexClass) {
+    super(obj)
+    this.name = obj.name
+    this.simpleClassId = obj.simpleClassId
   }
 }
 
@@ -69,7 +95,23 @@ class TestSimpleClassDAO extends DAO<ITestSimpeClass> {
 
 }
 
-describe('DAO', () => {
+class TestComplexClassDAO extends DAO<ITestComplexClass> {
+  storedb: JSData.DataStore
+  constructor(store: JSData.DataStore, appConfig: AppConfig) {
+    const testSimple = store.defineMapper('test_complex', {
+    })
+    super(testSimple, [])
+    this.storedb = store
+  }
+
+  public create(obj: ITestSimpeClass, userP: any): Promise<ITestSimpeClass> {
+    let testSimpleClass: ITestSimpeClass = new TestSimpleClass(obj)
+    return this.collection.create(testSimpleClass)
+  }
+
+}
+
+describe('Simple DAO', () => {
   let dao1 = new TestSimpleClassDAO(store, config)
   let instance1 = new TestSimpleClass({ name : 'test'})
 
@@ -84,15 +126,32 @@ describe('DAO', () => {
   it('update', () => {
     let i2 = instance1
     i2.name = 'joao'
-    dao1.update(instance1.id,null,i2).should.eventually.fulfilled
+    dao1.update(i2.id,null,i2).should.eventually.fulfilled
+    .have.property('id').eq(i2.id)
+    .have.property('name').eq(i2.name)
+    .have.property('createdAt').eq(i2.createdAt)
+    .have.property('updatedAt').eq(i2.updatedAt)
   })
 
   it('find', () => {
     dao1.find(instance1.id,null).should.eventually.fulfilled
+    .should.eventually.instanceof(Object)
   })
 
   it('listAll', () => {
     dao1.findAll({},null).should.eventually.fulfilled
+    .should.eventually.instanceof(Array)
+    .have.property('length').eq(1)
+  })
+
+  let dao2 = new TestSimpleClassDAO(store, config)
+  let instance1 = new TestSimpleClass({ name : 'test'})
+
+
+  it('inserindo o DAO2 que é mais complexo', () => {
+    dao1.findAll({},null).should.eventually.fulfilled
+    .should.eventually.instanceof(Array)
+    .have.property('length').eq(1)
   })
 
   it('delete', () => {
@@ -100,3 +159,6 @@ describe('DAO', () => {
   })
 
 })
+
+
+
