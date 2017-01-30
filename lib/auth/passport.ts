@@ -25,7 +25,14 @@ export const passportJwt = (store: JSData.DataStore, passport: any, appConfig: A
           } else {
             let u = user
             u.isAdmin = u.companyAlias === appConfig.getMainCompany()
-            return done(null, u)
+            return done(null, {
+              id : u.id,
+              name: u.name,
+              companyAlias: u.companyAlias,
+              email: u.email,
+              username: u.username,
+              isAdmin: u.isAdmin
+            })
           }
         } else {
           return done(new APIError('Unauthorized', 401), null)
