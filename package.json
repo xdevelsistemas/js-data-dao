@@ -19,8 +19,16 @@
     "lib/**/*.js.map"
   ],
   "dependencies": {
+    "@types/chai-as-promised": "^0.0.29",
+    "bcrypt-then": "^1.1.0",
+    "bcryptjs": "^2.4.0",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "email-validator": "^1.0.7",
     "js-data": "3.0.0-rc.5",
-    "js-data-rethinkdb": "https://github.com/xdevelsistemas/js-data-rethinkdb#stable"
+    "js-data-rethinkdb": "https://github.com/xdevelsistemas/js-data-rethinkdb#stable",
+    "rethinkdbdash": "^2.3.27",
+    "shortid": "^2.2.6"
   },
   "devDependencies": {
     "@types/bluebird": "^3.0.37",

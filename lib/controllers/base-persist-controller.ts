@@ -34,8 +34,11 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status(200)
         return reg
       })
-      .catch((error: Error) => {
-        throw new APIError(error.message, 400)
+      .catch((err : string) => {
+        throw new APIError(err, 400)
+      })
+      .catch((err : Error) => {
+        throw new APIError(err.message, 400)
       })
   }
 
@@ -49,6 +52,9 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status(200)
         return regs
       })
+      .catch((err : string) => {
+        throw new APIError(err, 400)
+      })
       .catch((err : Error) => {
         throw new APIError(err.message, 400)
       })
@@ -61,8 +67,11 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status(201)
         return reg
       })
-      .catch((error: Error) => {
-        throw new APIError(error.message, 400)
+      .catch((err : string) => {
+        throw new APIError(err, 400)
+      })
+      .catch((err : Error) => {
+        throw new APIError(err.message, 400)
       })
   }
 
@@ -73,8 +82,11 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status(200)
         return reg
       })
-      .catch((error: Error) => {
-        throw new APIError(error.message, 400)
+      .catch((err : string) => {
+        throw new APIError(err, 400)
+      })
+      .catch((err : Error) => {
+        throw new APIError(err.message, 400)
       })
   }
 
@@ -84,8 +96,11 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status(200)
         return isDeleted
       })
-      .catch(error => {
-        throw new APIError(error, 400)
+      .catch((err : string) => {
+        throw new APIError(err, 400)
+      })
+      .catch((err : Error) => {
+        throw new APIError(err.message, 400)
       })
   }
 
@@ -99,8 +114,11 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status(200)
         return result
       })
-      .catch(error => {
-        throw new APIError(error, 400)
+      .catch((err : string) => {
+        throw new APIError(err, 400)
+      })
+      .catch((err : Error) => {
+        throw new APIError(err.message, 400)
       })
   }
 }
