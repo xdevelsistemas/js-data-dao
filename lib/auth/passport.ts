@@ -26,7 +26,7 @@ export const passportJwt = (store: JSData.DataStore, passport: any, appConfig: A
             let u = user
             u.isAdmin = u.companyAlias === appConfig.getMainCompany()
             return done(null, {
-              id : u.id,
+              id: u.id,
               name: u.name,
               companyAlias: u.companyAlias,
               email: u.email,
@@ -39,6 +39,9 @@ export const passportJwt = (store: JSData.DataStore, passport: any, appConfig: A
         }
       })
   }))
+
+  passport.serializeUser((user: IBaseUser, done: Function) => done(null, user))
+  passport.deserializeUser((user: IBaseUser, done: Function) => done(null, user))
   return passport
 }
 
