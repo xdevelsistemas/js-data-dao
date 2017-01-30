@@ -5,6 +5,5 @@ export interface IBaseUser extends IBaseModel {
   email: string
   username: string
   password: string
-  newPassword?: string
   isAdmin: boolean
 }
