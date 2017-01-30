@@ -11,6 +11,7 @@ export class LoginRouter {
   constructor(store: JSData.DataStore, appConfig: AppConfig) {
     this.store = store
     this.router = Router()
+    this.appConfig = appConfig
     this.routers()
   }
 
