@@ -1,6 +1,5 @@
 import { IDAO, IResultSearch } from '../interfaces'
 import { APIError } from '../services/api-error'
-import { ServiceLib } from '../services/service-lib'
 import * as JSData from 'js-data'
 import { IBaseUser } from '../interfaces/ibase-user'
 import { IBaseModel } from '../interfaces/ibase-model'
@@ -9,16 +8,14 @@ import * as _ from 'lodash'
 export class DAO<T extends IBaseModel> implements IDAO<T> {
   public collection: JSData.Mapper
   public options: any
-  public exclude: Array<string>
 
-  constructor(currentModel: JSData.Mapper, joins: any[] = [], exclude: Array<string> = []) {
+  constructor(currentModel: JSData.Mapper, joins: any[] = []) {
     if (!currentModel) {
       throw Error('classe não instanciada corretamente')
     }
     this.options = {
       with: joins
     }
-    this.exclude = exclude
     this.collection = currentModel
   }
 
@@ -80,9 +77,6 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @memberOf DAO
    */
   public update(id: string, user: IBaseUser, obj: T): Promise<T> {
-    if (!ServiceLib.validateFields(obj, Object.keys(obj), this.exclude)) {
-      throw 'Alguns dados são obrigatórios, corrija-os e tente novamente'
-    }
     return this.collection.update(id, obj)
   }
 
@@ -125,7 +119,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    */
   paginatedQuery(
     search: Object, user: IBaseUser, page?: number, limit?: number, order?: Array<string>
-  ): Promise<IResultSearch<T>> {
+  , options?: any): Promise<IResultSearch<T>> {
     let _page: number = page || 1
     let _limit: number = limit || 10
     let _order: string[] = []
