@@ -65,7 +65,7 @@ export class ServiceLib {
     return allCorrect
   }
 
-  static hashPassword(password: string): string {
+  static hashPassword(password: string): Promise<string> {
     return bcrypt.hash(password, bcryptjs.genSaltSync(10))
   }
 

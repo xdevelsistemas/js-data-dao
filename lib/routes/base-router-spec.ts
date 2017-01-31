@@ -91,7 +91,7 @@ describe('Criando ambiente testavel para aplicar CRUD na persistencia', () => {
   it('Find invalid id ?', (done: Function) => {
     request(app)
     .get(`/api/v1/test/178278`)
-    .expect(404, done)
+    .expect(400, done)
   })
 
   it('Delete ?', (done: Function) => {
