@@ -48,9 +48,11 @@ export const passportJwt = (store: JSData.DataStore, passport: any, appConfig: A
 export const jwtGenerator = (store: JSData.DataStore, appConfig: AppConfig) => (req: Request, res: Response, nex: Function): Promise<Response> => {
   let { email, password } = req.body
   if (email && password) {
-    let options: any = {
-      email: {
-        '===': email
+    let options = {
+      where: {
+        email: {
+          '===': email
+        }
       }
     }
     return store.findAll(appConfig.getUsersTable(), options)
