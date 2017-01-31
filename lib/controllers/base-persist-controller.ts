@@ -76,7 +76,7 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
   }
 
   public update(req: Request, res: express.Response, next?: express.NextFunction): Promise<T> {
-    return this.collection.update(req.params.id, req.body, req.user)
+    return this.collection.update(req.params.id, req.user, req.body)
       .then((reg: T) => {
         delete (reg as any).password
         res.status(200)

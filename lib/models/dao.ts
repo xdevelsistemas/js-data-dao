@@ -68,6 +68,10 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
     }
   }
 
+  public parseModel(val: any): T {
+    throw new Error('não implementado')
+  }
+
   /**
    * busca todos os registros
    *
@@ -118,7 +122,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @memberOf DAO
    */
   public create(obj: T, userP: any): Promise<T> {
-    return this.collection.create(obj)
+    return this.collection.create(this.parseModel(obj))
       .then((record: JSData.Record) => {
         return record.toJSON(this.opts)
       })

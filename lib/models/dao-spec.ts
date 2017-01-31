@@ -31,11 +31,11 @@ let store: JSData.DataStore = handleJSData(config)
  * @interface ITestSimpeClass
  * @extends {IBaseModel}
  */
-interface ITestSimpleClass extends IBaseModel {
+export interface ITestSimpleClass extends IBaseModel {
   name: string
 }
 
-interface ITestComplexClass extends IBaseModel {
+export interface ITestComplexClass extends IBaseModel {
   name: string
   simpleClassId: string
   simpleClass?: ITestSimpleClass
@@ -48,7 +48,7 @@ interface ITestComplexClass extends IBaseModel {
  * @extends {BaseModel}
  * @implements {ITestSimpeClass}
  */
-class TestSimpleClass extends BaseModel implements ITestSimpleClass {
+export class TestSimpleClass extends BaseModel implements ITestSimpleClass {
   name: string
 
   constructor(obj: ITestSimpleClass) {
@@ -64,7 +64,7 @@ class TestSimpleClass extends BaseModel implements ITestSimpleClass {
  * @extends {BaseModel}
  * @implements {ITestComplexClass}
  */
-class TestComplexClass extends BaseModel implements ITestComplexClass {
+export class TestComplexClass extends BaseModel implements ITestComplexClass {
   name: string
   simpleClassId: string
   simpleClass?: ITestSimpleClass
@@ -76,7 +76,7 @@ class TestComplexClass extends BaseModel implements ITestComplexClass {
   }
 }
 
-class TestSimpleClassDAO extends DAO<ITestSimpleClass> {
+export class TestSimpleClassDAO extends DAO<ITestSimpleClass> {
   storedb: JSData.DataStore
   constructor(store: JSData.DataStore, appConfig: AppConfig) {
     super(store, 'simple', {
@@ -89,9 +89,13 @@ class TestSimpleClassDAO extends DAO<ITestSimpleClass> {
     this.storedb = store
   }
 
+  parseModel(obj: any) {
+    return new TestSimpleClass(obj)
+  }
+
 }
 
-class TestComplexClassDAO extends DAO<ITestComplexClass> {
+export class TestComplexClassDAO extends DAO<ITestComplexClass> {
   storedb: JSData.DataStore
   constructor(store: JSData.DataStore, appConfig: AppConfig) {
     super(store, 'complex', {
@@ -109,6 +113,10 @@ class TestComplexClassDAO extends DAO<ITestComplexClass> {
       }
     }, ['simple'])
     this.storedb = store
+  }
+
+  parseModel(obj: any) {
+    return new TestComplexClass(obj)
   }
 }
 let dao1 = new TestSimpleClassDAO(store, config)
@@ -269,6 +277,43 @@ describe('Instance new same DAO', () => {
   let dao3 = new TestSimpleClassDAO(store,config)
   it('listAll', (done: Function) => {
     dao3.findAll({}, null)
+      .should.be.fulfilled
+      .and.notify(done)
+  })
+
+})
+
+class TestOtherSimpleClassDAO extends DAO<ITestSimpleClass> {
+  storedb: JSData.DataStore
+  constructor(store: JSData.DataStore, appConfig: AppConfig) {
+    super(store, 'other')
+    this.storedb = store
+  }
+
+  parseModel(obj: any) {
+    return new TestSimpleClass(obj)
+  }
+
+}
+
+describe('install minimal config', () => {
+  let dao4 = new TestOtherSimpleClassDAO(store,config)
+  let instance5 = new TestSimpleClass({ name: 'invalid'})
+
+  it('Ocorre limpeza de todos os itens que estão no banco?', (done: Function) => {
+    dao4.collection.destroyAll({})
+      .should.be.fulfilled
+      .and.notify(done)
+  })
+
+  it('insert', (done: Function) => {
+    dao4.create(instance5, null)
+      .should.be.fulfilled
+      .and.notify(done)
+  })
+
+  it('listAll', (done: Function) => {
+    dao4.findAll({}, null)
       .should.be.fulfilled
       .and.notify(done)
   })
