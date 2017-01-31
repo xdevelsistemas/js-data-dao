@@ -25,8 +25,11 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "email-validator": "^1.0.7",
+    "fs-extra-promise": "^0.4.1",
     "js-data": "3.0.0-rc.5",
     "js-data-rethinkdb": "https://github.com/xdevelsistemas/js-data-rethinkdb#stable",
+    "nodemailer": "^3.0.0",
+    "nodemailer-smtp-transport": "^2.7.2",
     "rethinkdbdash": "^2.3.27",
     "shortid": "^2.2.6"
   },

@@ -1,4 +1,5 @@
 import { IDAO, IResultSearch } from '../interfaces'
+import { APIError } from '../services'
 import * as JSData from 'js-data'
 import { IBaseUser } from '../interfaces/ibase-user'
 import { IBaseModel } from '../interfaces/ibase-model'
@@ -26,11 +27,11 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
       },
       createdAt: {
         description: 'date of created time',
-        type: 'number'
+        type: 'string'
       },
       updatedAt: {
         description: 'date of last update',
-        type: 'number'
+        type: 'string'
       }
     }
 
@@ -47,11 +48,10 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
       }
       this.schema = new JSData.Schema(objSchema)
     }
-
     this.collectionName = collectionName
-    // this.collection = store.getMapper(collectionName)
-
-    if (!this.collection) {
+    try {
+      this.collection = store.getMapper(collectionName)
+    } catch (e) {
       let opts: any = {}
       if (schema) {
         opts.schema = this.schema
@@ -122,6 +122,9 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
       .then((record: JSData.Record) => {
         return record.toJSON(this.opts)
       })
+      .catch((reject: JSData.SchemaValidationError) => {
+        throw new APIError('erro de entrada', 400, reject)
+      })
   }
 
   /**
@@ -138,6 +141,9 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
     return this.collection.update(id, obj)
       .then((record: JSData.Record) => {
         return record.toJSON(this.opts) as T
+      })
+      .catch((reject: JSData.SchemaValidationError) => {
+        throw new APIError('erro de entrada', 400, reject)
       })
   }
 

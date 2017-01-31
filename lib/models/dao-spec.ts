@@ -235,6 +235,18 @@ describe('Complex DAO', () => {
       .should.be.fulfilled
       .and.notify(done)
   })
+
+})
+
+let instance4 = new TestComplexClass({ name: 'invalid', simpleClassId: instance1.id })
+
+describe('Incomplete DAO', () => {
+  delete instance4.name
+  it('add invalida complex', (done: Function) => {
+    dao2.create(instance4,null)
+      .should.be.rejected
+      .and.notify(done)
+  })
 })
 
 describe('Clean DAO ops', () => {
@@ -251,4 +263,14 @@ describe('Clean DAO ops', () => {
       .should.be.eventually.equal(true)
       .and.notify(done)
   })
+})
+
+describe('Instance new same DAO', () => {
+  let dao3 = new TestSimpleClassDAO(store,config)
+  it('listAll', (done: Function) => {
+    dao3.findAll({}, null)
+      .should.be.fulfilled
+      .and.notify(done)
+  })
+
 })
