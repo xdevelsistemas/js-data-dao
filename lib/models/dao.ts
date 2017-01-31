@@ -1,5 +1,4 @@
 import { IDAO, IResultSearch } from '../interfaces'
-import { APIError } from '../services/api-error'
 import * as JSData from 'js-data'
 import { IBaseUser } from '../interfaces/ibase-user'
 import { IBaseModel } from '../interfaces/ibase-model'
@@ -7,16 +6,66 @@ import * as _ from 'lodash'
 
 export class DAO<T extends IBaseModel> implements IDAO<T> {
   public collection: JSData.Mapper
-  public options: any
+  public schema: JSData.Schema
+  public collectionName: string
+  public opts: any
 
-  constructor(currentModel: JSData.Mapper, joins: any[] = []) {
-    if (!currentModel) {
+  constructor(store: JSData.DataStore, collectionName: string, schema: any = null, relations: any = null, joins: string[] = []) {
+    if (!store) {
       throw Error('classe não instanciada corretamente')
     }
-    this.options = {
-      with: joins
+
+    const mainSchemaProperties: Object = {
+      id: {
+        description: 'The unique identifier for a register',
+        type: 'string'
+      },
+      active: {
+        description: 'the register is active?',
+        type: 'boolean'
+      },
+      createdAt: {
+        description: 'date of created time',
+        type: 'number'
+      },
+      updatedAt: {
+        description: 'date of last update',
+        type: 'number'
+      }
     }
-    this.collection = currentModel
+
+    if (schema) {
+      let mainSchemaRequireds: string[] = ['id', 'active', 'createdAt']
+      let newSchemaRequireds = (schema.required && Array.isArray(schema.required) && schema.required.length > 0) ? _.union(schema.required, mainSchemaRequireds) : mainSchemaRequireds
+      let newSchemaProperties = Object.assign({}, mainSchemaProperties, schema.properties)
+      let objSchema = {
+        title: schema.title || this.collectionName,
+        description: schema.description || 'please add description',
+        type: schema.type || 'object',
+        properties: newSchemaProperties,
+        required: newSchemaRequireds
+      }
+      this.schema = new JSData.Schema(objSchema)
+    }
+
+    this.collectionName = collectionName
+    // this.collection = store.getMapper(collectionName)
+
+    if (!this.collection) {
+      let opts: any = {}
+      if (schema) {
+        opts.schema = this.schema
+      }
+      if (relations) {
+        opts.relations = relations
+      }
+      this.collection = store.defineMapper(collectionName, opts)
+    }
+
+    this.opts = {
+      with: joins,
+      debug: true
+    }
   }
 
   /**
@@ -29,7 +78,14 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @memberOf DAO
    */
   public findAll(query: Object = {}, user: IBaseUser): Promise<Array<T>> {
-    return this.collection.findAll(query, this.options)
+    return this.collection.findAll(query, this.opts)
+      .then((records: JSData.Record[]) => {
+        if (records) {
+          return records.map(d => d.toJSON(this.opts)) as T[]
+        } else {
+          return []
+        }
+      })
   }
 
   /**
@@ -42,12 +98,12 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @memberOf DAO
    */
   public find(id: string, user: IBaseUser): Promise<T> {
-    return this.collection.find(id, this.options)
-      .then((register: T) => {
-        if (register.active) {
-          return register
+    return this.collection.find(id, this.opts)
+      .then((record: JSData.Record) => {
+        if (record) {
+          return record.toJSON(this.opts) as T
         } else {
-          throw 'Registro não encontrado'
+          return null
         }
       })
   }
@@ -61,9 +117,11 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public create(obj: T, user: IBaseUser): Promise<T> {
-    throw new APIError('Nao implementado', 500)
-    // return this.collection.create(obj)
+  public create(obj: T, userP: any): Promise<T> {
+    return this.collection.create(obj)
+      .then((record: JSData.Record) => {
+        return record.toJSON(this.opts)
+      })
   }
 
   /**
@@ -78,6 +136,9 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    */
   public update(id: string, user: IBaseUser, obj: T): Promise<T> {
     return this.collection.update(id, obj)
+      .then((record: JSData.Record) => {
+        return record.toJSON(this.opts) as T
+      })
   }
 
   /**
@@ -90,19 +151,9 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @memberOf DAO
    */
   public delete(id: string, user: IBaseUser): Promise<boolean> {
-    // return this.collection.destroy(id)
-    //     .then(() => true)
-    //     .catch(() => false)
-
-    return this.collection.find(id)
-      .then((register: T) => {
-        if (_.isEmpty(register)) {
-          throw 'Registro não encontrado'
-        }
-        let newObj: T = register
-        newObj.active = false
-        return this.collection.destroy(id).then(() => true)
-      })
+    return this.collection.destroy(id)
+      .then(() => true)
+      .catch(() => false)
   }
 
   /**
@@ -118,8 +169,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @memberOf DAO
    */
   paginatedQuery(
-    search: Object, user: IBaseUser, page?: number, limit?: number, order?: Array<string>
-  , options?: any): Promise<IResultSearch<T>> {
+    search: Object, user: IBaseUser, page?: number, limit?: number, order?: Array<string>, options?: any): Promise<IResultSearch<T>> {
     let _page: number = page || 1
     let _limit: number = limit || 10
     let _order: string[] = []
@@ -131,12 +181,12 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
 
     return this.collection.findAll(search)
       .then((countResult) => {
-        return this.collection.findAll(params)
-          .then((results) => {
+        return this.collection.findAll(params, options || this.opts)
+          .then((results: JSData.Record[]) => {
             return {
               page: _page,
               total: countResult.length,
-              result: results
+              result: results.map(d => d.toJSON(options || this.opts))
             } as IResultSearch<T>
           })
       })

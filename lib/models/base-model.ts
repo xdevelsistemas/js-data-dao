@@ -1,11 +1,10 @@
 import { IBaseModel } from '../interfaces'
 import { ServiceLib } from '../services/service-lib'
-
 export class BaseModel implements IBaseModel {
   id?: string
   active?: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: number
+  updatedAt?: number
   constructor(obj?: IBaseModel) {
     if (obj) {
       if (obj.id) {
@@ -13,13 +12,13 @@ export class BaseModel implements IBaseModel {
       } else {
         this.id = ServiceLib.generateId()
       }
-      this.active = (obj.active === null || obj.active === undefined ) ? true : obj.active
-      this.createdAt = obj.createdAt || new Date()
-      this.updatedAt = obj.updatedAt || new Date()
+      this.active = (obj.active === null || obj.active === undefined) ? true : obj.active
+      this.createdAt = obj.createdAt || new Date().getTime()
+      this.updatedAt = obj.updatedAt || new Date().getTime()
     } else {
       this.id = ServiceLib.generateId()
       this.active = true
-      this.createdAt = new Date()
+      this.createdAt = new Date().getTime()
       this.updatedAt = null
     }
   }

@@ -61,6 +61,7 @@ gulp.task('pre-test', ['ts', 'tslint'], () =>
 gulp.task('test', ['pre-test'], () => runTest()
   .once('error', (error: Error) => {
     console.error(error.message)
+    process.exit(-1)
   })
   .once('end', () => process.exit())
 )
@@ -69,6 +70,7 @@ gulp.task('test-coverage', ['pre-test'], function () {
   return runTest()
     .once('error', (error: Error) => {
       console.error(error.message)
+      process.exit(-1)
     })
     .pipe(istanbul.writeReports({
       reporters: ['json']
