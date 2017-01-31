@@ -29,6 +29,7 @@
     "js-data": "3.0.0-rc.5",
     "js-data-rethinkdb": "https://github.com/xdevelsistemas/js-data-rethinkdb#stable",
     "nodemailer": "^3.0.0",
+    "nodemailer-mock": "^1.1.10",
     "nodemailer-smtp-transport": "^2.7.2",
     "rethinkdbdash": "^2.3.27",
     "shortid": "^2.2.6"
