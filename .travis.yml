@@ -12,6 +12,7 @@ before_script:
   - npm install 
   - npm run builder:compile
   - docker run -p 28015:28015 -d rethinkdb
+  - gulp coveralls
 deploy:
   skip_cleanup: true
   provider: npm
