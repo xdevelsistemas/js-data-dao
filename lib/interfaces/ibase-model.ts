@@ -1,6 +1,7 @@
+
 export interface IBaseModel {
-  id: string
-  active: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  id?: string
+  active?: boolean
+  createdAt?: string
+  updatedAt?: string
 }

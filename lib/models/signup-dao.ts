@@ -5,13 +5,14 @@ import * as _ from 'lodash'
 import { AppConfig } from '../config/app-config'
 import { MailConfig } from '../config/mail-config'
 import { ServiceLib } from '../services/service-lib'
+import * as nodemailer from 'nodemailer'
 
 export class SignUpDAO {
   storedb: JSData.DataStore
   private _mailConfig: MailConfig
   private _serviceLib: ServiceLib
   private _appConfig: AppConfig
-  constructor(store: JSData.DataStore, appConfig: AppConfig) {
+  constructor(store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
     this.storedb = store
     this._appConfig = appConfig
     this._mailConfig = appConfig.mailConfig

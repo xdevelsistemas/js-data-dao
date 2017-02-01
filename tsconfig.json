@@ -14,9 +14,6 @@
         "noUnusedLocals": true,
         "noUnusedParameters" : false
     },
-    "files": [
-        "lib/index.ts"
-    ],
     "exclude": [
         "node_modules",
         "jspm_packages"
