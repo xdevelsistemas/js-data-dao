@@ -1,6 +1,7 @@
 import * as gulp from 'gulp'
 import * as ts from 'gulp-typescript'
 let clean = require('gulp-clean')
+let coveralls = require('gulp-coveralls')
 import * as tslint from 'gulp-tslint'
 import * as sourcemaps from 'gulp-sourcemaps'
 import * as mocha from 'gulp-mocha'
@@ -87,5 +88,12 @@ gulp.task('coverage', ['test-coverage'], () =>
         'lcovonly': './coverage/lcov.info'
       }
     }))
+    .pipe(coveralls())
+    .once('end', () => process.exit())
+)
+
+gulp.task('coveralls', ['test-coverage'], () =>
+  gulp.src('./coverage/lcov.info')
+    .pipe(coveralls())
     .once('end', () => process.exit())
 )
