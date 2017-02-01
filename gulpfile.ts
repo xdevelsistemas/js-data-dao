@@ -88,7 +88,6 @@ gulp.task('coverage', ['test-coverage'], () =>
         'lcovonly': './coverage/lcov.info'
       }
     }))
-    .pipe(coveralls())
     .once('end', () => process.exit())
 )
 

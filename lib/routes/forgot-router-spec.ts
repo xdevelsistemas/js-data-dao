@@ -14,6 +14,7 @@ import { ServiceLib } from '../services/service-lib'
 const Passport = require('passport')
 import { passportJwt } from '../auth/passport'
 const nodemailerMock = require('nodemailer-mock-transport')
+import * as path from 'path'
 chai.use(chaiAsPromised)
 chai.should()
 
@@ -23,6 +24,7 @@ app.use(bodyParser())
 /**
  * criando o ambiente testável
  */
+process.env.LAYOUT_PATH = path.join(__dirname,'../../testResources')
 process.env.CRYPTO_PASSWORD = 'secret'
 process.env.APP_JWT_SECRET = 'SECRET'
 let config = new AppConfig()
