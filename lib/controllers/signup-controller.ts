@@ -3,12 +3,13 @@ import { SignUpDAO } from '../models/signup-dao'
 import { APIError } from '../services'
 import * as JSData from 'js-data'
 import { AppConfig } from '../config/app-config'
+import * as nodemailer from 'nodemailer'
 
 export class SignupController {
   Signup: SignUpDAO
 
-  constructor(store: JSData.DataStore, appConfig: AppConfig) {
-    this.Signup = new SignUpDAO(store, appConfig)
+  constructor(store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
+    this.Signup = new SignUpDAO(store, appConfig, transporter)
   }
 
   /**

@@ -3,12 +3,13 @@ import { ForgotDAO } from '../models/forgot-dao'
 import { APIError } from '../services'
 import { AppConfig } from '../config/app-config'
 import * as JSData from 'js-data'
+import * as nodemailer from 'nodemailer'
 
 export class ForgotController {
   forgot: ForgotDAO
 
-  constructor(store: JSData.DataStore, appConfig: AppConfig) {
-    this.forgot = new ForgotDAO(store, appConfig)
+  constructor(store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
+    this.forgot = new ForgotDAO(store, appConfig, transporter)
   }
 
   /**

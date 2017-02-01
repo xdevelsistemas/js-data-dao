@@ -1,5 +1,5 @@
 import { DAO } from '../models/dao'
-import { LoginRouter, PingRouter } from './'
+import { ForgotRouter, LoginRouter } from './'
 import { AppConfig } from '../config'
 import * as JSData from 'js-data'
 import * as chai from 'chai'
@@ -11,9 +11,9 @@ import * as bodyParser from 'body-parser'
 import { BaseModel } from '../models/base-model'
 import { IBaseUser } from '../interfaces'
 import { ServiceLib } from '../services/service-lib'
-import { authenticate } from '../auth/jwtAuth'
 const Passport = require('passport')
 import { passportJwt } from '../auth/passport'
+const nodemailerMock = require('nodemailer-mock-transport')
 chai.use(chaiAsPromised)
 chai.should()
 
@@ -23,8 +23,10 @@ app.use(bodyParser())
 /**
  * criando o ambiente testável
  */
+process.env.CRYPTO_PASSWORD = 'secret'
 process.env.APP_JWT_SECRET = 'SECRET'
 let config = new AppConfig()
+let serviceLib = new ServiceLib(config)
 let handleJSData = (config: AppConfig): JSData.DataStore => {
   /**
    * Definindo o adaptador JSData para o projeto
@@ -72,22 +74,23 @@ let store: JSData.DataStore = handleJSData(config)
 let userDAO = new TestUserDAO(store, config)
 let passport = passportJwt(store, Passport, config)
 
-let router = new LoginRouter(store, config)
+let router = new ForgotRouter(store, config, nodemailerMock({ foo: 'bar' }))
+let loginRouter = new LoginRouter(store, config)
 
 /**
  * create api/v1/test router for CRUD operation
  */
 app.use(passport.initialize())
-app.use('/api/v1/login', router.getRouter())
-app.use('/api/v1/ping', authenticate(passport, config), new PingRouter().getRouter())
+app.use('/api/v1/forgot', router.getRouter())
+app.use('/api/v1/login', loginRouter.getRouter())
 
 /**
  * inicio dos testes
  */
 
-describe('Persist Router Basic', () => {
+describe('Forgot Router Basic', () => {
   it('Controller é Instanciável ?', () => {
-    assert(router instanceof LoginRouter)
+    assert(router instanceof ForgotRouter)
   })
 })
 
@@ -112,43 +115,34 @@ describe('Preparando ambiente', () => {
   })
 })
 
-describe('Logando com usuário', () => {
-  let resp: any = null
-  it('login', (done: Function) => {
-    request(app)
-      .post('/api/v1/login')
-      .send({ email: 'test@test.com', password: '12345' }).expect(200)
-      .then((response) => {
-        resp = response.body
-      })
-      .then(() => done())
-  })
+let token = serviceLib.generateToken('test@test.com')
 
-  it('ping seguro autenticado', (done: Function) => {
+describe('Recuperando login', () => {
+  it('iniciando o fluxo', (done: Function) => {
     request(app)
-      .get('/api/v1/ping')
-      .set('Authorization', resp)
+      .post(`/api/v1/forgot`)
+      .send({ email: 'test@test.com' })
       .expect(200, done)
   })
 
-  it('ping seguro sem autorizacao', (done: Function) => {
+  it('clicando no link', (done: Function) => {
     request(app)
-      .get('/api/v1/ping')
-      .expect(401, done)
+      .get(`/api/v1/forgot/${token}`)
+      .expect(200, done)
   })
 
-  it('login inválido', (done: Function) => {
+  it('alterando senha', (done: Function) => {
     request(app)
-      .post('/api/v1/login')
-      .send({ email: 'test@test.com', password: 'x' })
-      .expect(401, done)
+      .post(`/api/v1/forgot/${token}`)
+      .send({ password: '123456' })
+      .expect(200, done)
   })
 
-  it('campos inválidos', (done: Function) => {
+  it('login novo', (done: Function) => {
     request(app)
       .post('/api/v1/login')
-      .send({ x: 'test@test.com', password: 'x' })
-      .expect(401, done)
+      .send({ email: 'test@test.com', password: '123456' })
+      .expect(200, done)
   })
 
   it('eliminando dados sujos', (done: Function) => {

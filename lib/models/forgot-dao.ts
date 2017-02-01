@@ -5,16 +5,17 @@ import * as Bluebird from 'bluebird'
 import * as JSData from 'js-data'
 import * as _ from 'lodash'
 import { AppConfig } from '../config/app-config'
+import * as nodemailer from 'nodemailer'
 
 export class ForgotDAO {
   storedb: JSData.DataStore
   private _sendMail: SendMail
   private _serviceLib: ServiceLib
   private _appConfig: AppConfig
-  constructor(store: JSData.DataStore, appConfig: AppConfig) {
+  constructor(store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
     this.storedb = store
     this._appConfig = appConfig
-    this._sendMail = new SendMail(appConfig.mailConfig)
+    this._sendMail = new SendMail(appConfig.mailConfig, transporter)
     this._serviceLib = new ServiceLib(appConfig)
   }
 

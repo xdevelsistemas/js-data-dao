@@ -9,6 +9,8 @@ export class BaseRouter {
     return t
       .then((u) => res.json(u))
       .catch((err: APIError) => res.status(err.statusCode).json(err.error))
+      .catch((err: Error) => res.status(500).json(err.message))
+      .catch((err) => res.status(500).json(err))
   }
 }
 

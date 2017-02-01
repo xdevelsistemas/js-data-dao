@@ -52,12 +52,6 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status(200)
         return regs
       })
-      .catch((err : string) => {
-        throw new APIError(err, 400)
-      })
-      .catch((err : Error) => {
-        throw new APIError(err.message, 400)
-      })
   }
 
   public create(req: Request, res: express.Response, next?: express.NextFunction): Promise<T> {
@@ -66,12 +60,6 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         delete (reg as any).password
         res.status(201)
         return reg
-      })
-      .catch((err : string) => {
-        throw new APIError(err, 400)
-      })
-      .catch((err : Error) => {
-        throw new APIError(err.message, 400)
       })
   }
 
@@ -82,12 +70,6 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status(200)
         return reg
       })
-      .catch((err : string) => {
-        throw new APIError(err, 400)
-      })
-      .catch((err : Error) => {
-        throw new APIError(err.message, 400)
-      })
   }
 
   public delete(req: Request, res: express.Response, next?: express.NextFunction): Promise<boolean> {
@@ -95,12 +77,6 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
       .then((isDeleted) => {
         res.status(200)
         return isDeleted
-      })
-      .catch((err : string) => {
-        throw new APIError(err, 400)
-      })
-      .catch((err : Error) => {
-        throw new APIError(err.message, 400)
       })
   }
 
@@ -113,12 +89,6 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         })
         res.status(200)
         return result
-      })
-      .catch((err : string) => {
-        throw new APIError(err, 400)
-      })
-      .catch((err : Error) => {
-        throw new APIError(err.message, 400)
       })
   }
 }

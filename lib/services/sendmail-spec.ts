@@ -2,17 +2,39 @@ import { MailConfig } from '../config/mail-config'
 import { SendMail } from './sendmail'
 import * as assert from 'assert'
 import * as chai from 'chai'
+import * as path from 'path'
+const nodemailerMock = require('nodemailer-mock-transport')
 chai.should()
 /**
  * preparando testabililidade do ambiente
  */
+process.env.LAYOUT_PATH = path.join(__dirname,'../../testResources')
 process.env.CRYPTO_PASSWORD = 'secret'
-const bm = new SendMail(new MailConfig())
+const sm0 = new SendMail(new MailConfig())
+const sm = new SendMail(new MailConfig(), nodemailerMock({foo : 'bar'}))
 
-describe('ServiceLib', () => {
+describe('SendMail', () => {
 
-  it('A classe é instanciável?', () => {
-    assert(bm instanceof SendMail)
+  it('A classe é instanciável? (nodemailer padrao)', () => {
+    assert(sm0 instanceof SendMail)
+  })
+
+  it('A classe é instanciável? (nodemailer mockup)', () => {
+    assert(sm instanceof SendMail)
+  })
+
+  it('Teste de simulaçao de envio de confirmacao', (done: Function) => {
+    sm.sendConfirmationEmail('test@test.com', 'http://teste.com.br')
+    .then(() => done())
+    .catch((err) => done(err))
+    .should.be.fulfilled
+  })
+
+  it('Teste de simulaçao de envio de forgot', (done: Function) => {
+    sm.sendForgotEmail('jhon doe', 'test@test.com', 'http://teste.com.br')
+    .then(() => done())
+    .catch((err) => done(err))
+    .should.be.fulfilled
   })
 
 })

@@ -8,7 +8,7 @@ import * as Bluebird from 'bluebird'
 export class SendMail {
   private transporter: nodemailer.Transporter
   private mailConfig: MailConfig
-  constructor(mailConfig: MailConfig) {
+  constructor(mailConfig: MailConfig, transporter?: nodemailer.Transporter) {
     this.mailConfig = mailConfig
     const options = {
       host: this.mailConfig.getHost(),
@@ -18,17 +18,19 @@ export class SendMail {
         pass: this.mailConfig.getPassword()
       }
     }
-    this.transporter = nodemailer.createTransport(smtpTransport(options))
+    this.transporter = nodemailer.createTransport(transporter || smtpTransport(options))
   }
 
   public sendForgotEmail(name: string, email: string, url: string): Bluebird<any> {
-    return this.generateHtml(name, email, url, TpEMail.forgot).then((html: string) => {
+    return this.generateHtml(name, email, url, TpEMail.forgot)
+    .then((html: string) => {
       return this.sendMail(email, 'Recuperação de senha', html)
     })
   }
 
   public sendConfirmationEmail(email: string, url: string): Bluebird<any> {
-    return this.generateHtml('', email, url, TpEMail.confirmation).then((html: string) => {
+    return this.generateHtml('', email, url, TpEMail.confirmation)
+    .then((html: string) => {
       return this.sendMail(email, 'Confirmação de Cadastro', html)
     })
   }
