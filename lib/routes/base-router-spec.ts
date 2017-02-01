@@ -40,16 +40,20 @@ let ctrl = new TestController(dao)
 
 let router = new TestRouter(store, ctrl)
 
+/**
+ * create api/v1/test router for CRUD operation
+ */
+app.use('/api/v1/test', router.getRouter())
+
+/**
+ * inicio dos testes
+ */
+
 describe('Persist Router Basic', () => {
   it('Controller é Instanciável ?', () => {
     assert(router instanceof TestRouter)
   })
 })
-
-/**
- * create api/v1/test router for CRUD operation
- */
-app.use('/api/v1/test', router.getRouter())
 
 describe('Criando ambiente testavel para aplicar CRUD na persistencia', () => {
   let resp: ITestSimpleClass = null

@@ -1,6 +1,5 @@
 import { AppConfig } from '../config/app-config'
 import * as shortid from 'shortid'
-import * as _ from 'lodash'
 import * as EmailValidator from 'email-validator'
 /**
  * passwordCrypto
@@ -43,28 +42,6 @@ export class ServiceLib {
     return EmailValidator.validate(email)
   }
 
-  /**
-   * O 'obj' terá seus dados validado em relação aos campos contidos em 'fields'
-   * Exceto os campos contidos em 'exclude'
-   *
-   * @param {*} obj
-   * @param {Array<string>} fields
-   * @param {Array<string>} [exclude=[]]
-   * @returns {Boolean}
-   *
-   */
-  static validateFields(obj: any, fields: Array<string>, exclude: Array<string> = []): boolean {
-    let allCorrect: boolean = true
-
-    fields.forEach(el => {
-      if (_.indexOf(exclude, el) === -1) {
-        allCorrect = allCorrect && !_.isEmpty(_.toString(obj[el]))
-      }
-    })
-
-    return allCorrect
-  }
-
   static hashPassword(password: string): Promise<string> {
     return bcrypt.hash(password, bcryptjs.genSaltSync(10))
   }
@@ -73,27 +50,6 @@ export class ServiceLib {
     return bcrypt.compare(password, encryptedPassword)
   }
 
-  /**
-   * Através de 'fieldsUp' um novo objeto é formado e somente os campos ditos nele serão atualizados.
-   * Ou seja, permitindo que campos que não podem ser alterados fiquem seguros e inalterados na atualização.
-   *
-   * @param {*} obj
-   * @param {Array<string>} fieldsObj
-   * @param {Array<string>} fieldsUp
-   * @returns {*}
-   *
-   */
-  static fieldsUpValidator(obj: any, fieldsObj: Array<string>, fieldsUp: Array<string>): any {
-    let newObj: any = {}
-
-    fieldsUp.forEach(field => {
-      if (_.indexOf(fieldsObj, field) !== -1) {
-        newObj[field] = obj[field]
-      }
-    })
-
-    return newObj
-  }
   encrypt(text: string) {
     let cipher = crypto.createCipher(this.config.getCryptoAlgorithm(), this.config.getCryptoPassword())
     let crypted = cipher.update(text, 'utf8', 'hex')

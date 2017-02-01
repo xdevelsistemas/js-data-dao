@@ -10,7 +10,7 @@ export class PingRouter {
   }
 
   public routers() {
-    this.router.get('/ping', (req: Request, res: Response, next: NextFunction) => res.json('pong'))
+    this.router.get('/', (req: Request, res: Response, next: NextFunction) => res.json('pong'))
   }
 
   public getRouter(): Router {

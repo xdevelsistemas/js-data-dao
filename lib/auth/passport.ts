@@ -50,9 +50,7 @@ export const jwtGenerator = (store: JSData.DataStore, appConfig: AppConfig) => (
   if (email && password) {
     let options = {
       where: {
-        email: {
-          '===': email
-        }
+        email: email
       }
     }
     return store.findAll(appConfig.getUsersTable(), options)
