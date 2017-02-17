@@ -61,16 +61,16 @@ export const jwtGenerator = (store: JSData.DataStore, appConfig: AppConfig) => (
         } else if (!user.active) {
           throw 'A conta foi desativada'
         }
-        return Bluebird.all([user, ServiceLib.comparePassword(password, user.password)])
+        let userParsed: any = JSON.parse(JSON.stringify(user))
+        return Bluebird.all([userParsed, ServiceLib.comparePassword(password, userParsed.password)])
       })
       .then((resp: any) => {
         let user: IBaseUser = resp[0]
         let encryptedPassword: boolean = resp[1]
         if (encryptedPassword) {
-          let userParsed: any = JSON.parse(JSON.stringify(user))
-          delete userParsed.password
+          delete user.password
           let days: string = appConfig.getExpirationDays() ? appConfig.getExpirationDays().toString(10) : '3'
-          return res.status(200).json(`JWT ${jwt.sign(userParsed, appConfig.getJwtConfig().secret, { expiresIn:  `${days} days` })}`)
+          return res.status(200).json(`JWT ${jwt.sign(user, appConfig.getJwtConfig().secret, { expiresIn:  `${days} days` })}`)
         }
         throw 'Invalid password'
       })
