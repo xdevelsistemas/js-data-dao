@@ -67,8 +67,10 @@ export const jwtGenerator = (store: JSData.DataStore, appConfig: AppConfig) => (
         let user: IBaseUser = resp[0]
         let encryptedPassword: boolean = resp[1]
         if (encryptedPassword) {
-          delete user.password
-          return res.status(200).json(`JWT ${jwt.sign(user, appConfig.getJwtConfig().secret, { expiresIn: '3 days' })}`)
+          let userParsed: any = JSON.parse(JSON.stringify(user))
+          delete userParsed.password
+          let days: string = appConfig.getExpirationDays() ? appConfig.getExpirationDays().toString(10) : '3'
+          return res.status(200).json(`JWT ${jwt.sign(userParsed, appConfig.getJwtConfig().secret, { expiresIn:  `${days} days` })}`)
         }
         throw 'Invalid password'
       })
