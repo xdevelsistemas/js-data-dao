@@ -56,7 +56,7 @@ export const jwtGenerator = (store: JSData.DataStore, appConfig: AppConfig) => (
     return store.findAll(appConfig.getUsersTable(), options)
       .then((users: Array<IBaseUser>) => {
         let user: IBaseUser = _.head(users)
-        if (_.isEmpty(user)) {
+        if (!user) {
           throw 'O usuário não foi encontrado'
         } else if (!user.active) {
           throw 'A conta foi desativada'
