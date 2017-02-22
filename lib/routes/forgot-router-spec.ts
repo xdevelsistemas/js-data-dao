@@ -49,7 +49,7 @@ export class TestUser extends BaseModel implements IBaseUser {
   password: string
   isAdmin: boolean
 
-  constructor(obj: IBaseUser) {
+  constructor (obj: IBaseUser) {
     super(obj)
     this.name = obj.name
     this.companyAlias = obj.companyAlias
@@ -61,12 +61,12 @@ export class TestUser extends BaseModel implements IBaseUser {
 
 export class TestUserDAO extends DAO<IBaseUser> {
   storedb: JSData.DataStore
-  constructor(store: JSData.DataStore, appConfig: AppConfig) {
+  constructor (store: JSData.DataStore, appConfig: AppConfig) {
     super(store, 'users')
     this.storedb = store
   }
 
-  parseModel(obj: any) {
+  parseModel (obj: any) {
     return new TestUser(obj)
   }
 

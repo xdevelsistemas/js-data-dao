@@ -8,7 +8,7 @@ import * as nodemailer from 'nodemailer'
 export class SignupController {
   Signup: SignUpDAO
 
-  constructor(store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
+  constructor (store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
     this.Signup = new SignUpDAO(store, appConfig, transporter)
   }
 
@@ -22,7 +22,7 @@ export class SignupController {
    *
    * @memberOf SignupController
    */
-  public validaToken(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public validaToken (req: Request, res: Response, next: NextFunction): Promise<any> {
     return this.Signup.validaToken(req.params)
       .then((dados: any) => {
         res.status(200)
@@ -43,7 +43,7 @@ export class SignupController {
    *
    * @memberOf SignupController
    */
-  public registerPassword(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public registerPassword (req: Request, res: Response, next: NextFunction): Promise<any> {
     return this.Signup.registerPassword(req.params, req.body)
       .then((dados: any) => {
         res.status(200)

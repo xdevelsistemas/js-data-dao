@@ -5,7 +5,7 @@ export class BaseModel implements IBaseModel {
   active?: boolean
   createdAt?: string
   updatedAt?: string
-  constructor(obj?: IBaseModel) {
+  constructor (obj?: IBaseModel) {
     if (obj) {
       if (obj.id) {
         this.id = obj.id

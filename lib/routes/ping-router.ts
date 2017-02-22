@@ -4,16 +4,16 @@ export class PingRouter {
 
   router: Router
 
-  constructor() {
+  constructor () {
     this.router = Router()
     this.routers()
   }
 
-  public routers() {
+  public routers () {
     this.router.get('/', (req: Request, res: Response, next: NextFunction) => res.json('pong'))
   }
 
-  public getRouter(): Router {
+  public getRouter (): Router {
     return this.router
   }
 }

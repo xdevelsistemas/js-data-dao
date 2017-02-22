@@ -5,7 +5,7 @@ import { IPersistController } from '../interfaces'
 import * as JSData from 'js-data'
 
 export class BaseRouter {
-  respond( t: Promise<any>, res: Response ): Promise<Response> {
+  respond ( t: Promise<any>, res: Response ): Promise<Response> {
     return t
       .then(( u ) => res.json( u ) )
       .catch(( err: APIError ) => res.status( err.statusCode ).json( { error: err.error, objectResponse: err.objectResponse }) )
@@ -18,14 +18,14 @@ export class PersistRouter<M extends IBaseModel, C extends IPersistController<M>
   controller: C
   router: Router
 
-  constructor( store: JSData.DataStore, controller: C ) {
+  constructor ( store: JSData.DataStore, controller: C ) {
     super()
     this.controller = controller
     this.router = Router()
     this.routers()
   }
 
-  public routers() {
+  public routers () {
     let ctrl = this.controller
     /* GET lista todos os registros da classe corrente em controller. */
     this.router.get( '/', ( req, res, next ) => this.respond( ctrl.findAll( req, res, next ), res ) )
@@ -46,7 +46,7 @@ export class PersistRouter<M extends IBaseModel, C extends IPersistController<M>
     this.router.post( '/query', ( req, res, next ) => this.respond( ctrl.query( req, res, next ), res ) )
   }
 
-  public getRouter(): Router {
+  public getRouter (): Router {
     return this.router
   }
 }
