@@ -8,19 +8,19 @@ export class LoginRouter {
   router: Router
   appConfig: AppConfig
 
-  constructor(store: JSData.DataStore, appConfig: AppConfig) {
+  constructor (store: JSData.DataStore, appConfig: AppConfig) {
     this.store = store
     this.router = Router()
     this.appConfig = appConfig
     this.routers()
   }
 
-  public routers() {
+  public routers () {
     this.router.post('/', (req: Request, res: Response, next: NextFunction): Promise<Response> =>
       jwtGenerator(this.store, this.appConfig)(req, res, next))
   }
 
-  public getRouter(): Router {
+  public getRouter (): Router {
     return this.router
   }
 }

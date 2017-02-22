@@ -4,7 +4,7 @@ export class DatabaseConfig {
   private _adapterOptions: IDefaultAdapterOptions
   private _adapter: JSDataRethink.RethinkDBAdapter
   private _database: string
-  public constructor() {
+  public constructor () {
 
     let opts: JSDataRethink.IBaseRethinkDBAdapter = {
       rOpts: {
@@ -19,13 +19,13 @@ export class DatabaseConfig {
     this._database = 'rethinkdb'
     this._adapter = new JSDataRethink.RethinkDBAdapter(opts)
   }
-  getAdapterOptions() {
+  getAdapterOptions () {
     return this._adapterOptions
   }
-  getDatabase() {
+  getDatabase () {
     return this._database
   }
-  getAdapter() {
+  getAdapter () {
     return this._adapter
   }
 }

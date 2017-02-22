@@ -12,7 +12,7 @@ export class SignUpDAO {
   private _mailConfig: MailConfig
   private _serviceLib: ServiceLib
   private _appConfig: AppConfig
-  constructor(store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
+  constructor (store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
     this.storedb = store
     this._appConfig = appConfig
     this._mailConfig = appConfig.mailConfig
@@ -26,7 +26,7 @@ export class SignUpDAO {
    * @returns {Promise<IBaseUser>}
    * @memberOf SignUpDAO
    */
-  public validaToken(params: any): Promise<IBaseUser> {
+  public validaToken (params: any): Promise<IBaseUser> {
     let tokenDecrypted: string = this._serviceLib.decrypt(params.token)
     let data: any = JSON.parse(tokenDecrypted)
     let today: Date = new Date()
@@ -61,7 +61,7 @@ export class SignUpDAO {
    *
    * @memberOf SignUpDAO
    */
-  public registerPassword(params: any, obj: any): Promise<boolean> {
+  public registerPassword (params: any, obj: any): Promise<boolean> {
     let data: any = JSON.parse(this._serviceLib.decrypt(params.token))
     let today: Date = new Date()
     let filterUser: any = {

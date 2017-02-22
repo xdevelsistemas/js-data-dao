@@ -7,7 +7,7 @@ export class MailConfig {
   private _port: number
   private _layoutPath: string
 
-  constructor() {
+  constructor () {
     this._from = process.env.EMAIL_FROM
     this._email = process.env.EMAIL_NAME
     this._user = process.env.EMAIL_USER
@@ -17,31 +17,31 @@ export class MailConfig {
     this._layoutPath = process.env.LAYOUT_PATH
   }
 
-  getFrom(): string {
+  getFrom (): string {
     return this._from
   }
 
-  getEmail(): string {
+  getEmail (): string {
     return this._email
   }
 
-  getUser(): string {
+  getUser (): string {
     return this._user
   }
 
-  getPassword(): string {
+  getPassword (): string {
     return this._password
   }
 
-  getHost(): string {
+  getHost (): string {
     return this._host
   }
 
-  getLayoutPath(): string {
+  getLayoutPath (): string {
     return this._layoutPath
   }
 
-  getPort(): number {
+  getPort (): number {
     return this._port
   }
 }
