@@ -73,6 +73,7 @@ export class TestComplexClass extends BaseModel implements ITestComplexClass {
     super(obj)
     this.name = obj.name
     this.simpleClassId = obj.simpleClassId
+    this.simpleClass = obj.simpleClass ? new TestSimpleClass(obj.simpleClass) : null
   }
 }
 
