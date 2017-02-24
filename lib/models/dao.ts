@@ -6,14 +6,51 @@ import { IBaseModel } from '../interfaces/ibase-model'
 import * as _ from 'lodash'
 
 export class DAO<T extends IBaseModel> implements IDAO<T> {
+  /**
+   * collection of T registers, if necessary, you can use directly the collection to
+   * execute queries in the store
+   * @type {JSData.Mapper}
+   * @memberOf DAO
+   */
   public collection: JSData.Mapper
+  /**
+   * schema for model validation
+   * the schema validate the model with json from the instantiated class
+   * see more in this link http://www.js-data.io/v3.0/docs/validation
+   * @type {JSData.Schema}
+   * @memberOf DAO
+   */
   public schema: JSData.Schema
+
+  /**
+   * name of the collecion in the store
+   *
+   * @type {string}
+   * @memberOf DAO
+   */
   public collectionName: string
+  /**
+   * options to define model Mapper, if set, opts is overrided by your custom options, this include
+   * defaults relations to load with the register (eager loading)
+   *
+   * @type {*}
+   * @memberOf DAO
+   */
   public opts: any
 
-  constructor (store: JSData.DataStore, collectionName: string, schema: any = null, relations: any = null, joins: string[] = []) {
-    if (!store) {
-      throw Error('classe não instanciada corretamente')
+  /**
+   * Creates an instance of DAO.
+   * @param {JSData.DataStore} store
+   * @param {string} collectionName
+   * @param {*} [schema=null]
+   * @param {*} [relations=null]
+   * @param {string[]} [joins=[]]
+   *
+   * @memberOf DAO
+   */
+  constructor ( store: JSData.DataStore, collectionName: string, schema: any = null, relations: any = null, joins: string[] = [] ) {
+    if ( !store ) {
+      throw Error( 'store is not defined' )
     }
 
     const mainSchemaProperties: Object = {
@@ -35,10 +72,10 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
       }
     }
 
-    if (schema) {
-      let mainSchemaRequireds: string[] = ['id', 'active', 'createdAt']
-      let newSchemaRequireds = (schema.required && Array.isArray(schema.required) && schema.required.length > 0) ? _.union(schema.required, mainSchemaRequireds) : mainSchemaRequireds
-      let newSchemaProperties = Object.assign({}, mainSchemaProperties, schema.properties)
+    if ( schema ) {
+      let mainSchemaRequireds: string[] = [ 'id', 'active', 'createdAt' ]
+      let newSchemaRequireds = ( schema.required && Array.isArray( schema.required ) && schema.required.length > 0 ) ? _.union( schema.required, mainSchemaRequireds ) : mainSchemaRequireds
+      let newSchemaProperties = Object.assign( {}, mainSchemaProperties, schema.properties )
       let objSchema = {
         title: schema.title || this.collectionName,
         description: schema.description || 'please add description',
@@ -46,20 +83,20 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
         properties: newSchemaProperties,
         required: newSchemaRequireds
       }
-      this.schema = new JSData.Schema(objSchema)
+      this.schema = new JSData.Schema( objSchema )
     }
     this.collectionName = collectionName
     try {
-      this.collection = store.getMapper(collectionName)
-    } catch (e) {
+      this.collection = store.getMapper( collectionName )
+    } catch ( e ) {
       let opts: any = {}
-      if (schema) {
+      if ( schema ) {
         opts.schema = this.schema
       }
-      if (relations) {
+      if ( relations ) {
         opts.relations = relations
       }
-      this.collection = store.defineMapper(collectionName, opts)
+      this.collection = store.defineMapper( collectionName, opts )
     }
 
     this.opts = {
@@ -68,12 +105,24 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
     }
   }
 
-  public parseModel (val: any): T {
-    throw new Error('não implementado')
+  /**
+   * this method is used to "normalize" models, typescript cannot run new instance of
+   * Generic Type like Class<T> { public method() { new T() } } , so parseModel is used in the
+   * class and ALL models have to implement parseModel
+   *
+   * @param {*} val
+   * @returns {T}
+   *
+   * @memberOf DAO
+   */
+
+  public parseModel ( val: any ): T {
+    throw new Error( 'not implemented' )
   }
 
   /**
-   * busca todos os registros
+   * find all registers using query syntax from js-data
+   * http://www.js-data.io/v3.0/docs/query-syntax#section-filtering-where
    *
    * @param {Object} [query={}]
    * @param {*} user
@@ -81,15 +130,15 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public findAll (query: Object = {}, user: IBaseUser): Promise<Array<T>> {
-    return this.collection.findAll(query, this.opts)
-      .then((records: JSData.Record[]) => {
-        if (records) {
-          return records.map(d => d.toJSON(this.opts)) as T[]
+  public findAll ( query: Object = {}, user: IBaseUser ): Promise<Array<T>> {
+    return this.collection.findAll( query, this.opts )
+      .then(( records: JSData.Record[] ) => {
+        if ( records ) {
+          return records.map( d => d.toJSON( this.opts ) ) as T[]
         } else {
           return []
         }
-      })
+      } )
   }
 
   /**
@@ -101,19 +150,19 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public find (id: string, user: IBaseUser): Promise<T> {
-    return this.collection.find(id, this.opts)
-      .then((record: JSData.Record) => {
-        if (record) {
-          return record.toJSON(this.opts) as T
+  public find ( id: string, user: IBaseUser ): Promise<T> {
+    return this.collection.find( id, this.opts )
+      .then(( record: JSData.Record ) => {
+        if ( record ) {
+          return record.toJSON( this.opts ) as T
         } else {
           return null
         }
-      })
+      } )
   }
 
   /**
-   * create registro
+   * create register and return the added object
    *
    * @param {T} obj
    * @param {*} user
@@ -121,14 +170,14 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public create (obj: T, userP: any): Promise<T> {
-    return this.collection.create(this.parseModel(obj))
-      .then((record: JSData.Record) => {
-        return record.toJSON(this.opts)
-      })
-      .catch((reject: JSData.SchemaValidationError) => {
-        throw new APIError('erro de entrada', 400, reject)
-      })
+  public create ( obj: T, userP: any ): Promise<T> {
+    return this.collection.create( this.parseModel( obj ) )
+      .then(( record: JSData.Record ) => {
+        return record.toJSON( this.opts )
+      } )
+      .catch(( reject: JSData.SchemaValidationError ) => {
+        throw new APIError( 'erro de entrada', 400, reject )
+      } )
   }
 
   /**
@@ -141,18 +190,18 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public update (id: string, user: IBaseUser, obj: T): Promise<T> {
-    return this.collection.update(id, obj)
-      .then((record: JSData.Record) => {
-        return record.toJSON(this.opts) as T
-      })
-      .catch((reject: JSData.SchemaValidationError) => {
-        throw new APIError('erro de entrada', 400, reject)
-      })
+  public update ( id: string, user: IBaseUser, obj: T ): Promise<T> {
+    return this.collection.update( id, obj )
+      .then(( record: JSData.Record ) => {
+        return record.toJSON( this.opts ) as T
+      } )
+      .catch(( reject: JSData.SchemaValidationError ) => {
+        throw new APIError( 'erro de entrada', 400, reject )
+      } )
   }
 
   /**
-   * delete registro
+   * delete register and return boolean if can delete or not
    *
    * @param {string} id
    * @param {*} user
@@ -160,14 +209,19 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public delete (id: string, user: IBaseUser): Promise<boolean> {
-    return this.collection.destroy(id)
-      .then(() => true)
-      .catch(() => false)
+  public delete ( id: string, user: IBaseUser ): Promise<boolean> {
+    return this.collection.destroy( id )
+      .then(() => true )
+      .catch(() => false )
   }
 
   /**
    * realize search query using limits and page control
+   *
+   * the search param is a object.
+   * the documentation is located in
+   * http://www.js-data.io/v3.0/docs/query-syntax#section-filtering-where
+   * js-data-dao use js-data query syntax
    *
    * @param {Object} search
    * @param {*} user
@@ -179,27 +233,27 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @memberOf DAO
    */
   paginatedQuery (
-    search: Object, user: IBaseUser, page?: number, limit?: number, order?: Array<string>, options?: any): Promise<IResultSearch<T>> {
+    search: Object, user: IBaseUser, page?: number, limit?: number, order?: Array<string>, options?: any ): Promise<IResultSearch<T>> {
     let _page: number = page || 1
     let _limit: number = limit || 10
     let _order: string[] = []
-    let params = Object.assign({}, search, {
+    let params = Object.assign( {}, search, {
       orderBy: _order,
-      offset: _limit * (_page - 1),
+      offset: _limit * ( _page - 1 ),
       limit: _limit
-    })
+    } )
 
-    return this.collection.findAll(search)
-      .then((countResult) => {
-        return this.collection.findAll(params, options || this.opts)
-          .then((results: JSData.Record[]) => {
+    return this.collection.findAll( search )
+      .then(( countResult ) => {
+        return this.collection.findAll( params, options || this.opts )
+          .then(( results: JSData.Record[] ) => {
             return {
               page: _page,
               total: countResult.length,
-              result: results.map(d => d.toJSON(options || this.opts))
+              result: results.map( d => d.toJSON( options || this.opts ) )
             } as IResultSearch<T>
-          })
-      })
+          } )
+      } )
   }
 
 }
