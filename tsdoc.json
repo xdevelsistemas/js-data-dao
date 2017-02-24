@@ -1,0 +1,23 @@
+{
+    "declaration": true,
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators":true,
+        "target": "es6",
+        "rootDir": ".",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "noImplicitThis" : true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters" : false
+    },
+    "exclude": [
+        "gulpfile.ts",
+        "node_modules",
+        "jspm_packages",
+        "lib/**/*.spec.ts"
+    ]
+}
