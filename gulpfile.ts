@@ -12,13 +12,13 @@ let serverPath = 'lib'
 let istanbul = require('gulp-istanbul')
 let remapIstanbul = require('remap-istanbul/lib/gulpRemapIstanbul')
 let compiledPath = `${serverPath}/**/**.js`
-let testPath = `${serverPath}/**/*-spec.js`
+let testPath = `${serverPath}/**/*.spec.js`
 let tsProject = ts.createProject('tsconfig.json')
 let serverTS = `${serverPath}/**/**.ts`
 let files2Clean = ['**/*.js', '**/*.js.map', '**/*.d.ts'].map(el => serverPath + el)
 
 let runTest = () => gulp.src([testPath]) // take our transpiled test source
-  .pipe(mocha({ timeout: 64000 })) // runs tests
+  .pipe(mocha({ timeout: 64000 , reporter: 'nyan'})) // runs tests
 
 let tsCompile = () => gulp
   .src(serverTS)

@@ -50,14 +50,14 @@ export class ServiceLib {
     return bcrypt.compare(password, encryptedPassword)
   }
 
-  encrypt (text: string) {
+  encrypt (text: string): string {
     let cipher = crypto.createCipher(this.config.getCryptoAlgorithm(), this.config.getCryptoPassword())
     let crypted = cipher.update(text, 'utf8', 'hex')
     crypted += cipher.final('hex')
     return crypted
   }
 
-  decrypt (text: string) {
+  decrypt (text: string): string {
     let decipher = crypto.createDecipher(this.config.getCryptoAlgorithm(), this.config.getCryptoPassword())
     let dec = decipher.update(text, 'hex', 'utf8')
     dec += decipher.final('utf8')

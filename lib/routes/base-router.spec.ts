@@ -1,6 +1,6 @@
 import { PersistRouter } from './'
-import { TestSimpleClassDAO, ITestSimpleClass } from '../models/dao-spec'
-import { TestController } from '../controllers/base-persist-controller-spec'
+import { TestSimpleClassDAO, ITestSimpleClass } from '../models/dao.spec'
+import { TestController } from '../controllers/base-persist-controller.spec'
 import { AppConfig } from '../config'
 import * as JSData from 'js-data'
 import * as chai from 'chai'

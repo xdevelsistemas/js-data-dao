@@ -15,12 +15,14 @@ const sm = new SendMail(new MailConfig(), nodemailerMock({foo : 'bar'}))
 
 describe('SendMail', () => {
 
-  it('A classe é instanciável? (nodemailer padrao)', () => {
+  it('A classe é instanciável? (nodemailer padrao)', (done: Function) => {
     assert(sm0 instanceof SendMail)
+    done()
   })
 
-  it('A classe é instanciável? (nodemailer mockup)', () => {
+  it('A classe é instanciável? (nodemailer mockup)', (done: Function) => {
     assert(sm instanceof SendMail)
+    done()
   })
 
   it('Teste de simulaçao de envio de confirmacao', (done: Function) => {
