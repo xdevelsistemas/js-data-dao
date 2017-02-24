@@ -9,7 +9,8 @@
   "author": "Clayton Santos da Silva",
   "scripts": {
     "builder:compile": "gulp ts",
-    "test": "gulp coveralls"
+    "test": "gulp coveralls",
+    "builder:doc" : "typedoc --hideGenerator --excludeExternals  --target ES6 --mode file   --out docs  --tsconfig tsdoc.json && touch docs/.nojekyll"
   },
   "keywords": [
     "xdevel"
