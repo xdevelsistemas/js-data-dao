@@ -1,5 +1,5 @@
 import { DAO } from '../models/dao'
-import { SignupRouter, LoginRouter } from './'
+import { ForgotRouter, LoginRouter } from './'
 import { AppConfig } from '../config'
 import * as JSData from 'js-data'
 import * as chai from 'chai'
@@ -13,6 +13,8 @@ import { IBaseUser } from '../interfaces'
 import { ServiceLib } from '../services/service-lib'
 const Passport = require('passport')
 import { passportJwt } from '../auth/passport'
+const nodemailerMock = require('nodemailer-mock-transport')
+import * as path from 'path'
 chai.use(chaiAsPromised)
 chai.should()
 
@@ -22,6 +24,7 @@ app.use(bodyParser())
 /**
  * criando o ambiente testável
  */
+process.env.LAYOUT_PATH = path.join(__dirname,'../../testResources')
 process.env.CRYPTO_PASSWORD = 'secret'
 process.env.APP_JWT_SECRET = 'SECRET'
 let config = new AppConfig()
@@ -46,7 +49,7 @@ export class TestUser extends BaseModel implements IBaseUser {
   password: string
   isAdmin: boolean
 
-  constructor(obj: IBaseUser) {
+  constructor (obj: IBaseUser) {
     super(obj)
     this.name = obj.name
     this.companyAlias = obj.companyAlias
@@ -58,12 +61,12 @@ export class TestUser extends BaseModel implements IBaseUser {
 
 export class TestUserDAO extends DAO<IBaseUser> {
   storedb: JSData.DataStore
-  constructor(store: JSData.DataStore, appConfig: AppConfig) {
+  constructor (store: JSData.DataStore, appConfig: AppConfig) {
     super(store, 'users')
     this.storedb = store
   }
 
-  parseModel(obj: any) {
+  parseModel (obj: any) {
     return new TestUser(obj)
   }
 
@@ -73,23 +76,23 @@ let store: JSData.DataStore = handleJSData(config)
 let userDAO = new TestUserDAO(store, config)
 let passport = passportJwt(store, Passport, config)
 
-let router = new SignupRouter(store, config)
+let router = new ForgotRouter(store, config, nodemailerMock({ foo: 'bar' }))
 let loginRouter = new LoginRouter(store, config)
 
 /**
  * create api/v1/test router for CRUD operation
  */
 app.use(passport.initialize())
-app.use('/api/v1/signup', router.getRouter())
+app.use('/api/v1/forgot', router.getRouter())
 app.use('/api/v1/login', loginRouter.getRouter())
 
 /**
  * inicio dos testes
  */
 
-describe('Signup Router Basic', () => {
+describe('Forgot Router Basic', () => {
   it('Controller é Instanciável ?', () => {
-    assert(router instanceof SignupRouter)
+    assert(router instanceof ForgotRouter)
   })
 })
 
@@ -102,10 +105,10 @@ describe('Preparando ambiente', () => {
   it('Criando Usuário de exemplo ?', (done: Function) => {
     ServiceLib.hashPassword('12345').then((hash: string) => {
       return userDAO.create({
-        name: 'test2',
-        username: 'test2',
-        companyAlias: 'test2',
-        email: 'test2@test.com',
+        name: 'test',
+        username: 'test',
+        companyAlias: 'test',
+        email: 'test@test.com',
         password: hash,
         isAdmin: true
       }, null)
@@ -114,18 +117,25 @@ describe('Preparando ambiente', () => {
   })
 })
 
-let token = serviceLib.generateToken('test2@test.com')
+let token = serviceLib.generateToken('test@test.com')
 
-describe('Cadastrando login', () => {
-  it('login', (done: Function) => {
+describe('Recuperando login', () => {
+  it('iniciando o fluxo', (done: Function) => {
     request(app)
-      .get(`/api/v1/signup/${token}`)
+      .post(`/api/v1/forgot`)
+      .send({ email: 'test@test.com' })
       .expect(200, done)
   })
 
-  it('criando a senha', (done: Function) => {
+  it('clicando no link', (done: Function) => {
     request(app)
-      .post(`/api/v1/signup/${token}`)
+      .get(`/api/v1/forgot/${token}`)
+      .expect(200, done)
+  })
+
+  it('alterando senha', (done: Function) => {
+    request(app)
+      .post(`/api/v1/forgot/${token}`)
       .send({ password: '123456' })
       .expect(200, done)
   })
@@ -133,7 +143,7 @@ describe('Cadastrando login', () => {
   it('login novo', (done: Function) => {
     request(app)
       .post('/api/v1/login')
-      .send({ email: 'test2@test.com', password: '123456' })
+      .send({ email: 'test@test.com', password: '123456' })
       .expect(200, done)
   })
 

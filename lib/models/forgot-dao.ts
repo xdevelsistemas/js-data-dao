@@ -12,7 +12,7 @@ export class ForgotDAO {
   private _sendMail: SendMail
   private _serviceLib: ServiceLib
   private _appConfig: AppConfig
-  constructor(store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
+  constructor (store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
     this.storedb = store
     this._appConfig = appConfig
     this._sendMail = new SendMail(appConfig.mailConfig, transporter)
@@ -27,7 +27,7 @@ export class ForgotDAO {
    *
    * @memberOf ForgotDAO
    */
-  public sendForgotMail(obj: IForgot): any {
+  public sendForgotMail (obj: IForgot): any {
     let filterEmail: any = { where: { email: { '===': obj.email } } }
     return this.storedb.findAll(this._appConfig.getUsersTable(), filterEmail)
       .then((users: IBaseUser[]) => {
@@ -50,7 +50,7 @@ export class ForgotDAO {
    *
    * @memberOf ForgotDAO
    */
-  public validaToken(params: any): Promise<IBaseUser> {
+  public validaToken (params: any): Promise<IBaseUser> {
     let tokenDecrypted: string = this._serviceLib.decrypt(params.token)
     let data: any = JSON.parse(tokenDecrypted)
     let today: Date = new Date()
@@ -85,7 +85,7 @@ export class ForgotDAO {
    *
    * @memberOf ForgotDAO
    */
-  public resetPassword(params: any, obj: IBaseUser): Promise<boolean> {
+  public resetPassword (params: any, obj: IBaseUser): Promise<boolean> {
     let data: any = JSON.parse(this._serviceLib.decrypt(params.token))
     let today: Date = new Date()
     let filterUser: any = {

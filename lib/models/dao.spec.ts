@@ -51,7 +51,7 @@ export interface ITestComplexClass extends IBaseModel {
 export class TestSimpleClass extends BaseModel implements ITestSimpleClass {
   name: string
 
-  constructor(obj: ITestSimpleClass) {
+  constructor (obj: ITestSimpleClass) {
     super(obj)
     this.name = obj.name
   }
@@ -69,16 +69,17 @@ export class TestComplexClass extends BaseModel implements ITestComplexClass {
   simpleClassId: string
   simpleClass?: ITestSimpleClass
 
-  constructor(obj: ITestComplexClass) {
+  constructor (obj: ITestComplexClass) {
     super(obj)
     this.name = obj.name
     this.simpleClassId = obj.simpleClassId
+    this.simpleClass = obj.simpleClass ? new TestSimpleClass(obj.simpleClass) : null
   }
 }
 
 export class TestSimpleClassDAO extends DAO<ITestSimpleClass> {
   storedb: JSData.DataStore
-  constructor(store: JSData.DataStore, appConfig: AppConfig) {
+  constructor (store: JSData.DataStore, appConfig: AppConfig) {
     super(store, 'simple', {
       title: 'testSimple',
       description: 'Simple Test',
@@ -89,7 +90,7 @@ export class TestSimpleClassDAO extends DAO<ITestSimpleClass> {
     this.storedb = store
   }
 
-  parseModel(obj: any) {
+  parseModel (obj: any) {
     return new TestSimpleClass(obj)
   }
 
@@ -97,7 +98,7 @@ export class TestSimpleClassDAO extends DAO<ITestSimpleClass> {
 
 export class TestComplexClassDAO extends DAO<ITestComplexClass> {
   storedb: JSData.DataStore
-  constructor(store: JSData.DataStore, appConfig: AppConfig) {
+  constructor (store: JSData.DataStore, appConfig: AppConfig) {
     super(store, 'complex', {
       title: 'testSimple',
       description: 'Simple Test',
@@ -115,7 +116,7 @@ export class TestComplexClassDAO extends DAO<ITestComplexClass> {
     this.storedb = store
   }
 
-  parseModel(obj: any) {
+  parseModel (obj: any) {
     return new TestComplexClass(obj)
   }
 }
@@ -285,12 +286,12 @@ describe('Instance new same DAO', () => {
 
 class TestOtherSimpleClassDAO extends DAO<ITestSimpleClass> {
   storedb: JSData.DataStore
-  constructor(store: JSData.DataStore, appConfig: AppConfig) {
+  constructor (store: JSData.DataStore, appConfig: AppConfig) {
     super(store, 'other')
     this.storedb = store
   }
 
-  parseModel(obj: any) {
+  parseModel (obj: any) {
     return new TestSimpleClass(obj)
   }
 

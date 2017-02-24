@@ -1,5 +1,5 @@
 import { BasePersistController } from './'
-import { TestSimpleClassDAO, ITestSimpleClass } from '../models/dao-spec'
+import { TestSimpleClassDAO, ITestSimpleClass } from '../models/dao.spec'
 import { AppConfig } from '../config'
 import * as JSData from 'js-data'
 import * as chai from 'chai'

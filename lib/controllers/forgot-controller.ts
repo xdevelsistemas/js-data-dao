@@ -8,7 +8,7 @@ import * as nodemailer from 'nodemailer'
 export class ForgotController {
   forgot: ForgotDAO
 
-  constructor(store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
+  constructor (store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
     this.forgot = new ForgotDAO(store, appConfig, transporter)
   }
 
@@ -22,7 +22,7 @@ export class ForgotController {
    *
    * @memberOf ForgotController
    */
-  public sendMail(req: Request, res: Response, next?: NextFunction): Promise<any> {
+  public sendMail (req: Request, res: Response, next?: NextFunction): Promise<any> {
     return this.forgot.sendForgotMail(req.body)
       .then(() => {
         res.status(200)
@@ -43,7 +43,7 @@ export class ForgotController {
    *
    * @memberOf ForgotController
    */
-  public validaToken(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public validaToken (req: Request, res: Response, next: NextFunction): Promise<any> {
     return this.forgot.validaToken(req.params)
       .then((dados: any) => {
         res.status(200)
@@ -64,7 +64,7 @@ export class ForgotController {
    *
    * @memberOf ForgotController
    */
-  public resetPassword(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public resetPassword (req: Request, res: Response, next: NextFunction): Promise<any> {
     return this.forgot.resetPassword(req.params, req.body)
       .then((dados: any) => {
         res.status(200)

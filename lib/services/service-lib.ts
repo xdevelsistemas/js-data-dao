@@ -19,7 +19,7 @@ export class ServiceLib {
 
   config: AppConfig
 
-  constructor(config: AppConfig) {
+  constructor (config: AppConfig) {
     this.config = config
 
   }
@@ -28,7 +28,7 @@ export class ServiceLib {
    * Gera id
    * @returns {string}
    */
-  static generateId() {
+  static generateId () {
     return shortid.generate()
   }
 
@@ -38,33 +38,33 @@ export class ServiceLib {
    * @param {string} email
    * @returns {boolean}
    */
-  static emailValidator(email: string): boolean {
+  static emailValidator (email: string): boolean {
     return EmailValidator.validate(email)
   }
 
-  static hashPassword(password: string): Promise<string> {
+  static hashPassword (password: string): Promise<string> {
     return bcrypt.hash(password, bcryptjs.genSaltSync(10))
   }
 
-  static comparePassword(password: string, encryptedPassword: string): boolean {
+  static comparePassword (password: string, encryptedPassword: string): boolean {
     return bcrypt.compare(password, encryptedPassword)
   }
 
-  encrypt(text: string) {
+  encrypt (text: string): string {
     let cipher = crypto.createCipher(this.config.getCryptoAlgorithm(), this.config.getCryptoPassword())
     let crypted = cipher.update(text, 'utf8', 'hex')
     crypted += cipher.final('hex')
     return crypted
   }
 
-  decrypt(text: string) {
+  decrypt (text: string): string {
     let decipher = crypto.createDecipher(this.config.getCryptoAlgorithm(), this.config.getCryptoPassword())
     let dec = decipher.update(text, 'hex', 'utf8')
     dec += decipher.final('utf8')
     return dec
   }
 
-  generateToken(email: string): string {
+  generateToken (email: string): string {
     let data: any = {
       email,
       expiration: new Date()

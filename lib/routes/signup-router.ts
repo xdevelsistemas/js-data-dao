@@ -10,24 +10,24 @@ export class SignupRouter extends BaseRouter {
   store: JSData.DataStore
   router: Router
 
-  constructor(store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
+  constructor ( store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter ) {
     super()
-    this.controller = new SignupController(store, appConfig, transporter)
+    this.controller = new SignupController( store, appConfig, transporter )
     this.store = store
     this.router = Router()
     this.routers()
   }
 
-  public routers() {
+  public routers () {
     let ctrl = this
-    this.router.get('/:token', (req: Request, res: Response, next: NextFunction) =>
-      this.respond(ctrl.controller.validaToken(req, res, next), res))
+    this.router.get( '/:token', ( req: Request, res: Response, next: NextFunction ) =>
+      this.respond( ctrl.controller.validaToken( req, res, next ), res ) )
 
-    this.router.post('/:token', (req: Request, res: Response, next: NextFunction) =>
-      this.respond(ctrl.controller.registerPassword(req, res, next), res))
+    this.router.post( '/:token', ( req: Request, res: Response, next: NextFunction ) =>
+      this.respond( ctrl.controller.registerPassword( req, res, next ), res ) )
   }
 
-  public getRouter(): Router {
+  public getRouter (): Router {
     return this.router
   }
 }

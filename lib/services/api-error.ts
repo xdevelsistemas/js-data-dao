@@ -4,7 +4,7 @@ export class APIError extends Error {
   statusCode: number
   error: Boom.BoomError
   objectResponse: Object
-  constructor(message: string, statusCode: number, objectResponse?: Object) {
+  constructor (message: string, statusCode: number, objectResponse?: Object) {
     super(message)
     this.statusCode = statusCode
     this.objectResponse = objectResponse
@@ -12,7 +12,7 @@ export class APIError extends Error {
     this.showError()
   }
 
-  private definedBoomError() {
+  private definedBoomError () {
     switch (this.statusCode) {
       case 400:
         this.error = Boom.badRequest(this.message).output.payload
@@ -26,7 +26,7 @@ export class APIError extends Error {
     }
   }
 
-  private showError() {
+  private showError () {
     let err = this
     console.error(`API ERROR CODE: ${err.statusCode}`)
     console.error(`API ERROR MESSAGE: ${err.message}`)

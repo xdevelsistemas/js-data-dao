@@ -15,7 +15,7 @@ export class AppConfig {
   private _jwtConfig: any
   private _usersTable: string
 
-  constructor() {
+  constructor () {
     this._mainCompany = process.env.MAIN_COMPANY
     this._isProd = (process.env.NODE_ENV === 'production')
     this._cryptoAlgorithm = process.env.CRYPTO_ALGORITHM || 'aes192'
@@ -31,31 +31,31 @@ export class AppConfig {
     this.dbConfig = new DatabaseConfig()
   }
 
-  getMainCompany(): string {
+  getMainCompany (): string {
     return this._mainCompany
   }
 
-  getIsProd(): boolean {
+  getIsProd (): boolean {
     return this._isProd
   }
 
-  getCryptoAlgorithm(): string {
+  getCryptoAlgorithm (): string {
     return this._cryptoAlgorithm
   }
 
-  getCryptoPassword(): string {
+  getCryptoPassword (): string {
     return this._cryptoPassword
   }
 
-  getExpirationDays(): number {
+  getExpirationDays (): number {
     return this._expirationDays
   }
 
-  getUsersTable(): string {
+  getUsersTable (): string {
     return this._usersTable
   }
 
-  getJwtConfig(): any {
+  getJwtConfig (): any {
     return this._jwtConfig
   }
 }

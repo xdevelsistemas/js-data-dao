@@ -19,7 +19,7 @@ export class Application {
 
   routes: (app: express.Application, store: JSData.DataStore, passport: any, appConfig: Config.AppConfig) => express.Application
 
-  constructor(cfg: Config.AppConfig, routes: (app: express.Application, store: JSData.DataStore, passport: any, appConfig: Config.AppConfig) => express.Application) {
+  constructor (cfg: Config.AppConfig, routes: (app: express.Application, store: JSData.DataStore, passport: any, appConfig: Config.AppConfig) => express.Application) {
     this.app = express()
     this.appConfig = cfg
     /**
@@ -36,19 +36,19 @@ export class Application {
     this.app = this.handleError(this.app)
   }
 
-  handleParsers(app: express.Application): express.Application {
+  handleParsers (app: express.Application): express.Application {
     app.use(bodyParser.json())
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(cookieParser())
     return app
   }
 
-  handleLogs(app: express.Application): express.Application {
+  handleLogs (app: express.Application): express.Application {
     app.use(logger('dev'))
     return app
   }
 
-  handleEnableCORS(app: express.Application): express.Application {
+  handleEnableCORS (app: express.Application): express.Application {
     app.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', process.env.CORSALLOWED || '*')
       res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
@@ -69,7 +69,7 @@ export class Application {
    *
    *
    */
-  handleJSData(): JSData.DataStore {
+  handleJSData (): JSData.DataStore {
     /**
      * Definindo o adaptador JSData para o projeto
      */
@@ -81,14 +81,14 @@ export class Application {
     return store
   }
 
-  handlePassport(app: express.Application, store: JSData.DataStore, passport: any): express.Application {
+  handlePassport (app: express.Application, store: JSData.DataStore, passport: any): express.Application {
     // required for passport
     this.passport = Auth.passportJwt(store, passport, this.appConfig)
     app.use(this.passport.initialize())
     return app
   }
 
-  handleRoutes(app: express.Application, store: JSData.DataStore, passport: any): express.Application {
+  handleRoutes (app: express.Application, store: JSData.DataStore, passport: any): express.Application {
     /**
      * chamada no index para chamar todas as rotas
      */
@@ -102,7 +102,7 @@ export class Application {
     return app
   }
 
-  handleError(app: express.Application): express.Application {
+  handleError (app: express.Application): express.Application {
     // error handlers
 
     // development error handler

@@ -10,7 +10,7 @@ export class ForgotRouter extends BaseRouter {
   store: JSData.DataStore
   router: Router
 
-  constructor(store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
+  constructor (store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
     super()
     this.controller = new ForgotController(store, appConfig, transporter)
     this.store = store
@@ -18,7 +18,7 @@ export class ForgotRouter extends BaseRouter {
     this.routers()
   }
 
-  public routers() {
+  public routers () {
     let ctrl = this
 
     this.router.post('/', (req: Request, res: Response, next: NextFunction) =>
@@ -31,7 +31,7 @@ export class ForgotRouter extends BaseRouter {
       this.respond(ctrl.controller.resetPassword(req, res, next), res))
   }
 
-  public getRouter(): Router {
+  public getRouter (): Router {
     return this.router
   }
 }

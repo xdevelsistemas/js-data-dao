@@ -15,6 +15,7 @@
         "noUnusedParameters" : false
     },
     "exclude": [
+        "gulpfile.ts",
         "node_modules",
         "jspm_packages"
     ]

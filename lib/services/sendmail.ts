@@ -8,7 +8,7 @@ import * as Bluebird from 'bluebird'
 export class SendMail {
   private transporter: nodemailer.Transporter
   private mailConfig: MailConfig
-  constructor(mailConfig: MailConfig, transporter?: nodemailer.Transporter) {
+  constructor (mailConfig: MailConfig, transporter?: nodemailer.Transporter) {
     this.mailConfig = mailConfig
     const options = {
       host: this.mailConfig.getHost(),
@@ -21,21 +21,21 @@ export class SendMail {
     this.transporter = nodemailer.createTransport(transporter || smtpTransport(options))
   }
 
-  public sendForgotEmail(name: string, email: string, url: string): Bluebird<any> {
+  public sendForgotEmail (name: string, email: string, url: string): Bluebird<any> {
     return this.generateHtml(name, email, url, TpEMail.forgot)
     .then((html: string) => {
       return this.sendMail(email, 'Recuperação de senha', html)
     })
   }
 
-  public sendConfirmationEmail(email: string, url: string): Bluebird<any> {
+  public sendConfirmationEmail (email: string, url: string): Bluebird<any> {
     return this.generateHtml('', email, url, TpEMail.confirmation)
     .then((html: string) => {
       return this.sendMail(email, 'Confirmação de Cadastro', html)
     })
   }
 
-  private sendMail(to: string, subject: string, html: string) {
+  private sendMail (to: string, subject: string, html: string) {
     const options: nodemailer.SendMailOptions = {
       // from === nome da empresa
       from: `${this.mailConfig.getFrom()} <${this.mailConfig.getEmail()}>`,
@@ -49,7 +49,7 @@ export class SendMail {
     return this.transporter.sendMail(options)
   }
 
-  private generateHtml(name: string, email: string, url: string, type: TpEMail) {
+  private generateHtml (name: string, email: string, url: string, type: TpEMail) {
     let chooseTemplate = (t: TpEMail) => {
       if (t === TpEMail.confirmation) {
         return path.join(this.mailConfig.getLayoutPath(), `confirmation.hbs`)
