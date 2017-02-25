@@ -77,7 +77,7 @@ export const jwtGenerator = (store: JSData.DataStore, appConfig: AppConfig) => (
       .catch((err: Error) => {
         // throw new APIError(err, 401)
         let { statusCode, error } = new APIError(err.message, 401)
-        return res.status(statusCode).json(error)
+        return res.status(statusCode >= 100 && statusCode < 600 ? statusCode : 500).json(error)
       })
   } else {
     throw new APIError('Invalid fields', 401)
