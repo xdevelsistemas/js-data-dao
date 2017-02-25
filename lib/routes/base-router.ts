@@ -8,7 +8,7 @@ export class BaseRouter {
   respond ( t: Promise<any>, res: Response ): Promise<Response> {
     return t
       .then(( u ) => res.json( u ) )
-      .catch(( err: APIError ) => res.status( err.statusCode ).json( { error: err.error, objectResponse: err.objectResponse }) )
+      .catch(( err: APIError ) => res.status(err.statusCode >= 100 && err.statusCode < 600 ? err.statusCode : 500).json( { error: err.error, objectResponse: err.objectResponse }) )
       .catch(( err: Error ) => res.status( 500 ).json( err.message ) )
       .catch(( err ) => res.status( 500 ).json( err ) )
   }

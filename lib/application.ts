@@ -112,7 +112,7 @@ export class Application {
         if (!(err instanceof Services.APIError)) {
           err = new Services.APIError(err, err.status || err.statusCode || 500)
         }
-        res.status(err.statusCode).json(err.error)
+        return res.status(err.statusCode >= 100 && err.statusCode < 600 ? err.statusCode : 500).json(err.error)
       })
     }
 
@@ -122,7 +122,7 @@ export class Application {
       if (!(err instanceof Services.APIError)) {
         err = new Services.APIError(err, err.status || err.statusCode || 500)
       }
-      res.status(err.statusCode).json(err.error)
+      return res.status(err.statusCode >= 100 && err.statusCode < 600 ? err.statusCode : 500).json(err.error)
     })
     return app
   }
