@@ -111,16 +111,100 @@ describe( 'Init service', () => {
       }).should.be.fulfilled
         .and.notify(done)
     })
+
+    it('Criando Usuário (desativado) de exemplo ?', (done: Function) => {
+      ServiceLib.hashPassword('12345').then((hash: string) => {
+        return userDAO.create({
+          name: 'test3',
+          username: 'test3',
+          companyAlias: 'test3',
+          email: 'test3@test.com',
+          password: hash,
+          isAdmin: true,
+          active: false
+        }, null)
+      }).should.be.fulfilled
+        .and.notify(done)
+    })
   } )
 
   let token = serviceLib.generateToken( 'test2@test.com' )
+  let expiredToken = serviceLib.generateToken( 'test2@test.com', new Date('01-01-2000') )
+  let invalidUserToken = serviceLib.generateToken( 'test_invalid@test.com')
+  let inactiveUserToken = serviceLib.generateToken( 'test3@test.com')
 
   describe( 'Cadastrando login', () => {
-    it( 'login', ( done: Function ) => {
+    it( 'checando token', ( done: Function ) => {
       request( app )
         .get( `/api/v1/signup/${token}` )
         .expect( 200, done )
     } )
+
+    it('checando token invalido', (done: Function) => {
+      request(app)
+        .get(`/api/v1/signup/${token + 'blablabla'}`)
+        .expect(401, done)
+    })
+
+    it('checando token (usuario inexistente)', (done: Function) => {
+      request(app)
+        .get(`/api/v1/signup/${invalidUserToken}`)
+        .expect(401, done)
+    })
+
+    it('checando token expirado', (done: Function) => {
+      request(app)
+        .get(`/api/v1/signup/${expiredToken}`)
+        .expect(401, done)
+    })
+
+    it('checando token de usuario inativo', (done: Function) => {
+      request(app)
+        .get(`/api/v1/signup/${inactiveUserToken}`)
+        .expect(401, done)
+    })
+
+    it('criando a senha (senha indefinida)', (done: Function) => {
+      request(app)
+        .post(`/api/v1/signup/${token}`)
+        .send({ })
+        .expect(401, done)
+    })
+
+    it('criando a senha (senha com menos de 6 caracteres)', (done: Function) => {
+      request(app)
+        .post(`/api/v1/signup/${token}`)
+        .send({ password: '123' })
+        .expect(401, done)
+    })
+
+    it('provocando problema de token invalido', (done: Function) => {
+      request(app)
+        .post(`/api/v1/signup/${token + 'blablabla'}`)
+        .send({ password: '123456' })
+        .expect(401, done)
+    })
+
+    it('provocando problema de token invalido (usuario inexistente)', (done: Function) => {
+      request(app)
+        .post(`/api/v1/signup/${invalidUserToken}`)
+        .send({ password: '123456' })
+        .expect(401, done)
+    })
+
+    it('provocando problema de token expirado', (done: Function) => {
+      request(app)
+        .post(`/api/v1/signup/${expiredToken}`)
+        .send({ password: '123456' })
+        .expect(401, done)
+    })
+
+    it('provocando problema de token de usuario inativo', (done: Function) => {
+      request(app)
+        .post(`/api/v1/signup/${inactiveUserToken}`)
+        .send({ password: '123456' })
+        .expect(401, done)
+    })
 
     it('criando a senha', (done: Function) => {
       request(app)
@@ -139,7 +223,16 @@ describe( 'Init service', () => {
     it('eliminando dados sujos', (done: Function) => {
       userDAO.collection.destroyAll({})
         .should.be.fulfilled
-        .and.notify(done)
+        .then(() => done())
     })
+
+    // TODO provocar situacao de login de usuário invalido
+    // it('login novo (sem usuário no sistema)', (done: Function) => {
+    //   request(app)
+    //     .post('/api/v1/login')
+    //     .send({ email: 'test2@test.com', password: '123456' })
+    //     .expect(401, done)
+    // })
+
   } )
 } )
