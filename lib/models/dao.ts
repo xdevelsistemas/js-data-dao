@@ -67,7 +67,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  constructor( store: JSData.DataStore, collectionName: string, schema: any = null, relations: any = null, joins: string[] = [] ) {
+  constructor ( store: JSData.DataStore, collectionName: string, schema: any = null, relations: any = null, joins: string[] = [] ) {
     if ( !store ) {
       throw Error( 'store is not defined' )
     }
@@ -135,7 +135,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @memberOf DAO
    */
 
-  public parseModel( val: any ): T {
+  public parseModel ( val: any ): T {
     throw new Error( 'not implemented' )
   }
 
@@ -149,7 +149,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public findAll( query: Object = {}, user: IBaseUser ): Promise<Array<T>> {
+  public findAll ( query: Object = {}, user: IBaseUser ): Promise<Array<T>> {
     return this.collection.findAll( query, this.opts )
       .then(( records: JSData.Record[] ) => {
         return records.map( d => d.toJSON( this.opts ) ) as T[]
@@ -165,7 +165,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public find( id: string, user: IBaseUser ): Promise<T> {
+  public find ( id: string, user: IBaseUser ): Promise<T> {
     return this.collection.find( id, this.opts )
       .then(( record: JSData.Record ) => {
         if ( record ) {
@@ -185,7 +185,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public create( obj: T, userP: any ): Promise<T> {
+  public create ( obj: T, userP: any ): Promise<T> {
     try {
       return this.collection.create( this.parseModel( obj ) )
         .then(( record: JSData.Record ) => {
@@ -209,7 +209,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public update( id: string, user: IBaseUser, obj: T ): Promise<T> {
+  public update ( id: string, user: IBaseUser, obj: T ): Promise<T> {
     return this.collection.update( id, obj )
       .then(( record: JSData.Record ) => {
         return record.toJSON( this.opts ) as T
@@ -228,7 +228,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public delete( id: string, user: IBaseUser ): Promise<boolean> {
+  public delete ( id: string, user: IBaseUser ): Promise<boolean> {
     // TODO  = analisar como mostrar casos que não foram deletados pois a lib sempre está dando resolve na promise
     return this.collection.destroy( id )
       .then(( response ) => true )
@@ -251,7 +251,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  paginatedQuery(
+  paginatedQuery (
     search: Object, user: IBaseUser, page?: number, limit?: number, order?: Array<string>, options?: any ): Promise<IResultSearch<T>> {
     let _page: number = page || 1
     let _limit: number = limit || 10
