@@ -61,10 +61,10 @@ export class SignUpDAO {
    *
    * @memberOf SignUpDAO
    */
-  public registerPassword (params: any, obj: any): Promise<boolean> {
+  public registerPassword (params: any, obj: any, matchFilter?: any): Promise<boolean> {
     let data: any = JSON.parse(this._serviceLib.decrypt(params.token))
     let today: Date = new Date()
-    let filterUser: any = {
+    let filterUser: any = matchFilter || {
       where: {
         email: {
           '===': data.email
