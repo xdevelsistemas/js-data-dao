@@ -18,7 +18,7 @@ let serverTS = `${serverPath}/**/**.ts`
 let files2Clean = [ '**/*.js', '**/*.js.map', '**/*.d.ts' ].map( el => serverPath + el )
 
 let runTest = () => gulp.src( [ testPath ] ) // take our transpiled test source
-  .pipe( mocha( { timeout: 64000, reporter: 'nyan' } ) ) // runs tests
+  .pipe( mocha( { timeout: 64000 } ) ) // runs tests
 
 let runCoverage = () => gulp.src( './coverage/coverage-final.json' )
   .pipe( remapIstanbul( {

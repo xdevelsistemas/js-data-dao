@@ -64,6 +64,37 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Foi projetado a classe para ser operada como classe generica para ser aplicavel em qualquer classe de persistencia, de forma montar as seguintes operacoes</p>
+					</div>
+					<ul>
+						<li>buscar todos</li>
+						<li>buscar por id</li>
+						<li>inserir</li>
+						<li>alterar</li>
+						<li>deletar</li>
+						<li>fazer uma busca paginada</li>
+					</ul>
+					<p>os metodos buscar todos ( findAll ) e query paginada (paginatedQuery) utilizam do sistema de sintaxe de query de busca do js-data, para mais detalhes de como utilizar,
+					entre no seguinte link:</p>
+					<p><a href="http://www.js-data.io/docs/query-syntax">http://www.js-data.io/docs/query-syntax</a></p>
+					<dl class="tsd-comment-tags">
+						<dt>export</dt>
+						<dd></dd>
+						<dt>class</dt>
+						<dd><p>DAO</p>
+						</dd>
+						<dt>implements</dt>
+						<dd><p>{IDAO<T>}</p>
+						</dd>
+						<dt>template</dt>
+						<dd><p>T</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -132,7 +163,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/dao.ts#L39">models/dao.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/dao.ts#L58">models/dao.ts:58</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -176,14 +207,14 @@
 					<div class="tsd-signature tsd-kind-icon">collection<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Mapper</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/dao.ts#L15">models/dao.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/dao.ts#L34">models/dao.ts:34</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>collection of T registers, if necessary, you can use directly the collection to
-							execute queries in the store</p>
+							<p>propriedade que permite navegar e realizar as funcoes nativas da collection do js-data na entidade definida em T</p>
 						</div>
+						<p>para mais uso consulte o link: <a href="http://api.js-data.io/js-data/3.0.0-rc.8/Mapper.html">http://api.js-data.io/js-data/3.0.0-rc.8/Mapper.html</a></p>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
 							<dd><p>{JSData.Mapper}</p>
@@ -200,7 +231,7 @@
 					<div class="tsd-signature tsd-kind-icon">collection<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/dao.ts#L31">models/dao.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/dao.ts#L50">models/dao.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -223,7 +254,7 @@
 					<div class="tsd-signature tsd-kind-icon">opts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/dao.ts#L39">models/dao.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/dao.ts#L58">models/dao.ts:58</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -247,7 +278,7 @@
 					<div class="tsd-signature tsd-kind-icon">schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Schema</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/dao.ts#L23">models/dao.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/dao.ts#L42">models/dao.ts:42</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -279,7 +310,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/dao.ts#L173">models/dao.ts:173</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/dao.ts#L188">models/dao.ts:188</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -316,7 +347,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/idao.html">IDAO</a>.<a href="../interfaces/idao.html#delete">delete</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/dao.ts#L212">models/dao.ts:212</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/dao.ts#L231">models/dao.ts:231</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -352,7 +383,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/dao.ts#L153">models/dao.ts:153</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/dao.ts#L168">models/dao.ts:168</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -388,7 +419,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/dao.ts#L133">models/dao.ts:133</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/dao.ts#L152">models/dao.ts:152</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -425,7 +456,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/dao.ts#L235">models/dao.ts:235</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/dao.ts#L254">models/dao.ts:254</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -478,7 +509,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/idao.html">IDAO</a>.<a href="../interfaces/idao.html#parsemodel">parseModel</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/dao.ts#L119">models/dao.ts:119</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/dao.ts#L138">models/dao.ts:138</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -514,7 +545,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/idao.html">IDAO</a>.<a href="../interfaces/idao.html#update">update</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/dao.ts#L193">models/dao.ts:193</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/dao.ts#L212">models/dao.ts:212</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

@@ -64,6 +64,26 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>classe responsável pelo processamento de cadastros de novos usuários no sistema
+							foi construido para trabalhar com seguinte fluxo
+							1 - usuário inicia pre-cadastro enviando email
+							1* - um usuário ativo envia convite para o email do candidato ao novo cadastro
+							2 - depois que enviado o email, o usuário procede com cadastro entrando no hotlink e cadastrando
+							3 - finalmente com cadastro passado por toda triagem, é enviado a resposta de ok do cadastro
+						4 - o filtro de &quot;unicidade&quot; do metodo registerPassword pode ser customizado adicionando mais lógica conforme a lógica de query filter</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>export</dt>
+						<dd></dd>
+						<dt>class</dt>
+						<dd><p>SignUpDAO</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -113,7 +133,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/signup-dao.ts#L14">models/signup-dao.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/signup-dao.ts#L26">models/signup-dao.ts:26</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -141,7 +161,7 @@
 					<div class="tsd-signature tsd-kind-icon">_app<wbr>Config<span class="tsd-signature-symbol">:</span> <a href="appconfig.html" class="tsd-signature-type">AppConfig</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/signup-dao.ts#L14">models/signup-dao.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/signup-dao.ts#L26">models/signup-dao.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -151,7 +171,7 @@
 					<div class="tsd-signature tsd-kind-icon">_mail<wbr>Config<span class="tsd-signature-symbol">:</span> <a href="mailconfig.html" class="tsd-signature-type">MailConfig</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/signup-dao.ts#L12">models/signup-dao.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/signup-dao.ts#L24">models/signup-dao.ts:24</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -161,7 +181,7 @@
 					<div class="tsd-signature tsd-kind-icon">_service<wbr>Lib<span class="tsd-signature-symbol">:</span> <a href="servicelib.html" class="tsd-signature-type">ServiceLib</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/signup-dao.ts#L13">models/signup-dao.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/signup-dao.ts#L25">models/signup-dao.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -171,7 +191,7 @@
 					<div class="tsd-signature tsd-kind-icon">storedb<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DataStore</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/signup-dao.ts#L11">models/signup-dao.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/signup-dao.ts#L23">models/signup-dao.ts:23</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -182,18 +202,18 @@
 					<a name="registerpassword" class="tsd-anchor"></a>
 					<h3>register<wbr>Password</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">register<wbr>Password<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, matchFilter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">register<wbr>Password<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, matchFilter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/signup-dao.ts#L64">models/signup-dao.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/signup-dao.ts#L77">models/signup-dao.ts:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Verifica o token e cadastra a senha para o usuário</p>
+									<p>Verifica o token e cadastra a senha para o usuário, utilizado no processamento do hotlink do site de cadastro</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>memberof</dt>
@@ -205,15 +225,22 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>params: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>parametro de entrada quando o usuario clica no hotlink do site por convite de email</p>
+									</div>
 								</li>
 								<li>
 									<h5>obj: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>objeto dos dados do usuário preenchido por um formulário ou outro meio</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> matchFilter: <span class="tsd-signature-type">any</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> matchFilter: <span class="tsd-signature-type">Object</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>retorna booleano indicando ok do processo</p>
 						</li>
 					</ul>
 				</section>
@@ -227,7 +254,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/df349c5/lib/models/signup-dao.ts#L29">models/signup-dao.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/35ac9a3/lib/models/signup-dao.ts#L41">models/signup-dao.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
