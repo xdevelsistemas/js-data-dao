@@ -13,17 +13,17 @@ import * as nodemailer from 'nodemailer'
  *
  *
  * foi construido para trabalhar com seguinte fluxo:
- * 
+ *
  * 1 - usuário inicia pre-cadastro enviando email;
- * 
+ *
  * 1* - um usuário ativo envia convite para o email do candidato ao novo cadastro;
- * 
+ *
  * 2 - depois que enviado o email, o usuário procede com cadastro entrando no hotlink e cadastrando;
- * 
+ *
  * 3 - finalmente com cadastro passado por toda triagem, é enviado a resposta de ok do cadastro;
- * 
+ *
  * 4 - o filtro de "unicidade" do metodo registerPassword pode ser customizado adicionando mais lógica conforme a lógica de query filter;
- * 
+ *
  * @export
  * @class SignUpDAO
  */
