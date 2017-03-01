@@ -2,15 +2,7 @@ import { AppConfig } from '../config/app-config'
 import * as shortid from 'shortid'
 import * as EmailValidator from 'email-validator'
 import { APIError } from '../services/api-error'
-/**
- * passwordCrypto
- */
-const bcrypt = require( 'bcrypt-then' )
-const bcryptjs = require( 'bcryptjs' )
-/**
- * Cripto
- */
-const crypto = require( 'crypto' )
+import * as crypto from 'crypto'
 /**
  * shortid config chars
  */
@@ -75,8 +67,8 @@ export class ServiceLib {
    *
    * @memberOf ServiceLib
    */
-  static hashPassword ( password: string ): Promise<string> {
-    return bcrypt.hash( password, bcryptjs.genSaltSync( 10 ) )
+  static hashPassword ( password: string ): string {
+    return crypto.createHash('sha1').update(password).digest('hex')
   }
 
   /**
@@ -90,7 +82,7 @@ export class ServiceLib {
    * @memberOf ServiceLib
    */
   static comparePassword ( password: string, encryptedPassword: string ): boolean {
-    return bcrypt.compare( password, encryptedPassword )
+    return ( crypto.createHash('sha1').update(password).digest('hex') === encryptedPassword)
   }
 
   /**

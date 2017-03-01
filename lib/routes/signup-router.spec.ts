@@ -113,31 +113,29 @@ describe( 'SignUp Router', () => {
         .and.notify( done )
     } )
     it( 'Criando Usuário de exemplo ?', ( done: Function ) => {
-      ServiceLib.hashPassword( '12345' ).then(( hash: string ) => {
-        return userDAO.create( {
-          name: 'test2',
-          username: 'test2',
-          companyAlias: 'test2',
-          email: 'test2@test.com',
-          password: hash,
-          isAdmin: true
-        }, null )
-      } ).should.be.fulfilled
+      userDAO.create( {
+        name: 'test2',
+        username: 'test2',
+        companyAlias: 'test2',
+        email: 'test2@test.com',
+        password: ServiceLib.hashPassword( '12345' ),
+        isAdmin: true
+      }, null )
+        .should.be.fulfilled
         .and.notify( done )
     } )
 
     it( 'Criando Usuário (desativado) de exemplo ?', ( done: Function ) => {
-      ServiceLib.hashPassword( '12345' ).then(( hash: string ) => {
-        return userDAO.create( {
-          name: 'test3',
-          username: 'test3',
-          companyAlias: 'test3',
-          email: 'test3@test.com',
-          password: hash,
-          isAdmin: true,
-          active: false
-        }, null )
-      } ).should.be.fulfilled
+      userDAO.create( {
+        name: 'test3',
+        username: 'test3',
+        companyAlias: 'test3',
+        email: 'test3@test.com',
+        password: ServiceLib.hashPassword( '12345' ),
+        isAdmin: true,
+        active: false
+      }, null )
+        .should.be.fulfilled
         .and.notify( done )
     } )
   } )
@@ -324,7 +322,7 @@ describe( 'SignUp Router', () => {
         .expect( 401, done )
     } )
 
-    it( 'consulta de dados de usuario deletado', (done) => {
+    it( 'consulta de dados de usuario deletado', ( done ) => {
       before(() => userDAO.delete( user.id, null ) )
       request( app )
         .get( '/api/v1/users' )

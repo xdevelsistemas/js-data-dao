@@ -21,8 +21,6 @@
     "lib/**/*.js.map"
   ],
   "dependencies": {
-    "bcrypt-then": "^1.1.0",
-    "bcryptjs": "^2.4.3",
     "body-parser": "^1.16.1",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
