@@ -1,6 +1,6 @@
-import { IBaseUser, ISignUp, IDAO } from '../interfaces'
+import { IBaseUser, ISignUp } from '../interfaces'
+import { DAO } from './dao'
 import * as JSData from 'js-data'
-import * as _ from 'lodash'
 import * as path from 'path'
 import * as moment from 'moment'
 import { AppConfig } from '../config/app-config'
@@ -35,15 +35,15 @@ export class SignUpDAO {
   private _mailConfig: MailConfig
   private _sendMail: SendMail
   private _serviceLib: ServiceLib
-  private _userDAO: IDAO<IBaseUser>
+  private userDAO: DAO<IBaseUser>
   private _appConfig: AppConfig
-  constructor ( store: JSData.DataStore, appConfig: AppConfig, userDao: IDAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
+  constructor ( store: JSData.DataStore, appConfig: AppConfig, userDao: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
     this.storedb = store
     this._appConfig = appConfig
     this._mailConfig = appConfig.mailConfig
     this._serviceLib = new ServiceLib( appConfig )
     this._sendMail = new SendMail( appConfig.mailConfig, transporter )
-    this._userDAO = userDao
+    this.userDAO = userDao
   }
 
   /**
@@ -106,22 +106,22 @@ export class SignUpDAO {
       }
     }
     if ( moment( data.expiration ) >= moment( today ) ) {
-      return this._userDAO.findAll( filterUser, null )
+      return this.userDAO.findAll( filterUser, null )
         .then(( users: Array<IBaseUser> ) => {
-          let user: IBaseUser = _.head( users )
-          if ( !_.isEmpty( user ) ) {
+          let user = this.userDAO.parseModel(obj)
+          user.email = data.email
+          let errValidation = this.userDAO.schema.validate( user )
+          if ( errValidation && errValidation.length ) {
+            throw new APIError( 'Erro de entrada', 400, errValidation )
+          } else if ( users.length ) {
             throw new APIError( 'Usuário existente', 401 )
-          } else if ( !obj.password ) {
+          } else if ( !user.password ) {
             throw new APIError( 'A senha não foi definida', 401 )
-          } else if ( obj.password.length < 6 ) {
+          } else if ( user.password.length < 6 ) {
             throw new APIError( 'A senha deve conter no mínimo 6 caracteres', 401 )
           }
-          return ServiceLib.hashPassword( obj.password )
-        } )
-        .then(( resp: string ) => {
-          obj.email = data.email
-          obj.password = resp
-          return this._userDAO.create( obj, null )
+          user.password = ServiceLib.hashPassword( user.password )
+          return this.userDAO.create( user, null )
         } )
         .then(( response ) => response )
     } else {

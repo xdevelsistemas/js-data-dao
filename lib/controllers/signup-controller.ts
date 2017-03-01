@@ -2,14 +2,15 @@ import { Request, Response, NextFunction } from 'express'
 import { SignUpDAO } from '../models/signup-dao'
 import * as JSData from 'js-data'
 import { AppConfig } from '../config/app-config'
-import { IBaseUser, IDAO } from '../interfaces'
+import { IBaseUser } from '../interfaces'
+import {DAO} from '../models/dao'
 import * as nodemailer from 'nodemailer'
 
 export class SignupController {
   signUpDAO: SignUpDAO
   config: AppConfig
 
-  constructor ( store: JSData.DataStore, appConfig: AppConfig, userDAO: IDAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
+  constructor ( store: JSData.DataStore, appConfig: AppConfig, userDAO: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
     this.config = appConfig
     this.signUpDAO = new SignUpDAO( store, appConfig, userDAO, transporter )
   }
