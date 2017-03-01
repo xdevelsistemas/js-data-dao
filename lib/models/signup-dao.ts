@@ -1,4 +1,5 @@
-import { IBaseUser, ISignUp, IDAO } from '../interfaces'
+import { IBaseUser, ISignUp } from '../interfaces'
+import { DAO } from './dao'
 import * as JSData from 'js-data'
 import * as _ from 'lodash'
 import * as path from 'path'
@@ -35,15 +36,15 @@ export class SignUpDAO {
   private _mailConfig: MailConfig
   private _sendMail: SendMail
   private _serviceLib: ServiceLib
-  private _userDAO: IDAO<IBaseUser>
+  private userDAO: DAO<IBaseUser>
   private _appConfig: AppConfig
-  constructor ( store: JSData.DataStore, appConfig: AppConfig, userDao: IDAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
+  constructor ( store: JSData.DataStore, appConfig: AppConfig, userDao: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
     this.storedb = store
     this._appConfig = appConfig
     this._mailConfig = appConfig.mailConfig
     this._serviceLib = new ServiceLib( appConfig )
     this._sendMail = new SendMail( appConfig.mailConfig, transporter )
-    this._userDAO = userDao
+    this.userDAO = userDao
   }
 
   /**
@@ -106,10 +107,13 @@ export class SignUpDAO {
       }
     }
     if ( moment( data.expiration ) >= moment( today ) ) {
-      return this._userDAO.findAll( filterUser, null )
+      return this.userDAO.findAll( filterUser, null )
         .then(( users: Array<IBaseUser> ) => {
-          let user: IBaseUser = _.head( users )
-          if ( !_.isEmpty( user ) ) {
+          let user = _.head( users )
+          let errValidation = this.userDAO.schema.validate( user )
+          if ( errValidation.length ) {
+            throw new APIError( 'Erro de entrada', 400, errValidation )
+          } else if ( !_.isEmpty( user ) ) {
             throw new APIError( 'Usuário existente', 401 )
           } else if ( !obj.password ) {
             throw new APIError( 'A senha não foi definida', 401 )
@@ -121,7 +125,7 @@ export class SignUpDAO {
         .then(( resp: string ) => {
           obj.email = data.email
           obj.password = resp
-          return this._userDAO.create( obj, null )
+          return this.userDAO.create( obj, null )
         } )
         .then(( response ) => response )
     } else {
