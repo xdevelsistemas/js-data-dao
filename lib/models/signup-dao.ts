@@ -1,7 +1,6 @@
 import { IBaseUser, ISignUp } from '../interfaces'
 import { DAO } from './dao'
 import * as JSData from 'js-data'
-import * as _ from 'lodash'
 import * as path from 'path'
 import * as moment from 'moment'
 import { AppConfig } from '../config/app-config'
@@ -109,23 +108,20 @@ export class SignUpDAO {
     if ( moment( data.expiration ) >= moment( today ) ) {
       return this.userDAO.findAll( filterUser, null )
         .then(( users: Array<IBaseUser> ) => {
-          let user = _.head( users )
+          let user = this.userDAO.parseModel(obj)
+          user.email = data.email
           let errValidation = this.userDAO.schema.validate( user )
-          if ( errValidation.length ) {
+          if ( errValidation && errValidation.length ) {
             throw new APIError( 'Erro de entrada', 400, errValidation )
-          } else if ( !_.isEmpty( user ) ) {
+          } else if ( users.length ) {
             throw new APIError( 'Usuário existente', 401 )
-          } else if ( !obj.password ) {
+          } else if ( !user.password ) {
             throw new APIError( 'A senha não foi definida', 401 )
-          } else if ( obj.password.length < 6 ) {
+          } else if ( user.password.length < 6 ) {
             throw new APIError( 'A senha deve conter no mínimo 6 caracteres', 401 )
           }
-          return ServiceLib.hashPassword( obj.password )
-        } )
-        .then(( resp: string ) => {
-          obj.email = data.email
-          obj.password = resp
-          return this.userDAO.create( obj, null )
+          user.password = ServiceLib.hashPassword( user.password )
+          return this.userDAO.create( user, null )
         } )
         .then(( response ) => response )
     } else {

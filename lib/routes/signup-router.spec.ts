@@ -144,7 +144,6 @@ describe( 'SignUp Router', () => {
   let expiredToken = serviceLib.generateToken( 'newuser@test.com', new Date( '01-01-2000' ) )
   let inactiveUserToken = serviceLib.generateToken( 'test3@test.com' )
   let newUserToken = serviceLib.generateToken( 'newuser@test.com' )
-  let newInactiveUserToken = serviceLib.generateToken( 'inactive@test.com' )
 
   describe( 'Enviando email de convite', () => {
     it( 'email válido', ( done: Function ) => {
@@ -173,7 +172,7 @@ describe( 'SignUp Router', () => {
         email: 'inativo_teste@test.com',
         active: true,
         companyAlias: null,
-        password: '$2a$10$PVRAIGyBPTHLBq4BHF83pu4buumCs9.qASdy.eGBfoPwPYtYzTCJu',
+        password: '8cb2237d0679ca88db6464eac60da96345513964',
         isAdmin: false
       } ), null )
         .then(( localUser: IBaseUser ) => {
@@ -215,35 +214,35 @@ describe( 'SignUp Router', () => {
     it( 'criando a senha (senha indefinida)', ( done: Function ) => {
       request( app )
         .post( `/api/v1/signup/${newUserToken}` )
-        .send( {} )
+        .send( { name: 'newuser', username: 'newuser', password: '' } )
         .expect( 401, done )
     } )
 
     it( 'criando a senha (senha com menos de 6 caracteres)', ( done: Function ) => {
       request( app )
         .post( `/api/v1/signup/${newUserToken}` )
-        .send( { password: '123' } )
+        .send( { name: 'newuser', username: 'newuser', password: '123' } )
         .expect( 401, done )
     } )
 
     it( 'provocando problema de token invalido', ( done: Function ) => {
       request( app )
         .post( `/api/v1/signup/${existUserToken + 'blablabla'}` )
-        .send( { password: '123456' } )
+        .send( { name: 'newuser', username: 'newuser', password: '123456' } )
         .expect( 401, done )
     } )
 
     it( 'criando login de usuario inexistente', ( done: Function ) => {
       request( app )
         .post( `/api/v1/signup/${existUserToken}` )
-        .send( { password: '123456' } )
+        .send( { name: 'newuser', username: 'newuser', password: '123456' } )
         .expect( 401, done )
     } )
 
     it( 'provocando problema de token expirado', ( done: Function ) => {
       request( app )
         .post( `/api/v1/signup/${expiredToken}` )
-        .send( { password: '123456' } )
+        .send( { name: 'newuser', username: 'newuser', password: '123456' } )
         .expect( 401, done )
     } )
 
@@ -258,13 +257,6 @@ describe( 'SignUp Router', () => {
       request( app )
         .post( `/api/v1/signup/${newUserToken}` )
         .send( { name: 'newuser', username: 'newuser', password: '123456' } )
-        .expect( 200, done )
-    } )
-
-    it( 'criando a senha (usuario inativo)', ( done: Function ) => {
-      request( app )
-        .post( `/api/v1/signup/${newInactiveUserToken}` )
-        .send( { name: 'newuser', username: 'newuser', password: '123456', active: false } )
         .expect( 200, done )
     } )
 
