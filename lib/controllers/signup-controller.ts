@@ -1,15 +1,34 @@
 import { Request, Response, NextFunction } from 'express'
 import { SignUpDAO } from '../models/signup-dao'
-import { APIError } from '../services'
 import * as JSData from 'js-data'
 import { AppConfig } from '../config/app-config'
+import { IBaseUser, IDAO } from '../interfaces'
 import * as nodemailer from 'nodemailer'
 
 export class SignupController {
-  Signup: SignUpDAO
+  signUpDAO: SignUpDAO
+  config: AppConfig
 
-  constructor (store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
-    this.Signup = new SignUpDAO(store, appConfig, transporter)
+  constructor ( store: JSData.DataStore, appConfig: AppConfig, userDAO: IDAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
+    this.config = appConfig
+    this.signUpDAO = new SignUpDAO( store, appConfig, userDAO, transporter )
+  }
+  /**
+   * Envia um email para criar o primeiro login
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} [next]
+   * @returns {Promise<IUser>}
+   *
+   * @memberOf ForgotController
+   */
+  public sendMail ( req: Request, res: Response, next?: NextFunction ): Promise<any> {
+    return this.signUpDAO.sendSignUpMail( req.body, this.config.getSignUpUrl() )
+      .then(() => {
+        res.status( 200 )
+        return 'Email enviado'
+      } )
   }
 
   /**
@@ -22,15 +41,12 @@ export class SignupController {
    *
    * @memberOf SignupController
    */
-  public validaToken (req: Request, res: Response, next: NextFunction): Promise<any> {
-    return this.Signup.validaToken(req.params)
-      .then((dados: any) => {
-        res.status(200)
+  public validaToken ( req: Request, res: Response, next: NextFunction ): Promise<any> {
+    return this.signUpDAO.validaToken( req.params )
+      .then(( dados: any ) => {
+        res.status( 200 )
         return dados
-      })
-      .catch((err: any) => {
-        throw new APIError(err, 401)
-      })
+      } )
   }
 
   /**
@@ -43,14 +59,11 @@ export class SignupController {
    *
    * @memberOf SignupController
    */
-  public registerPassword (req: Request, res: Response, next: NextFunction): Promise<any> {
-    return this.Signup.registerPassword(req.params, req.body)
-      .then((dados: any) => {
-        res.status(200)
+  public registerPassword ( req: Request, res: Response, next: NextFunction ): Promise<any> {
+    return this.signUpDAO.registerPassword( req.params, req.body )
+      .then(( dados: any ) => {
+        res.status( 200 )
         return dados
-      })
-      .catch((err: any) => {
-        throw new APIError(err, 401)
-      })
+      } )
   }
 }

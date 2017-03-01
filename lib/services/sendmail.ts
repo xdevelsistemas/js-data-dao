@@ -5,6 +5,7 @@ import * as handlebars from 'handlebars'
 import * as path from 'path'
 import * as fs from 'fs-extra-promise'
 import * as Bluebird from 'bluebird'
+import {APIError} from '../services/api-error'
 export class SendMail {
   private transporter: nodemailer.Transporter
   private mailConfig: MailConfig
@@ -26,12 +27,18 @@ export class SendMail {
     .then((html: string) => {
       return this.sendMail(email, 'Recuperação de senha', html)
     })
+    .catch((e: Error) => {
+      throw new APIError('layout não localizado',500)
+    })
   }
 
   public sendConfirmationEmail (email: string, url: string): Bluebird<any> {
     return this.generateHtml('', email, url, TpEMail.confirmation)
     .then((html: string) => {
       return this.sendMail(email, 'Confirmação de Cadastro', html)
+    })
+    .catch((e: Error) => {
+      throw new APIError('layout não localizado',500)
     })
   }
 

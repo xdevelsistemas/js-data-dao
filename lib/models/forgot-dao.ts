@@ -28,7 +28,7 @@ export class ForgotDAO {
    *
    * @memberOf ForgotDAO
    */
-  public sendForgotMail ( obj: IForgot ): any {
+  public sendForgotMail ( obj: IForgot , url: string): any {
 
     if ( !ServiceLib.emailValidator( obj.email ) ) {
       throw new APIError('Email inválido' , 400)
@@ -41,7 +41,7 @@ export class ForgotDAO {
           }
           let user: IBaseUser = _.head( users )
           let token: string = this._serviceLib.generateToken( obj.email )
-          return this._sendMail.sendForgotEmail( user.name, obj.email, `https://app.safetruck.com.br/auth/forgot/${token}` )
+          return this._sendMail.sendForgotEmail( user.name, obj.email, `${url}/auth/forgot/${token}` )
         } )
 
     }
