@@ -7,8 +7,10 @@ import * as nodemailer from 'nodemailer'
 
 export class ForgotController {
   forgot: ForgotDAO
+  appConfig: AppConfig
 
   constructor (store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
+    this.appConfig = appConfig
     this.forgot = new ForgotDAO(store, appConfig, transporter)
   }
 
@@ -23,7 +25,7 @@ export class ForgotController {
    * @memberOf ForgotController
    */
   public sendMail (req: Request, res: Response, next?: NextFunction): Promise<any> {
-    return this.forgot.sendForgotMail(req.body)
+    return this.forgot.sendForgotMail(req.body, this.appConfig.getForgotUrl())
       .then(() => {
         res.status(200)
         return 'Email enviado'

@@ -1,11 +1,14 @@
-import { IBaseUser } from '../interfaces'
-import * as Bluebird from 'bluebird'
+import { IBaseUser, ISignUp, IDAO } from '../interfaces'
 import * as JSData from 'js-data'
 import * as _ from 'lodash'
+import * as path from 'path'
 import * as moment from 'moment'
 import { AppConfig } from '../config/app-config'
 import { MailConfig } from '../config/mail-config'
 import { ServiceLib } from '../services/service-lib'
+import { APIError } from '../services/api-error'
+import { SendMail } from '../services/sendmail'
+import { BaseModel } from '../models/base-model'
 import * as nodemailer from 'nodemailer'
 
 /**
@@ -30,46 +33,56 @@ import * as nodemailer from 'nodemailer'
 export class SignUpDAO {
   storedb: JSData.DataStore
   private _mailConfig: MailConfig
+  private _sendMail: SendMail
   private _serviceLib: ServiceLib
+  private _userDAO: IDAO<IBaseUser>
   private _appConfig: AppConfig
-  constructor (store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
+  constructor ( store: JSData.DataStore, appConfig: AppConfig, userDao: IDAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
     this.storedb = store
     this._appConfig = appConfig
     this._mailConfig = appConfig.mailConfig
-    this._serviceLib = new ServiceLib(appConfig)
+    this._serviceLib = new ServiceLib( appConfig )
+    this._sendMail = new SendMail( appConfig.mailConfig, transporter )
+    this._userDAO = userDao
+  }
+
+  /**
+   * Envia um email para o usuário
+   *
+   * @param {ISignUp} obj
+   * @returns {JSData.JSDataPromise<IBaseUser>}
+   *
+   * @memberOf SignUpDAO
+   */
+  public sendSignUpMail ( obj: ISignUp, url: string ): any {
+
+    if ( !ServiceLib.emailValidator( obj.email ) ) {
+      throw new APIError( 'Email inválido', 400 )
+    } else {
+      let token: string = this._serviceLib.generateToken( obj.email )
+      return this._sendMail.sendConfirmationEmail( obj.email, path.join( url, token ) )
+    }
   }
 
   /**
    * Valida o token e retorna o user com email do token
    *
-   * @param {*} params
+   * @param {*} params parametros de rota predefinidos na querystring da rota ( /signup/token => /signup/1234 => token = 1234 )
    * @returns {Promise<IBaseUser>}
    * @memberOf SignUpDAO
    */
-  public validaToken (params: any): Promise<IBaseUser> {
-    let tokenDecrypted: string = this._serviceLib.decrypt(params.token)
-    let data: any = JSON.parse(tokenDecrypted)
+  public validaToken ( params: any ): Promise<IBaseUser> {
     let today: Date = new Date()
-    let filterUser: any = {
-      where: {
-        email: {
-          '===': data.email
-        }
+    let tokenDecrypted: string = this._serviceLib.decrypt( params.token )
+    try {
+      let data: any = JSON.parse( tokenDecrypted )
+      if ( moment( data.expiration ) < moment( today ) ) {
+        throw new APIError( 'O token expirou', 401 )
       }
+      return this.createEmptyUser( data.email )
+    } catch ( e ) {
+      throw new APIError( 'invalid token', 401, e.message )
     }
-    return this.storedb.findAll(this._appConfig.getUsersTable(), filterUser)
-      .then((users: Array<IBaseUser>) => {
-        let user: IBaseUser = _.head(users)
-        if (_.isEmpty(user)) {
-          throw 'Token inválido'
-        } else if (moment(data.expiration) < moment(today)) {
-          throw 'O token expirou'
-        } else if (!user.active) {
-          throw 'A conta foi desativada'
-        }
-        delete user.password
-        return user
-      })
   }
 
   /**
@@ -82,8 +95,8 @@ export class SignUpDAO {
    *
    * @memberOf SignUpDAO
    */
-  public registerPassword (params: any, obj: any, matchFilter?: Object): Promise<boolean> {
-    let data: any = JSON.parse(this._serviceLib.decrypt(params.token))
+  public registerPassword ( params: any, obj: any, matchFilter?: Object ): Promise<IBaseUser> {
+    let data: any = JSON.parse( this._serviceLib.decrypt( params.token ) )
     let today: Date = new Date()
     let filterUser: any = matchFilter || {
       where: {
@@ -92,31 +105,46 @@ export class SignUpDAO {
         }
       }
     }
-    return this.storedb.findAll(this._appConfig.getUsersTable(), filterUser)
-      .then((users: Array<IBaseUser>) => {
-        let user: IBaseUser = _.head(users)
-        if (_.isEmpty(user)) {
-          throw 'Token inválido'
-        } else if (moment(data.expiration) < moment(today)) {
-          throw 'O token expirou'
-        } else if (user.active !== undefined && !user.active) {
-          throw 'A conta foi desativada'
-        } else if (!obj.password) {
-          throw 'A senha não foi definida'
-        } else if (obj.password.length < 6) {
-          throw 'A senha deve conter no mínimo 6 caracteres'
-        }
-        return Bluebird.all([
-          user,
-          ServiceLib.hashPassword(obj.password)
-        ])
-      })
-      .then((resp: any) => {
-        let user: IBaseUser = resp[0]
-        let passwordEncrypted: string = resp[1]
-        user.password = passwordEncrypted
-        return this.storedb.update(this._appConfig.getUsersTable(), user.id, user)
-      })
-      .then(() => true)
+    if ( moment( data.expiration ) >= moment( today ) ) {
+      return this._userDAO.findAll( filterUser, null )
+        .then(( users: Array<IBaseUser> ) => {
+          let user: IBaseUser = _.head( users )
+          if ( !_.isEmpty( user ) ) {
+            throw new APIError( 'Usuário existente', 401 )
+          } else if ( !obj.password ) {
+            throw new APIError( 'A senha não foi definida', 401 )
+          } else if ( obj.password.length < 6 ) {
+            throw new APIError( 'A senha deve conter no mínimo 6 caracteres', 401 )
+          }
+          return ServiceLib.hashPassword( obj.password )
+        } )
+        .then(( resp: string ) => {
+          obj.email = data.email
+          obj.password = resp
+          return this._userDAO.create( obj, null )
+        } )
+        .then(( response ) => response )
+    } else {
+      throw new APIError( 'O token expirou', 401 )
+    }
+  }
+
+  /**
+   * metodo para criar um usuário vazio para terminar de preencher na conclusão do SignUp
+   *
+   * @private
+   * @param {string} email email informado na entrada do signup ou quando recebe convite
+   * @returns {Promise<IBaseUser>} retorna o objeto basico do usuario com os campos em branco para manter consistencia com o antigo modelo
+   *
+   * @memberOf SignUpDAO
+   */
+  private createEmptyUser ( email: string ): Promise<IBaseUser> {
+    let baseData = new BaseModel()
+    let returnData: any = Object.assign( {}, baseData, {
+      email: email,
+      isAdmin: false
+    } )
+    return Promise.resolve( returnData )
+
   }
 }

@@ -1,5 +1,7 @@
 import { IDefaultAdapterOptions } from '../interfaces'
 import * as JSDataRethink from 'js-data-rethinkdb'
+import {getEnv} from './utils'
+
 export class DatabaseConfig {
   private _adapterOptions: IDefaultAdapterOptions
   private _adapter: JSDataRethink.RethinkDBAdapter
@@ -9,9 +11,9 @@ export class DatabaseConfig {
     let opts: JSDataRethink.IBaseRethinkDBAdapter = {
       rOpts: {
         servers: [
-          { host: process.env.SERVER_RETHINKDB_HOST || 'localhost' }
+          { host: getEnv('SERVER_RETHINKDB_HOST') || 'localhost' }
         ],
-        db: process.env.SERVER_RETHINKDB_DB || 'appserver'
+        db: getEnv('SERVER_RETHINKDB_DB') || 'appserver'
       }
     }
 

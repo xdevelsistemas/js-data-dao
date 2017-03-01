@@ -1,47 +1,49 @@
+import {getEnv} from './utils'
+import * as path from 'path'
 export class MailConfig {
-  private _from: string
-  private _email: string
-  private _user: string
-  private _password: string
-  private _host: string
-  private _port: number
-  private _layoutPath: string
+  private from: string
+  private email: string
+  private user: string
+  private password: string
+  private host: string
+  private port: number
+  private layoutPath: string
 
   constructor () {
-    this._from = process.env.EMAIL_FROM
-    this._email = process.env.EMAIL_NAME
-    this._user = process.env.EMAIL_USER
-    this._password = process.env.EMAIL_PASS
-    this._host = process.env.EMAIL_HOST
-    this._port = Number.parseInt(process.env.EMAIL_PORT, 10)
-    this._layoutPath = process.env.LAYOUT_PATH
+    this.from = getEnv('EMAIL_FROM')
+    this.email = getEnv('EMAIL_NAME')
+    this.user = getEnv('EMAIL_USER')
+    this.password = getEnv('EMAIL_PASS')
+    this.host = getEnv('EMAIL_HOST')
+    this.port = Number.parseInt(getEnv('EMAIL_PORT'), 10)
+    this.layoutPath = getEnv('LAYOUT_PATH') || path.resolve('./testResources/')
   }
 
   getFrom (): string {
-    return this._from
+    return this.from
   }
 
   getEmail (): string {
-    return this._email
+    return this.email
   }
 
   getUser (): string {
-    return this._user
+    return this.user
   }
 
   getPassword (): string {
-    return this._password
+    return this.password
   }
 
   getHost (): string {
-    return this._host
+    return this.host
   }
 
   getLayoutPath (): string {
-    return this._layoutPath
+    return this.layoutPath
   }
 
   getPort (): number {
-    return this._port
+    return this.port
   }
 }

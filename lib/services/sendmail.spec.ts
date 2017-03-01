@@ -40,3 +40,27 @@ describe('SendMail', () => {
   })
 
 })
+
+process.env.LAYOUT_PATH = path.join(__dirname,'../../testResources_ajsjhasahj')
+process.env.CRYPTO_PASSWORD = 'secret'
+const sm2 = new SendMail(new MailConfig(), nodemailerMock({foo : 'bar'}))
+
+describe('SendMail com erro de config', () => {
+  it('A classe é instanciável? (nodemailer mockup)', (done: Function) => {
+    assert(sm2 instanceof SendMail)
+    done()
+  })
+
+  it('Teste de simulaçao de envio de confirmacao', (done: Function) => {
+    sm2.sendConfirmationEmail('test@test.com', 'http://teste.com.br')
+    .should.be.rejected
+    .and.notify(done)
+  })
+
+  it('Teste de simulaçao de envio de forgot', (done: Function) => {
+    sm2.sendForgotEmail('jhon doe', 'test@test.com', 'http://teste.com.br')
+    .should.be.rejected
+    .and.notify(done)
+  })
+
+})

@@ -1,3 +1,4 @@
+import {getEnv} from './utils'
 import { DatabaseConfig } from './database-config'
 import { MailConfig } from './mail-config'
 /**
@@ -7,55 +8,69 @@ import { MailConfig } from './mail-config'
 export class AppConfig {
   public mailConfig: MailConfig
   public dbConfig: DatabaseConfig
-  private _mainCompany: string
-  private _isProd: boolean
-  private _cryptoAlgorithm: string
-  private _cryptoPassword: string
-  private _expirationDays: number
-  private _jwtConfig: any
-  private _usersTable: string
+  private mainCompany: string
+  private isProd: boolean
+  private cryptoAlgorithm: string
+  private cryptoPassword: string
+  private expirationDays: number
+  private jwtConfig: any
+  private usersTable: string
+  private signUpUrl: string
+  private forgotUrl: string
 
   constructor () {
-    this._mainCompany = process.env.MAIN_COMPANY
-    this._isProd = (process.env.NODE_ENV === 'production')
-    this._cryptoAlgorithm = process.env.CRYPTO_ALGORITHM || 'aes192'
-    this._cryptoPassword = process.env.CRYPTO_PASSWORD
-    this._expirationDays = Number.parseInt(process.env.EXPIRATION_DAYS, 10) || 3
-    this._usersTable = process.env.USERS_TABLE || 'users'
-    this._jwtConfig = {
+    this.mainCompany = getEnv('MAIN_COMPANY')
+    this.isProd = ( process.env.NODE_ENV === 'production' )
+    this.cryptoAlgorithm = getEnv('CRYPTO_ALGORITHM') || 'aes192'
+    this.cryptoPassword = getEnv('CRYPTO_PASSWORD')
+    this.expirationDays = Number.parseInt( getEnv('EXPIRATION_DAYS'), 10 ) || 3
+    this.usersTable = getEnv('USERS_TABLE') || 'users'
+    this.signUpUrl = getEnv('SIGNUP_URL') || 'http://foo.bar/auth/signup'
+    this.forgotUrl = getEnv('FORGOT_URL') || 'http://foo.bar/auth/forgot'
+    this.jwtConfig = {
       strategy: 'jwt',
-      secret: process.env.APP_JWT_SECRET,
-      session: { session: (process.env.APP_JWT_SESSION || false as boolean) }
+      secret: getEnv('APP_JWT_SECRET'),
+      session: { session: ( getEnv('APP_JWT_SESSION') || false as boolean ) }
     }
     this.mailConfig = new MailConfig()
     this.dbConfig = new DatabaseConfig()
+
   }
 
   getMainCompany (): string {
-    return this._mainCompany
+    return this.mainCompany
   }
 
   getIsProd (): boolean {
-    return this._isProd
+    return this.isProd
   }
 
   getCryptoAlgorithm (): string {
-    return this._cryptoAlgorithm
+    return this.cryptoAlgorithm
   }
 
   getCryptoPassword (): string {
-    return this._cryptoPassword
+    return this.cryptoPassword
   }
 
   getExpirationDays (): number {
-    return this._expirationDays
+    return this.expirationDays
   }
 
   getUsersTable (): string {
-    return this._usersTable
+    return this.usersTable
   }
 
   getJwtConfig (): any {
-    return this._jwtConfig
+    return this.jwtConfig
   }
+
+  getSignUpUrl (): string {
+    return this.signUpUrl
+  }
+
+  getForgotUrl (): string {
+    return this.forgotUrl
+  }
+
 }

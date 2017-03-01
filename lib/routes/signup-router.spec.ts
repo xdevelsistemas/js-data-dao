@@ -12,7 +12,11 @@ import { BaseModel } from '../models/base-model'
 import { IBaseUser } from '../interfaces'
 import { ServiceLib } from '../services/service-lib'
 const Passport = require( 'passport' )
-import { passportJwt } from '../auth/passport'
+import { authenticate, passportJwt } from '../auth'
+import { UserDAO } from '../models/signup-dao.spec'
+import { BasePersistController } from '../controllers'
+import { PersistRouter } from '../routes'
+const nodemailerMock = require( 'nodemailer-mock-transport' )
 chai.use( chaiAsPromised )
 chai.should()
 
@@ -50,6 +54,7 @@ export class TestUser extends BaseModel implements IBaseUser {
     this.email = obj.email
     this.password = obj.password
     this.isAdmin = obj.isAdmin
+    this.active = obj.active
   }
 }
 
@@ -66,55 +71,64 @@ export class TestUserDAO extends DAO<IBaseUser> {
 
 }
 
+export class TestController extends BasePersistController<TestUser> {
+}
+
+export class TestRouter extends PersistRouter<TestUser, TestController> {
+}
+
 let store: JSData.DataStore = handleJSData( config )
-let userDAO = new TestUserDAO(store, config)
+let userDAO = new TestUserDAO( store, config )
+let ctrl = new TestController( userDAO )
+let userRouter = new TestRouter( store, ctrl )
 let passport = passportJwt( store, Passport, config )
 
-let router = new SignupRouter( store, config )
+let router = new SignupRouter( store, config, new UserDAO( store, config ), nodemailerMock( { foo: 'bar' } ) )
 let loginRouter = new LoginRouter( store, config )
 const app = express()
-app.use( bodyParser({extended: true}) )
+app.use( bodyParser( { extended: true } ) )
 /**
  * create api/v1/test router for CRUD operation
  */
 app.use( passport.initialize() )
 app.use( '/api/v1/signup', router.getRouter() )
 app.use( '/api/v1/login', loginRouter.getRouter() )
+app.use( '/api/v1/users', authenticate( passport, config ), userRouter.getRouter() )
 
-describe( 'Init service', () => {
+describe( 'SignUp Router', () => {
   /**
    * inicio dos testes
    */
   describe( 'Signup Router Basic', () => {
-    it('Controller é Instanciável ?', (done: Function) => {
-      assert(router instanceof SignupRouter)
+    it( 'Controller é Instanciável ?', ( done: Function ) => {
+      assert( router instanceof SignupRouter )
       done()
-    })
+    } )
   } )
 
   describe( 'Preparando ambiente', () => {
-    it('Limpando entidade users ?', (done: Function) => {
-      userDAO.collection.destroyAll({})
+    it( 'Limpando entidade users ?', ( done: Function ) => {
+      userDAO.collection.destroyAll( {} )
         .should.be.fulfilled
-        .and.notify(done)
-    })
-    it('Criando Usuário de exemplo ?', (done: Function) => {
-      ServiceLib.hashPassword('12345').then((hash: string) => {
-        return userDAO.create({
+        .and.notify( done )
+    } )
+    it( 'Criando Usuário de exemplo ?', ( done: Function ) => {
+      ServiceLib.hashPassword( '12345' ).then(( hash: string ) => {
+        return userDAO.create( {
           name: 'test2',
           username: 'test2',
           companyAlias: 'test2',
           email: 'test2@test.com',
           password: hash,
           isAdmin: true
-        }, null)
-      }).should.be.fulfilled
-        .and.notify(done)
-    })
+        }, null )
+      } ).should.be.fulfilled
+        .and.notify( done )
+    } )
 
-    it('Criando Usuário (desativado) de exemplo ?', (done: Function) => {
-      ServiceLib.hashPassword('12345').then((hash: string) => {
-        return userDAO.create({
+    it( 'Criando Usuário (desativado) de exemplo ?', ( done: Function ) => {
+      ServiceLib.hashPassword( '12345' ).then(( hash: string ) => {
+        return userDAO.create( {
           name: 'test3',
           username: 'test3',
           companyAlias: 'test3',
@@ -122,117 +136,201 @@ describe( 'Init service', () => {
           password: hash,
           isAdmin: true,
           active: false
-        }, null)
-      }).should.be.fulfilled
-        .and.notify(done)
-    })
+        }, null )
+      } ).should.be.fulfilled
+        .and.notify( done )
+    } )
   } )
 
-  let token = serviceLib.generateToken( 'test2@test.com' )
-  let expiredToken = serviceLib.generateToken( 'test2@test.com', new Date('01-01-2000') )
-  let invalidUserToken = serviceLib.generateToken( 'test_invalid@test.com')
-  let inactiveUserToken = serviceLib.generateToken( 'test3@test.com')
+  let existUserToken = serviceLib.generateToken( 'test2@test.com' )
+  let expiredToken = serviceLib.generateToken( 'newuser@test.com', new Date( '01-01-2000' ) )
+  let inactiveUserToken = serviceLib.generateToken( 'test3@test.com' )
+  let newUserToken = serviceLib.generateToken( 'newuser@test.com' )
+  let newInactiveUserToken = serviceLib.generateToken( 'inactive@test.com' )
 
-  describe( 'Cadastrando login', () => {
-    it( 'checando token', ( done: Function ) => {
+  describe( 'Enviando email de convite', () => {
+    it( 'email válido', ( done: Function ) => {
       request( app )
-        .get( `/api/v1/signup/${token}` )
+        .post( `/api/v1/signup` )
+        .send( { email: 'teste@test.com' } )
         .expect( 200, done )
     } )
 
-    it('checando token invalido', (done: Function) => {
-      request(app)
-        .get(`/api/v1/signup/${token + 'blablabla'}`)
-        .expect(401, done)
-    })
+    it( 'email inválido', ( done: Function ) => {
+      request( app )
+        .post( `/api/v1/signup` )
+        .send( { email: 'teste_at_test.com' } )
+        .expect( 400, done )
+    } )
 
-    it('checando token (usuario inexistente)', (done: Function) => {
-      request(app)
-        .get(`/api/v1/signup/${invalidUserToken}`)
-        .expect(401, done)
-    })
+  } )
 
-    it('checando token expirado', (done: Function) => {
-      request(app)
-        .get(`/api/v1/signup/${expiredToken}`)
-        .expect(401, done)
-    })
+  describe( 'Cadastrando login (Signup)', () => {
+    let result: any = null
+    let user: IBaseUser = null
+    before(() => {
+      return userDAO.create( Object.assign( {}, new BaseModel(), {
+        name: 'inativo',
+        username: 'inativo',
+        email: 'inativo_teste@test.com',
+        active: true,
+        companyAlias: null,
+        password: '$2a$10$PVRAIGyBPTHLBq4BHF83pu4buumCs9.qASdy.eGBfoPwPYtYzTCJu',
+        isAdmin: false
+      } ), null )
+        .then(( localUser: IBaseUser ) => {
+          user = localUser
+          return localUser
+        } )
+        .then(() => {
+          return request( app )
+            .post( '/api/v1/login' )
+            .send( { email: 'inativo_teste@test.com', password: '123456' } )
+        } )
+        .then(( response ) => {
+          result = response.body
+          return user.id
+        } )
+        .then(() => {
+          user.active = false
+          return userDAO.update( user.id, null, user )
+        } )
+    } )
+    it( 'checando token', ( done: Function ) => {
+      request( app )
+        .get( `/api/v1/signup/${newUserToken}` )
+        .expect( 200, done )
+    } )
 
-    it('checando token de usuario inativo', (done: Function) => {
-      request(app)
-        .get(`/api/v1/signup/${inactiveUserToken}`)
-        .expect(401, done)
-    })
+    it( 'checando token invalido', ( done: Function ) => {
+      request( app )
+        .get( `/api/v1/signup/${newUserToken + 'blablabla'}` )
+        .expect( 401, done )
+    } )
 
-    it('criando a senha (senha indefinida)', (done: Function) => {
-      request(app)
-        .post(`/api/v1/signup/${token}`)
-        .send({ })
-        .expect(401, done)
-    })
+    it( 'checando token expirado', ( done: Function ) => {
+      request( app )
+        .get( `/api/v1/signup/${expiredToken}` )
+        .expect( 401, done )
+    } )
 
-    it('criando a senha (senha com menos de 6 caracteres)', (done: Function) => {
-      request(app)
-        .post(`/api/v1/signup/${token}`)
-        .send({ password: '123' })
-        .expect(401, done)
-    })
+    it( 'criando a senha (senha indefinida)', ( done: Function ) => {
+      request( app )
+        .post( `/api/v1/signup/${newUserToken}` )
+        .send( {} )
+        .expect( 401, done )
+    } )
 
-    it('provocando problema de token invalido', (done: Function) => {
-      request(app)
-        .post(`/api/v1/signup/${token + 'blablabla'}`)
-        .send({ password: '123456' })
-        .expect(401, done)
-    })
+    it( 'criando a senha (senha com menos de 6 caracteres)', ( done: Function ) => {
+      request( app )
+        .post( `/api/v1/signup/${newUserToken}` )
+        .send( { password: '123' } )
+        .expect( 401, done )
+    } )
 
-    it('provocando problema de token invalido (usuario inexistente)', (done: Function) => {
-      request(app)
-        .post(`/api/v1/signup/${invalidUserToken}`)
-        .send({ password: '123456' })
-        .expect(401, done)
-    })
+    it( 'provocando problema de token invalido', ( done: Function ) => {
+      request( app )
+        .post( `/api/v1/signup/${existUserToken + 'blablabla'}` )
+        .send( { password: '123456' } )
+        .expect( 401, done )
+    } )
 
-    it('provocando problema de token expirado', (done: Function) => {
-      request(app)
-        .post(`/api/v1/signup/${expiredToken}`)
-        .send({ password: '123456' })
-        .expect(401, done)
-    })
+    it( 'criando login de usuario inexistente', ( done: Function ) => {
+      request( app )
+        .post( `/api/v1/signup/${existUserToken}` )
+        .send( { password: '123456' } )
+        .expect( 401, done )
+    } )
 
-    it('provocando problema de token de usuario inativo', (done: Function) => {
-      request(app)
-        .post(`/api/v1/signup/${inactiveUserToken}`)
-        .send({ password: '123456' })
-        .expect(401, done)
-    })
+    it( 'provocando problema de token expirado', ( done: Function ) => {
+      request( app )
+        .post( `/api/v1/signup/${expiredToken}` )
+        .send( { password: '123456' } )
+        .expect( 401, done )
+    } )
 
-    it('criando a senha', (done: Function) => {
-      request(app)
-        .post(`/api/v1/signup/${token}`)
-        .send({ password: '123456' })
-        .expect(200, done)
-    })
+    it( 'provocando problema de token de usuario inativo', ( done: Function ) => {
+      request( app )
+        .post( `/api/v1/signup/${inactiveUserToken}` )
+        .send( { name: 'inactive', username: 'inactive', password: '123456' } )
+        .expect( 401, done )
+    } )
 
-    it('login novo', (done: Function) => {
-      request(app)
-        .post('/api/v1/login')
-        .send({ email: 'test2@test.com', password: '123456' })
-        .expect(200, done)
-    })
+    it( 'criando a senha', ( done: Function ) => {
+      request( app )
+        .post( `/api/v1/signup/${newUserToken}` )
+        .send( { name: 'newuser', username: 'newuser', password: '123456' } )
+        .expect( 200, done )
+    } )
 
-    it('eliminando dados sujos', (done: Function) => {
-      userDAO.collection.destroyAll({})
+    it( 'criando a senha (usuario inativo)', ( done: Function ) => {
+      request( app )
+        .post( `/api/v1/signup/${newInactiveUserToken}` )
+        .send( { name: 'newuser', username: 'newuser', password: '123456', active: false } )
+        .expect( 200, done )
+    } )
+
+    it( 'login novo', ( done: Function ) => {
+      request( app )
+        .post( '/api/v1/login' )
+        .send( { email: 'newuser@test.com', password: '123456' } )
+        .expect( 200, done )
+    } )
+
+    it( 'realizando query com user válido', ( done: Function ) => {
+      request( app )
+        .post( '/api/v1/login' )
+        .send( { email: 'newuser@test.com', password: '123456' } )
+        .then(( result: any ) => {
+          request( app )
+            .get( '/api/v1/users' )
+            .set( 'Authorization', result.body )
+            .send( { email: 'newuser@test.com', password: '123456' } )
+            .expect( 200, done )
+        } )
+    } )
+
+    it( 'realizando query com user inválido', ( done: Function ) => {
+      request( app )
+        .get( '/api/v1/users' )
+        .set( 'Authorization', 'JWT xkjjsjkasjahsjhsahjs' )
+        .expect( 401, done )
+    } )
+
+    it( 'tentando fazer uma consulta com usuario inativo', ( done: Function ) => {
+      request( app )
+        .get( '/api/v1/users' )
+        .set( 'Authorization', result )
+        .expect( 401, done )
+    } )
+
+    it( 'tentando novo login com usuario inativo', ( done: Function ) => {
+      request( app )
+        .post( '/api/v1/login' )
+        .send( { email: 'inativo_teste@test.com', password: '123456' } )
+        .expect( 401, done )
+    } )
+
+    it( 'eliminando dados sujos', ( done: Function ) => {
+      userDAO.collection.destroyAll( {} )
         .should.be.fulfilled
-        .then(() => done())
-    })
+        .and.notify( done )
+    } )
 
-    // TODO provocar situacao de login de usuário invalido
-    // it('login novo (sem usuário no sistema)', (done: Function) => {
-    //   request(app)
-    //     .post('/api/v1/login')
-    //     .send({ email: 'test2@test.com', password: '123456' })
-    //     .expect(401, done)
-    // })
+    it( 'testando usuario inexistente', ( done: Function ) => {
+      request( app )
+        .post( '/api/v1/login' )
+        .send( { email: 'hjahjsahjsahjs@test.com', password: '123456' } )
+        .expect( 401, done )
+    } )
 
+    it( 'consulta de dados de usuario deletado', (done) => {
+      before(() => userDAO.delete( user.id, null ) )
+      request( app )
+        .get( '/api/v1/users' )
+        .set( 'Authorization', result )
+        .expect( 401, done )
+
+    } )
   } )
 } )
