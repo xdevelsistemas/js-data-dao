@@ -103,31 +103,28 @@ describe( 'Preparando ambiente', () => {
       .and.notify( done )
   } )
   it( 'Criando Usuário de exemplo ?', ( done: Function ) => {
-    ServiceLib.hashPassword( '12345' ).then(( hash: string ) => {
-      return userDAO.create( {
-        name: 'test',
-        username: 'test',
-        companyAlias: 'test',
-        email: 'test@test.com',
-        password: hash,
-        isAdmin: true
-      }, null )
-    } ).should.be.fulfilled
+    userDAO.create( {
+      name: 'test',
+      username: 'test',
+      companyAlias: 'test',
+      email: 'test@test.com',
+      password: ServiceLib.hashPassword( '12345' ),
+      isAdmin: true
+    }, null ).should.be.fulfilled
       .and.notify( done )
   } )
 
   it( 'Criando Usuário (desativado) de exemplo ?', ( done: Function ) => {
-    ServiceLib.hashPassword( '12345' ).then(( hash: string ) => {
-      return userDAO.create( {
-        name: 'test4',
-        username: 'test4',
-        companyAlias: 'test4',
-        email: 'test4@test.com',
-        password: hash,
-        isAdmin: true,
-        active: false
-      }, null )
-    } ).should.be.fulfilled
+    userDAO.create( {
+      name: 'test4',
+      username: 'test4',
+      companyAlias: 'test4',
+      email: 'test4@test.com',
+      password: ServiceLib.hashPassword( '12345' ),
+      isAdmin: true,
+      active: false
+    }, null )
+      .should.be.fulfilled
       .and.notify( done )
   } )
 } )
