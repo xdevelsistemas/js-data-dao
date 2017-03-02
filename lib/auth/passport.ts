@@ -42,12 +42,12 @@ export const passportJwt = ( store: JSData.DataStore, passport: any, appConfig: 
       .catch(( e: Error ) => done( null, false, e.message ) )
   } ) )
 
-  // passport.serializeUser(( user: IBaseUser, done: Function ) => {
-  //   return done( null, user )
-  // } )
-  // passport.deserializeUser(( user: IBaseUser, done: Function ) => {
-  //   return done( null, user )
-  // } )
+  passport.serializeUser(( user: IBaseUser, done: Function ) => {
+    return done( null, user )
+  } )
+  passport.deserializeUser(( user: IBaseUser, done: Function ) => {
+    return done( null, user )
+  } )
   return passport
 }
 
