@@ -51,7 +51,7 @@ export class Application {
   handleEnableCORS (app: express.Application): express.Application {
     app.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', process.env.CORSALLOWED || '*')
-      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH')
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type,' +
         ' Accept, Authorization, If-Modified-Since, Cache-Control, Pragma')
       if ('OPTIONS' === req.method) {

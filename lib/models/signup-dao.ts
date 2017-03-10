@@ -32,17 +32,16 @@ import * as nodemailer from 'nodemailer'
  */
 export class SignUpDAO {
   storedb: JSData.DataStore
-  private _mailConfig: MailConfig
-  private _sendMail: SendMail
-  private _serviceLib: ServiceLib
+  private mailConfig: MailConfig
+  private sendMail: SendMail
+  private serviceLib: ServiceLib
   private userDAO: DAO<IBaseUser>
-  private _appConfig: AppConfig
-  constructor ( store: JSData.DataStore, appConfig: AppConfig, userDao: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
-    this.storedb = store
-    this._appConfig = appConfig
-    this._mailConfig = appConfig.mailConfig
-    this._serviceLib = new ServiceLib( appConfig )
-    this._sendMail = new SendMail( appConfig.mailConfig, transporter )
+  private appConfig: AppConfig
+  constructor ( appConfig: AppConfig, userDao: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
+    this.appConfig = appConfig
+    this.mailConfig = appConfig.mailConfig
+    this.serviceLib = new ServiceLib( appConfig )
+    this.sendMail = new SendMail( appConfig.mailConfig, transporter )
     this.userDAO = userDao
   }
 
@@ -59,8 +58,8 @@ export class SignUpDAO {
     if ( !ServiceLib.emailValidator( obj.email ) ) {
       throw new APIError( 'Email inválido', 400 )
     } else {
-      let token: string = this._serviceLib.generateToken( obj.email )
-      return this._sendMail.sendConfirmationEmail( obj.email, path.join( url, token ) )
+      let token: string = this.serviceLib.generateToken( obj.email )
+      return this.sendMail.sendConfirmationEmail( obj.email, path.join( url, token ) )
     }
   }
 
@@ -73,7 +72,7 @@ export class SignUpDAO {
    */
   public validaToken ( params: any ): Promise<IBaseUser> {
     let today: Date = new Date()
-    let tokenDecrypted: string = this._serviceLib.decrypt( params.token )
+    let tokenDecrypted: string = this.serviceLib.decrypt( params.token )
     try {
       let data: any = JSON.parse( tokenDecrypted )
       if ( moment( data.expiration ) < moment( today ) ) {
@@ -96,7 +95,7 @@ export class SignUpDAO {
    * @memberOf SignUpDAO
    */
   public registerPassword ( params: any, obj: any, matchFilter?: Object ): Promise<IBaseUser> {
-    let data: any = JSON.parse( this._serviceLib.decrypt( params.token ) )
+    let data: any = JSON.parse( this.serviceLib.decrypt( params.token ) )
     let today: Date = new Date()
     let filterUser: any = matchFilter || {
       where: {

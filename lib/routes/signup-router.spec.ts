@@ -1,4 +1,3 @@
-import { DAO } from '../models/dao'
 import { SignupRouter, LoginRouter } from './'
 import { AppConfig } from '../config'
 import * as JSData from 'js-data'
@@ -13,7 +12,7 @@ import { IBaseUser } from '../interfaces'
 import { ServiceLib } from '../services/service-lib'
 const Passport = require( 'passport' )
 import { authenticate, passportJwt } from '../auth'
-import { UserDAO } from '../models/signup-dao.spec'
+import { TestUserDAO } from '../models/forgot-dao.spec'
 import { BasePersistController } from '../controllers'
 import { PersistRouter } from '../routes'
 const nodemailerMock = require( 'nodemailer-mock-transport' )
@@ -58,19 +57,6 @@ export class TestUser extends BaseModel implements IBaseUser {
   }
 }
 
-export class TestUserDAO extends DAO<IBaseUser> {
-  storedb: JSData.DataStore
-  constructor ( store: JSData.DataStore, appConfig: AppConfig ) {
-    super( store, 'users' )
-    this.storedb = store
-  }
-
-  parseModel ( obj: any ) {
-    return new TestUser( obj )
-  }
-
-}
-
 export class TestController extends BasePersistController<TestUser> {
 }
 
@@ -83,7 +69,7 @@ let ctrl = new TestController( userDAO )
 let userRouter = new TestRouter( store, ctrl )
 let passport = passportJwt( store, Passport, config )
 
-let router = new SignupRouter( store, config, new UserDAO( store, config ), nodemailerMock( { foo: 'bar' } ) )
+let router = new SignupRouter(config, userDAO, nodemailerMock( { foo: 'bar' } ) )
 let loginRouter = new LoginRouter( store, config )
 const app = express()
 app.use( bodyParser( { extended: true } ) )

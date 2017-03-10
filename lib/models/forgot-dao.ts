@@ -1,6 +1,7 @@
 import { IForgot, IBaseUser } from '../interfaces'
 import { ServiceLib } from '../services/service-lib'
 import { SendMail } from '../services/sendmail'
+import { DAO } from './dao'
 import * as Bluebird from 'bluebird'
 import * as JSData from 'js-data'
 import * as _ from 'lodash'
@@ -10,14 +11,16 @@ import * as moment from 'moment'
 import {APIError} from '../services/api-error'
 export class ForgotDAO {
   storedb: JSData.DataStore
-  private _sendMail: SendMail
-  private _serviceLib: ServiceLib
-  private _appConfig: AppConfig
-  constructor ( store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter ) {
-    this.storedb = store
-    this._appConfig = appConfig
-    this._sendMail = new SendMail( appConfig.mailConfig, transporter )
-    this._serviceLib = new ServiceLib( appConfig )
+  private sendMail: SendMail
+  private serviceLib: ServiceLib
+
+  private userDAO: DAO<IBaseUser>
+  private appConfig: AppConfig
+  constructor (appConfig: AppConfig,userDao: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
+    this.appConfig = appConfig
+    this.sendMail = new SendMail( appConfig.mailConfig, transporter )
+    this.serviceLib = new ServiceLib( appConfig )
+    this.userDAO = userDao
   }
 
   /**
@@ -34,14 +37,14 @@ export class ForgotDAO {
       throw new APIError('Email inválido' , 400)
     } else {
       let filterEmail: any = { where: { email: { '===': obj.email } } }
-      return this.storedb.findAll( this._appConfig.getUsersTable(), filterEmail )
+      return this.userDAO.findAll(filterEmail, null)
         .then(( users: IBaseUser[] ) => {
           if ( _.isEmpty( users ) ) {
             throw 'Usuário não encontrado'
           }
           let user: IBaseUser = _.head( users )
-          let token: string = this._serviceLib.generateToken( obj.email )
-          return this._sendMail.sendForgotEmail( user.name, obj.email, `${url}/auth/forgot/${token}` )
+          let token: string = this.serviceLib.generateToken( obj.email )
+          return this.sendMail.sendForgotEmail( user.name, obj.email, `${url}/auth/forgot/${token}` )
         } )
 
     }
@@ -56,7 +59,7 @@ export class ForgotDAO {
    * @memberOf ForgotDAO
    */
   public validaToken ( params: any ): Promise<IBaseUser> {
-    let tokenDecrypted: string = this._serviceLib.decrypt( params.token )
+    let tokenDecrypted: string = this.serviceLib.decrypt( params.token )
     let data: any = JSON.parse( tokenDecrypted )
     let today: Date = new Date()
     let filterUser: any = {
@@ -66,7 +69,7 @@ export class ForgotDAO {
         }
       }
     }
-    return this.storedb.findAll( this._appConfig.getUsersTable(), filterUser )
+    return this.userDAO.findAll( filterUser, null )
       .then(( users: Array<IBaseUser> ) => {
         let user: IBaseUser = _.head( users )
         if ( _.isEmpty( user ) ) {
@@ -91,7 +94,7 @@ export class ForgotDAO {
    * @memberOf ForgotDAO
    */
   public resetPassword ( params: any, obj: IBaseUser ): Promise<boolean> {
-    let data: any = JSON.parse( this._serviceLib.decrypt( params.token ) )
+    let data: any = JSON.parse( this.serviceLib.decrypt( params.token ) )
     let today: Date = new Date()
     let filterUser: any = {
       where: {
@@ -100,7 +103,7 @@ export class ForgotDAO {
         }
       }
     }
-    return this.storedb.findAll( this._appConfig.getUsersTable(), filterUser )
+    return this.userDAO.findAll( filterUser, null )
       .then(( users: Array<IBaseUser> ) => {
         let user: IBaseUser = _.head( users )
         if ( _.isEmpty( user ) ) {
@@ -123,7 +126,7 @@ export class ForgotDAO {
         let user: IBaseUser = resp[ 0 ]
         let passwordEncrypted: string = resp[ 1 ]
         user.password = passwordEncrypted
-        return this.storedb.update( this._appConfig.getUsersTable(), user.id, user )
+        return this.userDAO.update(user.id, null, user)
       } )
       .then(() => true )
   }

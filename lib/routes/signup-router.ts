@@ -12,10 +12,9 @@ export class SignupRouter extends BaseRouter {
   store: JSData.DataStore
   router: Router
 
-  constructor ( store: JSData.DataStore, appConfig: AppConfig, userDAO: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
+  constructor ( appConfig: AppConfig, userDAO: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
     super()
-    this.controller = new SignupController( store, appConfig, userDAO, transporter )
-    this.store = store
+    this.controller = new SignupController( appConfig, userDAO, transporter )
     this.router = Router()
     this.routers()
   }
