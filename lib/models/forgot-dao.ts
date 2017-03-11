@@ -4,6 +4,7 @@ import { SendMail } from '../services/sendmail'
 import { DAO } from './dao'
 import * as Bluebird from 'bluebird'
 import * as JSData from 'js-data'
+import * as path from 'path'
 import * as _ from 'lodash'
 import { AppConfig } from '../config/app-config'
 import * as nodemailer from 'nodemailer'
@@ -44,7 +45,7 @@ export class ForgotDAO {
           }
           let user: IBaseUser = _.head( users )
           let token: string = this.serviceLib.generateToken( obj.email )
-          return this.sendMail.sendForgotEmail( user.name, obj.email, `${url}/auth/forgot/${token}` )
+          return this.sendMail.sendForgotEmail( user.name, obj.email, path.join( url, token ) )
         } )
 
     }
