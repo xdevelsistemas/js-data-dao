@@ -4,7 +4,7 @@ import { SendMail } from '../services/sendmail'
 import { DAO } from './dao'
 import * as Bluebird from 'bluebird'
 import * as JSData from 'js-data'
-import * as path from 'path'
+import * as url from 'url'
 import * as _ from 'lodash'
 import { AppConfig } from '../config/app-config'
 import * as nodemailer from 'nodemailer'
@@ -32,7 +32,7 @@ export class ForgotDAO {
    *
    * @memberOf ForgotDAO
    */
-  public sendForgotMail ( obj: IForgot , url: string): any {
+  public sendForgotMail ( obj: IForgot , appUrl: string): any {
 
     if ( !ServiceLib.emailValidator( obj.email ) ) {
       throw new APIError('Email inválido' , 400)
@@ -45,7 +45,7 @@ export class ForgotDAO {
           }
           let user: IBaseUser = _.head( users )
           let token: string = this.serviceLib.generateToken( obj.email )
-          return this.sendMail.sendForgotEmail( user.name, obj.email, path.join( url, token ) )
+          return this.sendMail.sendForgotEmail( user.name, obj.email, url.resolve( appUrl, token ) )
         } )
 
     }

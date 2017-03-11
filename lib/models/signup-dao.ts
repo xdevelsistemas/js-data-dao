@@ -1,7 +1,7 @@
 import { IBaseUser, ISignUp } from '../interfaces'
 import { DAO } from './dao'
 import * as JSData from 'js-data'
-import * as path from 'path'
+import * as url from 'url'
 import * as moment from 'moment'
 import { AppConfig } from '../config/app-config'
 import { MailConfig } from '../config/mail-config'
@@ -10,7 +10,6 @@ import { APIError } from '../services/api-error'
 import { SendMail } from '../services/sendmail'
 import { BaseModel } from '../models/base-model'
 import * as nodemailer from 'nodemailer'
-
 /**
  * Classe responsável pelo processamento de cadastros de novos usuários no sistema
  *
@@ -53,13 +52,13 @@ export class SignUpDAO {
    *
    * @memberOf SignUpDAO
    */
-  public sendSignUpMail ( obj: ISignUp, url: string ): any {
+  public sendSignUpMail ( obj: ISignUp, appUrl: string ): any {
 
     if ( !ServiceLib.emailValidator( obj.email ) ) {
       throw new APIError( 'Email inválido', 400 )
     } else {
       let token: string = this.serviceLib.generateToken( obj.email )
-      return this.sendMail.sendConfirmationEmail( obj.email, path.join( url, token ) )
+      return this.sendMail.sendConfirmationEmail( obj.email, url.resolve( appUrl, token ) )
     }
   }
 
