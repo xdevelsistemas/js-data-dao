@@ -1,4 +1,4 @@
-import { DAO } from '../models/dao'
+import {TestUserDAO} from '../models/forgot-dao.spec'
 import { ForgotRouter, LoginRouter } from './'
 import { AppConfig } from '../config'
 import * as JSData from 'js-data'
@@ -59,24 +59,11 @@ export class TestUser extends BaseModel implements IBaseUser {
   }
 }
 
-export class TestUserDAO extends DAO<IBaseUser> {
-  storedb: JSData.DataStore
-  constructor ( store: JSData.DataStore, appConfig: AppConfig ) {
-    super( store, 'users' )
-    this.storedb = store
-  }
-
-  parseModel ( obj: any ) {
-    return new TestUser( obj )
-  }
-
-}
-
 let store: JSData.DataStore = handleJSData( config )
 let userDAO = new TestUserDAO( store, config )
 let passport = passportJwt( store, Passport, config )
 
-let router = new ForgotRouter( store, config, nodemailerMock( { foo: 'bar' } ) )
+let router = new ForgotRouter(config,userDAO, nodemailerMock( { foo: 'bar' } ) )
 let loginRouter = new LoginRouter( store, config )
 
 /**

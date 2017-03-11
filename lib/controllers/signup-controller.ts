@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
 import { SignUpDAO } from '../models/signup-dao'
-import * as JSData from 'js-data'
 import { AppConfig } from '../config/app-config'
 import { IBaseUser } from '../interfaces'
 import {DAO} from '../models/dao'
@@ -10,9 +9,9 @@ export class SignupController {
   signUpDAO: SignUpDAO
   config: AppConfig
 
-  constructor ( store: JSData.DataStore, appConfig: AppConfig, userDAO: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
+  constructor ( appConfig: AppConfig, userDAO: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
     this.config = appConfig
-    this.signUpDAO = new SignUpDAO( store, appConfig, userDAO, transporter )
+    this.signUpDAO = new SignUpDAO( appConfig, userDAO, transporter )
   }
   /**
    * Envia um email para criar o primeiro login

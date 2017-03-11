@@ -2,16 +2,16 @@ import { Request, Response, NextFunction } from 'express'
 import { ForgotDAO } from '../models/forgot-dao'
 import { APIError } from '../services'
 import { AppConfig } from '../config/app-config'
-import * as JSData from 'js-data'
+import {DAO} from '../models/dao'
+import {IBaseUser} from '../interfaces'
 import * as nodemailer from 'nodemailer'
-
 export class ForgotController {
   forgot: ForgotDAO
   appConfig: AppConfig
 
-  constructor (store: JSData.DataStore, appConfig: AppConfig, transporter?: nodemailer.Transporter) {
+  constructor (appConfig: AppConfig, userDAO: DAO<IBaseUser>, transporter?: nodemailer.Transporter) {
     this.appConfig = appConfig
-    this.forgot = new ForgotDAO(store, appConfig, transporter)
+    this.forgot = new ForgotDAO(appConfig, userDAO, transporter)
   }
 
   /**

@@ -6,6 +6,7 @@ import {DAO} from './dao'
 import * as assert from 'assert'
 import * as chai from 'chai'
 import * as JSData from 'js-data'
+import {TestUserDAO} from './forgot-dao.spec'
 chai.should()
 /**
  * preparando testabililidade do ambiente
@@ -79,7 +80,7 @@ let handleJSData = (config: AppConfig): JSData.DataStore => {
 }
 
 let store: JSData.DataStore = handleJSData(config)
-const dao = new SignUpDAO(store,config, new UserDAO(store,config))
+const dao = new SignUpDAO(config, new TestUserDAO(store,config))
 
 describe('ServiceLib', () => {
 
