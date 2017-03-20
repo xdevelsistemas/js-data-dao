@@ -53,7 +53,7 @@ export class Application {
       res.header('Access-Control-Allow-Origin', process.env.CORSALLOWED || '*')
       res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH')
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type,' +
-        ' Accept, Authorization, If-Modified-Since, Cache-Control, Pragma')
+        ' Accept, Authorization, If-Modified-Since, Cache-Control, enctype, Pragma')
       if ('OPTIONS' === req.method) {
         return res.send(200)
       } else {
