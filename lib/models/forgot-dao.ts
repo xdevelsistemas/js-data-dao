@@ -2,7 +2,6 @@ import { IForgot, IBaseUser } from '../interfaces'
 import { ServiceLib } from '../services/service-lib'
 import { SendMail } from '../services/sendmail'
 import { DAO } from './dao'
-import * as Bluebird from 'bluebird'
 import * as JSData from 'js-data'
 import * as url from 'url'
 import * as _ from 'lodash'
@@ -118,15 +117,7 @@ export class ForgotDAO {
         } else if ( obj.password.length < 6 ) {
           throw 'A nova senha deve conter no mínimo 6 caracteres'
         }
-        return Bluebird.all( [
-          user,
-          ServiceLib.hashPassword( obj.password )
-        ] )
-      } )
-      .then(( resp: any ) => {
-        let user: IBaseUser = resp[ 0 ]
-        let passwordEncrypted: string = resp[ 1 ]
-        user.password = passwordEncrypted
+        user.password = ServiceLib.hashPassword( obj.password )
         return this.userDAO.update(user.id, null, user)
       } )
       .then(() => true )
