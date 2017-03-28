@@ -18,9 +18,16 @@ export class AppConfig {
   private signUpUrl: string
   private forgotUrl: string
 
+  private corsAllowed: string
+  private corsAllowMethods: string
+  private corsAllowHeaders: string
+
   constructor () {
+    this.corsAllowed = getEnv('CORSALLOWED') || '*'
+    this.corsAllowMethods = getEnv('CORS_ALLOW_METHODS') || 'GET,PUT,POST,DELETE,OPTIONS,PATCH'
+    this.corsAllowHeaders = getEnv('CORS_ALLOW_HEADERS') || 'Origin, X-Requested-With, Content-Type, Accept, Authorization, If-Modified-Since, Cache-Control, enctype, Pragma'
     this.mainCompany = getEnv('MAIN_COMPANY')
-    this.isProd = ( process.env.NODE_ENV === 'production' )
+    this.isProd = ( getEnv('NODE_ENV') === 'production' )
     this.cryptoAlgorithm = getEnv('CRYPTO_ALGORITHM') || 'aes192'
     this.cryptoPassword = getEnv('CRYPTO_PASSWORD')
     this.expirationDays = Number.parseInt( getEnv('EXPIRATION_DAYS'), 10 ) || 3
@@ -71,6 +78,17 @@ export class AppConfig {
 
   getForgotUrl (): string {
     return this.forgotUrl
+  }
+
+  getCorsAllowed (): string {
+    return this.corsAllowed
+  }
+  getCorsAllowMethods (): string {
+    return this.corsAllowMethods
+  }
+
+  getCorsAllowHeaders (): string {
+    return this.corsAllowHeaders
   }
 
 }
