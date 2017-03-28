@@ -50,10 +50,9 @@ export class Application {
 
   handleEnableCORS (app: express.Application): express.Application {
     app.use((req, res, next) => {
-      res.header('Access-Control-Allow-Origin', process.env.CORSALLOWED || '*')
-      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH')
-      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type,' +
-        ' Accept, Authorization, If-Modified-Since, Cache-Control, enctype, Pragma')
+      res.header('Access-Control-Allow-Origin', this.appConfig.getCorsAllowed())
+      res.header('Access-Control-Allow-Methods', this.appConfig.getCorsAllowMethods())
+      res.header('Access-Control-Allow-Headers', this.appConfig.getCorsAllowHeaders())
       if ('OPTIONS' === req.method) {
         return res.send(200)
       } else {
@@ -112,7 +111,7 @@ export class Application {
         if (!(err instanceof Services.APIError)) {
           err = new Services.APIError(err, err.status || err.statusCode || 500)
         }
-        return res.status(err.statusCode >= 100 && err.statusCode < 600 ? err.statusCode : 500).json(err.error)
+        return res.sendStatus(err.statusCode >= 100 && err.statusCode < 600 ? err.statusCode : 500).json(err.error)
       })
     }
 
@@ -122,7 +121,7 @@ export class Application {
       if (!(err instanceof Services.APIError)) {
         err = new Services.APIError(err, err.status || err.statusCode || 500)
       }
-      return res.status(err.statusCode >= 100 && err.statusCode < 600 ? err.statusCode : 500).json(err.error)
+      return res.sendStatus(err.statusCode >= 100 && err.statusCode < 600 ? err.statusCode : 500).json(err.error)
     })
     return app
   }
