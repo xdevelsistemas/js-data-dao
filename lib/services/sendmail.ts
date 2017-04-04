@@ -22,27 +22,27 @@ export class SendMail {
     this.transporter = nodemailer.createTransport(transporter || smtpTransport(options))
   }
 
-  public sendForgotEmail (name: string, email: string, url: string): Bluebird<any> {
+  public sendForgotEmail (name: string, email: string, url: string): Bluebird<nodemailer.SentMessageInfo> {
     return this.generateHtml(name, email, url, TpEMail.forgot)
     .then((html: string) => {
       return this.sendMail(email, 'Recuperação de senha', html)
     })
     .catch((e: Error) => {
       throw new APIError('layout não localizado',500)
-    })
+    }) as Bluebird<nodemailer.SentMessageInfo>
   }
 
-  public sendConfirmationEmail (email: string, url: string): Bluebird<any> {
+  public sendConfirmationEmail (email: string, url: string): Bluebird<nodemailer.SentMessageInfo> {
     return this.generateHtml('', email, url, TpEMail.confirmation)
     .then((html: string) => {
       return this.sendMail(email, 'Confirmação de Cadastro', html)
     })
     .catch((e: Error) => {
       throw new APIError('layout não localizado',500)
-    })
+    }) as Bluebird<nodemailer.SentMessageInfo>
   }
 
-  private sendMail (to: string, subject: string, html: string) {
+  private sendMail (to: string, subject: string, html: string): Bluebird<nodemailer.SentMessageInfo> {
     const options: nodemailer.SendMailOptions = {
       // from === nome da empresa
       from: `${this.mailConfig.getFrom()} <${this.mailConfig.getEmail()}>`,
@@ -53,7 +53,7 @@ export class SendMail {
       // corpo do email
       html
     }
-    return this.transporter.sendMail(options)
+    return this.transporter.sendMail(options) as Bluebird<nodemailer.SentMessageInfo>
   }
 
   private generateHtml (name: string, email: string, url: string, type: TpEMail) {
