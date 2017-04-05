@@ -108,19 +108,21 @@ export class Application {
     // will print stacktrace
     if ( app.get( 'env' ) === 'development' ) {
       app.use( function ( err: any, req: Request, res: Response, next: Function ) {
+        let _err: Services.APIError
         if ( !( err instanceof Services.APIError ) ) {
-          err = new Services.APIError( err, err.status || err.statusCode || 500 )
+          _err = new Services.APIError( err, err.status || err.statusCode || 500 )
         }
-        return res.status( err.statusCode >= 100 && err.statusCode < 600 ? err.statusCode : 500 ).json( err.error )
+        return res.status( _err.statusCode >= 100 && _err.statusCode < 600 ? _err.statusCode : 500 ).json( _err.output )
       } )
     } else {
       // production error handler
       // no stacktraces leaked to user
       app.use( function ( err: any, req: Request, res: Response, next: Function ) {
+        let _err: Services.APIError
         if ( !( err instanceof Services.APIError ) ) {
-          err = new Services.APIError( err, err.status || err.statusCode || 500 )
+          _err = new Services.APIError( err, err.status || err.statusCode || 500 )
         }
-        return res.status( err.statusCode >= 100 && err.statusCode < 600 ? err.statusCode : 500 ).json( err.error )
+        return res.status( _err.statusCode >= 100 && _err.statusCode < 600 ? _err.statusCode : 500 ).json( _err.output )
       } )
     }
     return app

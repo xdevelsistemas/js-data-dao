@@ -117,7 +117,7 @@ export class ServiceLib {
       dec += decipher.final( 'utf8' )
       return dec
     } catch ( e ) {
-      throw new APIError( 'token inválido', 401 , {message : e.message})
+      throw new APIError( 'token inválido', 401 , e)
     }
   }
 
