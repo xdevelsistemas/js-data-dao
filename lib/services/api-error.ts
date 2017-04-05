@@ -1,15 +1,41 @@
 import * as Boom from 'boom'
+import { IError } from '../interfaces'
 
-export class APIError extends Error {
+export class APIError extends Error implements IError {
+
   statusCode: number
-  error: Boom.BoomError
   objectResponse: Object
+  private error: Boom.BoomError
+
   constructor (message: string, statusCode: number, objectResponse?: Object) {
     super(message)
     this.statusCode = statusCode
     this.objectResponse = objectResponse
     this.definedBoomError()
     this.showError()
+  }
+
+  static fromError (error: Error, statusCode: number = 500): APIError {
+    return new APIError(error.message || 'Ops! Algo deu errado!', statusCode)
+  }
+
+  json (): string {
+    return JSON.stringify(this.output)
+  }
+
+  /**
+   * @override
+   */
+  toString (): string {
+    return this.message
+  }
+
+  get output (): IError {
+    return {
+      statusCode: this.statusCode,
+      objectResponse: this.objectResponse || { },
+      message: this.error.message
+    }
   }
 
   private definedBoomError () {
@@ -32,4 +58,5 @@ export class APIError extends Error {
     console.error(`API ERROR MESSAGE: ${err.message}`)
     console.error(`API ERROR STACK: ${err.stack}`)
   }
+
 }
