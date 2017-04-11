@@ -122,12 +122,19 @@ describe( 'Logando com usuário', () => {
       } )
       .then(() => done() )
   } )
-
   it( 'ping seguro autenticado', ( done: Function ) => {
     request( app )
       .get( '/api/v1/ping' )
       .set( 'Authorization', resp )
       .expect( 200, done )
+  } )
+
+  it( 'ping seguro usando token expirado', ( done: Function ) => {
+    let expiredToken = `JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InJ5SzFWOTlwbCIsImFjdGl2ZSI6dHJ1ZSwiY29tcGFueUFsaWFzIjoidGVzdCIsImNyZWF0ZWRBdCI6IjIwMTctMDQtMTFUMTc6MzU6MjguNTIxWiIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlzQWRtaW4iOnRydWUsIm5hbWUiOiJ0ZXN0IiwidXBkYXRlZEF0IjoiMjAxNy0wNC0xMVQxNzozNToyOC41MjFaIiwiaWF0IjoxNDkxOTMyMTczLCJleHAiOjE0OTE5MzIxNzN9.fQQMRtBAU-WpKo8ivsv0MDl0DnSQ9Aibl6EmgOuTTT0`
+    request( app )
+      .get( '/api/v1/ping' )
+      .set( 'Authorization', expiredToken )
+      .expect( 401, done )
   } )
 
   it( 'ping seguro sem autorizacao', ( done: Function ) => {
