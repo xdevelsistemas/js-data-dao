@@ -53,18 +53,6 @@ export class UserDAO extends DAO<IBaseUser> {
     }
     super(store, User , appConfig.getUsersTable(), schema)
   }
-
-  /**
-   * Método para para facilitar a criação dos usuários
-   *
-   * @param {*} val
-   * @returns {IUser}
-   *
-   * @memberOf UserDAO
-   */
-  public parseModel (val: any): IBaseUser {
-    return new User(val)
-  }
 }
 
 let handleJSData = (config: AppConfig): JSData.DataStore => {

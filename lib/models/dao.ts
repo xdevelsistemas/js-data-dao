@@ -136,10 +136,6 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
     this.tpClass = tpClass
   }
 
-  public parseModel (obj: any) {
-    return new this.tpClass(obj)
-  }
-
   /**
    * find all registers using query syntax from js-data
    * http://www.js-data.io/v3.0/docs/query-syntax#section-filtering-where

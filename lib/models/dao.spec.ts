@@ -107,11 +107,6 @@ export class TestSimpleClassDAO extends DAO<ITestSimpleClass> {
     }, null, [] )
     this.storedb = store
   }
-
-  parseModel ( obj: any ) {
-    return new TestSimpleClass( obj )
-  }
-
 }
 export class TestInvalidClassDAO extends DAO<TestInvalidClass> {
   storedb: JSData.DataStore
@@ -141,10 +136,6 @@ export class TestComplexClassDAO extends DAO<ITestComplexClass> {
         }
       }, [ 'simple' ] )
     this.storedb = store
-  }
-
-  parseModel ( obj: any ) {
-    return new TestComplexClass( obj )
   }
 }
 let dao1 = new TestSimpleClassDAO( store, config )

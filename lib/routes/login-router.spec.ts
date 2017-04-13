@@ -61,11 +61,6 @@ export class TestUserDAO extends DAO<IBaseUser> {
     super( store, TestUser, 'users' )
     this.storedb = store
   }
-
-  parseModel ( obj: any ) {
-    return new TestUser( obj )
-  }
-
 }
 
 let store: JSData.DataStore = handleJSData( config )
