@@ -137,6 +137,18 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
   }
 
   /**
+   * funcao responsável por obter o dado do objeto e parsear gerando a classe instanciada dentro do DAO
+   * elementos desnecessários serão descartados e elementos necessários para geração da classe serão utilizados
+   * nessa parte pode ser feito verificacoes no construtor da classe impedindo a criaçao do registro caso alguma propriedade não entre
+   * em adequação com as regras do sistema.
+   *
+   * @param obj  objeto a ser "parseado"
+   */
+  public parseModel ( obj: any ): T {
+    return new this.tpClass( obj )
+  }
+
+  /**
    * find all registers using query syntax from js-data
    * http://www.js-data.io/v3.0/docs/query-syntax#section-filtering-where
    *
@@ -185,7 +197,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
   public create ( obj: T, userP: any ): Promise<T> {
     try {
       // let a = GenericDeserialize(obj, this.modelClass)
-      return this.collection.create( this.parseModel(obj) )
+      return this.collection.create( this.parseModel( obj ) )
         .then(( record: JSData.Record ) => {
           return record.toJSON( this.opts )
         } )
