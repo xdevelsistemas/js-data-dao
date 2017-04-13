@@ -80,6 +80,7 @@ let router = new LoginRouter( store, config )
 app.use( passport.initialize() )
 app.use( '/api/v1/login', router.getRouter() )
 app.use( '/api/v1/ping', authenticate( passport, config ), new PingRouter().getRouter() )
+app.use( '/api/v1/user', authenticate( passport, config ), ( req: any, res, next ) => req.user )
 
 /**
  * inicio dos testes
