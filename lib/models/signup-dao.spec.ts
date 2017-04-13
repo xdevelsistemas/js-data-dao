@@ -51,7 +51,7 @@ export class UserDAO extends DAO<IBaseUser> {
       },
       required: ['id', 'name', 'username', 'email', 'password', 'active']
     }
-    super(store, appConfig.getUsersTable(), schema)
+    super(store, User , appConfig.getUsersTable(), schema)
   }
 
   /**

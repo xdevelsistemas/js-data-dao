@@ -1,5 +1,6 @@
 import { DAO } from './dao'
 import { IBaseModel, IResultSearch } from '../interfaces'
+// import { GenericDeserialize } from 'cerialize'
 import { BaseModel } from './base-model'
 import { AppConfig } from '../config'
 import * as JSData from 'js-data'
@@ -70,6 +71,7 @@ export class TestInvalidClass extends BaseModel implements ITestSimpleClass {
   constructor ( obj: ITestSimpleClass ) {
     super( obj )
     this.name = obj.name
+    throw new Error('provocando erro na instanciação')
   }
 }
 
@@ -96,7 +98,7 @@ export class TestComplexClass extends BaseModel implements ITestComplexClass {
 export class TestSimpleClassDAO extends DAO<ITestSimpleClass> {
   storedb: JSData.DataStore
   constructor ( store: JSData.DataStore, appConfig: AppConfig ) {
-    super( store, 'simple', {
+    super( store, TestSimpleClass, 'simple', {
       title: 'testSimple',
       description: 'Simple Test',
       type: 'object',
@@ -114,7 +116,7 @@ export class TestSimpleClassDAO extends DAO<ITestSimpleClass> {
 export class TestInvalidClassDAO extends DAO<TestInvalidClass> {
   storedb: JSData.DataStore
   constructor ( store: JSData.DataStore, appConfig: AppConfig ) {
-    super( store, 'simple', {
+    super( store, TestInvalidClass, 'simple', {
       properties: { name: { type: 'string' } }
     }, null, [] )
     this.storedb = store
@@ -124,20 +126,20 @@ export class TestInvalidClassDAO extends DAO<TestInvalidClass> {
 export class TestComplexClassDAO extends DAO<ITestComplexClass> {
   storedb: JSData.DataStore
   constructor ( store: JSData.DataStore, appConfig: AppConfig ) {
-    super( store, 'complex', {
+    super( store, TestComplexClass , 'complex', {
       title: 'testSimple',
       description: 'Simple Test',
       type: 'object',
       properties: { simpleClassId: { type: 'string' }, name: { type: 'string' } },
       required: [ 'name', 'simpleClassId' ]
     }, {
-      belongsTo: {
-        simple: {
-          localKey: 'simpleClassId',
-          localField: 'simpleClass'
+        belongsTo: {
+          simple: {
+            localKey: 'simpleClassId',
+            localField: 'simpleClass'
+          }
         }
-      }
-    }, [ 'simple' ] )
+      }, [ 'simple' ] )
     this.storedb = store
   }
 
@@ -331,12 +333,8 @@ describe( 'Instance new same DAO', () => {
 class TestOtherSimpleClassDAO extends DAO<ITestSimpleClass> {
   storedb: JSData.DataStore
   constructor ( store: JSData.DataStore, appConfig: AppConfig ) {
-    super( store, 'other' )
+    super( store, TestSimpleClass , 'other' )
     this.storedb = store
-  }
-
-  parseModel ( obj: any ) {
-    return new TestSimpleClass( obj )
   }
 
 }
@@ -365,13 +363,14 @@ describe( 'install minimal config', () => {
 
 } )
 
-let instanceInvalid = new TestInvalidClass( { name: 'test invalid' } )
+// let instanceInvalid = new TestInvalidClass( { name: 'test invalid' } )
 let daoInvalid = new TestInvalidClassDAO( store, config )
 
 describe( 'Invalid DAO', () => {
 
   it( 'insert', ( done: Function ) => {
-    daoInvalid.create( instanceInvalid, null )
+    // let a = GenericDeserialize({ name: 'test invalid' }, TestInvalidClass)
+    daoInvalid.create( { name: 'test invalid' }, null )
       .should.be.rejected
       .and.notify( done )
   } )
@@ -387,10 +386,8 @@ describe( 'Invalid DAO', () => {
 describe( 'Construtor Inválido', () => {
 
   it( 'testando construir uma classe de forma invalida', ( done: Function ) => {
-    let fcn = () => {
-      new TestInvalidClassDAO(null, config)
-    }
-    chai.expect(fcn).to.throw()
+    let fcn = () => new TestInvalidClassDAO( null, config )
+    chai.expect( fcn ).to.throw()
     done()
   } )
 

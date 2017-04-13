@@ -9,5 +9,4 @@ export interface IDAO<T extends IBaseModel> {
   update (id: string, user: IBaseUser, t: T): Promise<T>
   delete (id: string, user: IBaseUser): Promise<boolean>
   paginatedQuery (search: Object, user: IBaseUser, page?: number, limit?: number, options?: any): Promise<IResultSearch<T>>
-  parseModel (val: any): T
 }

@@ -58,7 +58,7 @@ export class TestUser extends BaseModel implements IBaseUser {
 export class TestUserDAO extends DAO<IBaseUser> {
   storedb: JSData.DataStore
   constructor ( store: JSData.DataStore, appConfig: AppConfig ) {
-    super( store, 'users' )
+    super( store, TestUser, 'users' )
     this.storedb = store
   }
 

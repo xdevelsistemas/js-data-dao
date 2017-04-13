@@ -58,6 +58,16 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
   public opts: any
 
   /**
+   * classe da implementacao da Persistencia, ela deve ter a assinatura  do tipo
+   * constructor ( obj: any ) : T  => gerando o tipo da classe generico
+   *
+   * @private
+   *
+   * @memberOf DAO
+   */
+  private tpClass: new ( obj: any ) => T
+
+  /**
    * Creates an instance of DAO.
    * @param {JSData.DataStore} store
    * @param {string} collectionName
@@ -67,7 +77,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  constructor ( store: JSData.DataStore, collectionName: string, schema: any = null, relations: any = null, joins: string[] = [] ) {
+  constructor ( store: JSData.DataStore, tpClass: new ( obj: any ) => T, collectionName: string, schema: any = null, relations: any = null, joins: string[] = [] ) {
     if ( !store ) {
       throw Error( 'store is not defined' )
     }
@@ -122,21 +132,12 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
       with: joins,
       debug: true
     }
+
+    this.tpClass = tpClass
   }
 
-  /**
-   * this method is used to "normalize" models, typescript cannot run new instance of
-   * Generic Type like Class<T> { public method() { new T() } } , so parseModel is used in the
-   * class and ALL models have to implement parseModel
-   *
-   * @param {*} val
-   * @returns {T}
-   *
-   * @memberOf DAO
-   */
-
-  public parseModel ( val: any ): T {
-    throw new Error( 'not implemented' )
+  public parseModel (obj: any) {
+    return new this.tpClass(obj)
   }
 
   /**
@@ -187,7 +188,8 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    */
   public create ( obj: T, userP: any ): Promise<T> {
     try {
-      return this.collection.create( this.parseModel( obj ) )
+      // let a = GenericDeserialize(obj, this.modelClass)
+      return this.collection.create( this.parseModel(obj) )
         .then(( record: JSData.Record ) => {
           return record.toJSON( this.opts )
         } )
