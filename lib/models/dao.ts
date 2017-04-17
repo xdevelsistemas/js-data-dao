@@ -141,6 +141,9 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * elementos desnecessários serão descartados e elementos necessários para geração da classe serão utilizados
    * nessa parte pode ser feito verificacoes no construtor da classe impedindo a criaçao do registro caso alguma propriedade não entre
    * em adequação com as regras do sistema.
+   * por padrão ele trabalha com construtor da classe que o instancia exemplo:
+   *
+   *  new CarDAO = new DAO<ICar>(store, Car, 'car')
    *
    * @param obj  objeto a ser "parseado"
    */
