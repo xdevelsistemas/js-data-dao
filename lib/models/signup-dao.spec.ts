@@ -51,19 +51,7 @@ export class UserDAO extends DAO<IBaseUser> {
       },
       required: ['id', 'name', 'username', 'email', 'password', 'active']
     }
-    super(store, appConfig.getUsersTable(), schema)
-  }
-
-  /**
-   * Método para para facilitar a criação dos usuários
-   *
-   * @param {*} val
-   * @returns {IUser}
-   *
-   * @memberOf UserDAO
-   */
-  public parseModel (val: any): IBaseUser {
-    return new User(val)
+    super(store, User , appConfig.getUsersTable(), schema)
   }
 }
 

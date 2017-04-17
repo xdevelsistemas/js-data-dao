@@ -14,6 +14,7 @@ import * as _ from 'lodash'
  * - deletar
  * - fazer uma busca paginada
  *
+ *
  * os metodos buscar todos ( findAll ) e query paginada (paginatedQuery) utilizam do sistema de sintaxe de query de busca do js-data, para mais detalhes de como utilizar,
  * entre no seguinte link:
  *
@@ -58,6 +59,16 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
   public opts: any
 
   /**
+   * classe da implementacao da Persistencia, ela deve ter a assinatura  do tipo
+   * constructor ( obj: any ) : T  => gerando o tipo da classe generico
+   *
+   * @private
+   *
+   * @memberOf DAO
+   */
+  private tpClass: new ( obj: any ) => T
+
+  /**
    * Creates an instance of DAO.
    * @param {JSData.DataStore} store
    * @param {string} collectionName
@@ -67,7 +78,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  constructor ( store: JSData.DataStore, collectionName: string, schema: any = null, relations: any = null, joins: string[] = [] ) {
+  constructor ( store: JSData.DataStore, tpClass: new ( obj: any ) => T, collectionName: string, schema: any = null, relations: any = null, joins: string[] = [] ) {
     if ( !store ) {
       throw Error( 'store is not defined' )
     }
@@ -122,21 +133,23 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
       with: joins,
       debug: true
     }
+
+    this.tpClass = tpClass
   }
 
   /**
-   * this method is used to "normalize" models, typescript cannot run new instance of
-   * Generic Type like Class<T> { public method() { new T() } } , so parseModel is used in the
-   * class and ALL models have to implement parseModel
+   * funcao responsável por obter o dado do objeto e parsear gerando a classe instanciada dentro do DAO
+   * elementos desnecessários serão descartados e elementos necessários para geração da classe serão utilizados
+   * nessa parte pode ser feito verificacoes no construtor da classe impedindo a criaçao do registro caso alguma propriedade não entre
+   * em adequação com as regras do sistema.
+   * por padrão ele trabalha com construtor da classe que o instancia exemplo:
    *
-   * @param {*} val
-   * @returns {T}
+   *  new CarDAO = new DAO<ICar>(store, Car, 'car')
    *
-   * @memberOf DAO
+   * @param obj  objeto a ser "parseado"
    */
-
-  public parseModel ( val: any ): T {
-    throw new Error( 'not implemented' )
+  public parseModel ( obj: any ): T {
+    return new this.tpClass( obj )
   }
 
   /**
@@ -187,6 +200,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    */
   public create ( obj: T, userP: any ): Promise<T> {
     try {
+      // let a = GenericDeserialize(obj, this.modelClass)
       return this.collection.create( this.parseModel( obj ) )
         .then(( record: JSData.Record ) => {
           return record.toJSON( this.opts )
