@@ -14,6 +14,7 @@ import * as _ from 'lodash'
  * - deletar
  * - fazer uma busca paginada
  *
+ *
  * os metodos buscar todos ( findAll ) e query paginada (paginatedQuery) utilizam do sistema de sintaxe de query de busca do js-data, para mais detalhes de como utilizar,
  * entre no seguinte link:
  *
