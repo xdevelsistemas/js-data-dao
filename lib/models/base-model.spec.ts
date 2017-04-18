@@ -28,24 +28,24 @@ describe('BaseModel', () => {
     return expect(bm2).have.property('id').eq('1') &&
       expect(bm2).have.property('active').eq(true) &&
       expect(bm2).have.property('createdAt').is.not.null &&
-      expect(bm2).have.property('updatedAt').is.not.null
+      expect(bm2).have.property('updatedAt').is.null
   })
 
   it('A classe gerou todos os itens com uma instancia parcialmente preenchida faltando id ?', () => {
     return expect(bm3).have.property('id').is.not.null &&
       expect(bm3).have.property('active').eq(true) &&
       expect(bm3).have.property('createdAt').is.not.null &&
-      expect(bm3).have.property('updatedAt').is.not.null
+      expect(bm3).have.property('updatedAt').is.null
   })
 
   it('A classe gerou todos os itens com uma instancia parcialmente preenchida faltando active ?', () => {
     return expect(bm4).have.property('id').is.not.null &&
       expect(bm4).have.property('active').eq(true) &&
       expect(bm4).have.property('createdAt').is.not.null &&
-      expect(bm4).have.property('updatedAt').is.not.null &&
+      expect(bm4).have.property('updatedAt').is.null &&
       expect(bm5).have.property('id').is.not.null &&
       expect(bm5).have.property('active').eq(true) &&
       expect(bm5).have.property('createdAt').is.not.null &&
-      expect(bm5).have.property('updatedAt').is.not.null
+      expect(bm5).have.property('updatedAt').is.null
   })
 })

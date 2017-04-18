@@ -163,7 +163,7 @@ describe( 'Simple DAO', () => {
         return ( result.should.have.property( 'id' ).eq( instance1.id )
           && result.should.have.property( 'name' ).eq( instance1.name )
           && result.should.have.property( 'createdAt' ).eq( instance1.createdAt )
-          && result.should.have.property( 'updatedAt' ).eq( instance1.updatedAt ) )
+          && result.should.have.property( 'updatedAt' ).eq( null ) )
       } )
       .should.be.fulfilled
       .and.notify( done )
@@ -181,7 +181,7 @@ describe( 'Simple DAO', () => {
         return ( result.should.have.property( 'id' ).eq( instance2.id )
           && result.should.have.property( 'name' ).eq( instance2.name )
           && result.should.have.property( 'createdAt' ).eq( instance2.createdAt )
-          && result.should.have.property( 'updatedAt' ).eq( instance2.updatedAt ) )
+          && result.should.have.property( 'updatedAt' ).not.eq( null ) )
       } )
       .should.be.fulfilled
       .and.notify( done )

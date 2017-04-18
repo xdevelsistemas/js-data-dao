@@ -98,7 +98,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
       },
       updatedAt: {
         description: 'date of last update',
-        type: 'string'
+        type: ['string', 'null']
       }
     }
 
@@ -224,6 +224,8 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @memberOf DAO
    */
   public update ( id: string, user: IBaseUser, obj: T ): Promise<T> {
+    let updatedObj = obj
+    updatedObj.updatedAt = new Date().toISOString()
     return this.collection.update( id, obj )
       .then(( record: JSData.Record ) => {
         return record.toJSON( this.opts ) as T

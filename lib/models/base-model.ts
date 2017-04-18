@@ -15,12 +15,11 @@ export class BaseModel implements IBaseModel {
       }
       this.active = ( obj.active === null || obj.active === undefined ) ? true : obj.active
       this.createdAt = obj.createdAt || new Date().toISOString()
-      this.updatedAt = obj.updatedAt || new Date().toISOString()
     } else {
       this.id = ServiceLib.generateId()
       this.active = true
       this.createdAt = new Date().toISOString()
-      this.updatedAt = null
     }
+    this.updatedAt = null
   }
 }
