@@ -11,7 +11,7 @@ export class APIError extends Error implements IError {
     super(message)
     this.statusCode = statusCode
     this.objectResponse = objectResponse
-    this.definedBoomError()
+    // this.definedBoomError()
     this.showError()
   }
 
@@ -38,19 +38,19 @@ export class APIError extends Error implements IError {
     }
   }
 
-  private definedBoomError () {
-    switch (this.statusCode) {
-      case 400:
-        this.error = Boom.badRequest(this.message).output.payload
-        break
-      case 401:
-        this.error = Boom.unauthorized(this.message).output.payload
-        break
-      default:
-        this.error = Boom.create(this.statusCode, this.message).output.payload
-        break
-    }
-  }
+  // private definedBoomError () {
+  //   switch (this.statusCode) {
+  //     case 400:
+  //       this.error = Boom.badRequest(this.message).output.payload.error
+  //       break
+  //     case 401:
+  //       this.error = Boom.unauthorized(this.message).output.payload
+  //       break
+  //     default:
+  //       this.error = Boom.create(this.statusCode, this.message).output.payload
+  //       break
+  //   }
+  // }
 
   private showError () {
     let err = this
