@@ -6,8 +6,16 @@ import * as JSData from 'js-data'
 export class BaseRouter {
   respond ( t: Promise<any>, res: Response, next: NextFunction ): Promise<Response> {
     return t
-      .then(( u ) => res.json( u ) )
-      .catch(( error ) => next( error ) )
+      .catch(( error ) => {
+        return next( error )
+      } )
+      .then(( u ) => {
+        if ( u ) {
+          return res.json( u )
+        } else {
+          return next()
+        }
+      } )
     // .catch(( err: APIError ) => res.status(err.statusCode >= 100 && err.statusCode < 600 ? err.statusCode : 500).json( err.output ) )
   }
 }

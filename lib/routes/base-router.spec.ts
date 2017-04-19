@@ -89,6 +89,13 @@ describe( 'Criando ambiente testavel para aplicar CRUD na persistencia', () => {
       .expect( 200, done )
   } )
 
+  it( 'Query (invalid parser) ?', ( done: Function ) => {
+    request( app )
+      .post( `/api/v1/test/query?limit=10&page=1` )
+      .send( { where: { name: { OperadorInexistente: 1 } } } )
+      .expect( 500, done )
+  } )
+
   it( 'FindAll ?', ( done: Function ) => {
     request( app )
       .get( `/api/v1/test` )

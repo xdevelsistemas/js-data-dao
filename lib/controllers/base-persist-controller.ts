@@ -38,9 +38,6 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status( 200 )
         return reg
       } )
-      .catch(( error ) => {
-        return next( error )
-      } )
   }
 
   public findAll ( req: Request, res: express.Response, next?: express.NextFunction ): Promise<T[]> {
@@ -53,7 +50,6 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status( 200 )
         return regs
       } )
-      .catch(( error ) => next( error ) )
   }
 
   public create ( req: Request, res: express.Response, next?: express.NextFunction ): Promise<T> {
@@ -63,7 +59,6 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status( 201 )
         return reg
       } )
-      .catch(( error ) => next( error ) )
   }
 
   public update ( req: Request, res: express.Response, next?: express.NextFunction ): Promise<T> {
@@ -73,7 +68,6 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status( 200 )
         return reg
       } )
-      .catch(( error ) => next( error ) )
   }
 
   public delete ( req: Request, res: express.Response, next?: express.NextFunction ): Promise<boolean> {
@@ -82,7 +76,6 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status( 200 )
         return isDeleted
       } )
-      .catch(( error ) => next( error ) )
   }
 
   public query ( req: Request, res: express.Response, next?: express.NextFunction ): Promise<IResultSearch<T>> {
@@ -95,6 +88,5 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
         res.status( 200 )
         return result
       } )
-      .catch(( error ) => next( error ) )
   }
 }

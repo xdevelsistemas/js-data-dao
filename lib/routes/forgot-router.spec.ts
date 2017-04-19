@@ -1,4 +1,4 @@
-import {TestUserDAO} from '../models/forgot-dao.spec'
+import { TestUserDAO } from '../models/forgot-dao.spec'
 import { ForgotRouter, LoginRouter } from './'
 import { AppConfig } from '../config'
 import * as JSData from 'js-data'
@@ -64,7 +64,7 @@ let store: JSData.DataStore = handleJSData( config )
 let userDAO = new TestUserDAO( store, config )
 let passport = passportJwt( store, Passport, config )
 
-let router = new ForgotRouter(config,userDAO, nodemailerMock( { foo: 'bar' } ) )
+let router = new ForgotRouter( config, userDAO, nodemailerMock( { foo: 'bar' } ) )
 let loginRouter = new LoginRouter( store, config )
 
 /**
@@ -91,19 +91,19 @@ describe( 'Preparando ambiente', () => {
       .and.notify( done )
   } )
   it( 'Criando Usuário de exemplo ?', ( done: Function ) => {
-    userDAO.create( userDAO.parseModel({
+    userDAO.create( userDAO.parseModel( {
       name: 'test',
       username: 'test',
       companyAlias: 'test',
       email: 'test@test.com',
       password: ServiceLib.hashPassword( '12345' ),
       isAdmin: true
-    }), null ).should.be.fulfilled
+    } ), null ).should.be.fulfilled
       .and.notify( done )
   } )
 
   it( 'Criando Usuário (desativado) de exemplo ?', ( done: Function ) => {
-    userDAO.create( userDAO.parseModel({
+    userDAO.create( userDAO.parseModel( {
       name: 'test4',
       username: 'test4',
       companyAlias: 'test4',
@@ -111,7 +111,7 @@ describe( 'Preparando ambiente', () => {
       password: ServiceLib.hashPassword( '12345' ),
       isAdmin: true,
       active: false
-    }), null )
+    } ), null )
       .should.be.fulfilled
       .and.notify( done )
   } )
@@ -134,7 +134,7 @@ describe( 'Recuperando login', () => {
     request( app )
       .post( `/api/v1/forgot` )
       .send( { email: 'test_invalid@test.com' } )
-      .expect( 400, done )
+      .expect( 404, done )
   } )
 
   it( 'iniciando o fluxo (email invalido)', ( done: Function ) => {
