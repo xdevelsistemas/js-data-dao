@@ -22,14 +22,14 @@ export class SignupRouter extends BaseRouter {
   public routers () {
     let ctrl = this
 
-    this.router.post('/' , ( req: Request, res: Response, next: NextFunction ) =>
-      this.respond( ctrl.controller.sendMail( req, res, next ), res ) )
+    this.router.post( '/', ( req: Request, res: Response, next: NextFunction ) =>
+      this.respond( ctrl.controller.sendMail( req, res, next ), res, next ) )
 
     this.router.get( '/:token', ( req: Request, res: Response, next: NextFunction ) =>
-      this.respond( ctrl.controller.validaToken( req, res, next ), res ) )
+      this.respond( ctrl.controller.validaToken( req, res, next ), res, next ) )
 
     this.router.post( '/:token', ( req: Request, res: Response, next: NextFunction ) =>
-      this.respond( ctrl.controller.registerPassword( req, res, next ), res ) )
+      this.respond( ctrl.controller.registerPassword( req, res, next ), res, next ) )
   }
 
   public getRouter (): Router {

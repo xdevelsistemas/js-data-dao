@@ -8,7 +8,7 @@ import * as _ from 'lodash'
 import { AppConfig } from '../config/app-config'
 import * as nodemailer from 'nodemailer'
 import * as moment from 'moment'
-import {APIError} from '../services/api-error'
+import { APIError } from '../services/api-error'
 export class ForgotDAO {
   storedb: JSData.DataStore
   private sendMail: SendMail
@@ -16,7 +16,7 @@ export class ForgotDAO {
 
   private userDAO: DAO<IBaseUser>
   private appConfig: AppConfig
-  constructor (appConfig: AppConfig,userDao: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
+  constructor ( appConfig: AppConfig, userDao: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
     this.appConfig = appConfig
     this.sendMail = new SendMail( appConfig.mailConfig, transporter )
     this.serviceLib = new ServiceLib( appConfig )
@@ -31,16 +31,16 @@ export class ForgotDAO {
    *
    * @memberOf ForgotDAO
    */
-  public sendForgotMail ( obj: IForgot , appUrl: string): any {
+  public sendForgotMail ( obj: IForgot, appUrl: string ): any {
 
     if ( !ServiceLib.emailValidator( obj.email ) ) {
-      throw new APIError('Email inválido' , 400)
+      throw new APIError( 'Email inválido', 400 )
     } else {
       let filterEmail: any = { where: { email: { '===': obj.email } } }
-      return this.userDAO.findAll(filterEmail, null)
+      return this.userDAO.findAll( filterEmail, null )
         .then(( users: IBaseUser[] ) => {
           if ( _.isEmpty( users ) ) {
-            throw 'Usuário não encontrado'
+            throw new APIError( 'Usuário não encontrado', 404 )
           }
           let user: IBaseUser = _.head( users )
           let token: string = this.serviceLib.generateToken( obj.email )
@@ -73,11 +73,11 @@ export class ForgotDAO {
       .then(( users: Array<IBaseUser> ) => {
         let user: IBaseUser = _.head( users )
         if ( _.isEmpty( user ) ) {
-          throw 'Token inválido'
+          throw new APIError( 'Token inválido', 401 )
         } else if ( moment( data.expiration ) < moment( today ) ) {
-          throw 'O token expirou'
+          throw new APIError( 'O token expirou', 401 )
         } else if ( !user.active ) {
-          throw 'A conta foi desativada'
+          throw new APIError( 'A conta foi desativada', 401 )
         }
         delete user.password
         return user
@@ -107,18 +107,18 @@ export class ForgotDAO {
       .then(( users: Array<IBaseUser> ) => {
         let user: IBaseUser = _.head( users )
         if ( _.isEmpty( user ) ) {
-          throw 'Token inválido'
+          throw new APIError( 'Token inválido', 401 )
         } else if ( moment( data.expiration ) < moment( today ) ) {
-          throw 'O token expirou'
+          throw new APIError( 'O token expirou', 401 )
         } else if ( !user.active ) {
-          throw 'A conta foi desativada'
+          throw new APIError( 'A conta foi desativada', 401 )
         } else if ( !obj.password ) {
-          throw 'A nova senha não foi definida'
+          throw new APIError( 'A nova senha não foi definida', 401 )
         } else if ( obj.password.length < 6 ) {
-          throw 'A nova senha deve conter no mínimo 6 caracteres'
+          throw new APIError( 'A nova senha deve conter no mínimo 6 caracteres', 401 )
         }
         user.password = ServiceLib.hashPassword( obj.password )
-        return this.userDAO.update(user.id, null, user)
+        return this.userDAO.update( user.id, null, user )
       } )
       .then(() => true )
   }

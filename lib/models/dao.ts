@@ -210,10 +210,9 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public create ( obj: T, userP: any ): Promise<T> {
+  public create ( obj: any, userP: any ): Promise<T> {
     try {
-      let a = this.parseModel( obj )
-      return this.collection.create( a )
+      return this.collection.create( this.parseModel( obj ) )
         .then(( record: JSData.Record ) => {
           return record.toJSON( this.opts )
         } )

@@ -10,7 +10,7 @@ const passport = require( 'passport' )
  */
 import * as Auth from './auth'
 import * as Config from './config'
-import * as Services from './services'
+import {ErrorHandler} from './routes/error-router'
 export class Application {
   app: express.Application
   store: JSData.DataStore
@@ -102,29 +102,6 @@ export class Application {
   }
 
   handleError ( app: express.Application ): express.Application {
-    // error handlers
-
-    // development error handler
-    // will print stacktrace
-    if ( app.get( 'env' ) === 'development' ) {
-      app.use( function ( err: any, req: Request, res: Response, next: Function ) {
-        let _err: Services.APIError
-        if ( !( err instanceof Services.APIError ) ) {
-          _err = new Services.APIError( err, err.status || err.statusCode || 500 )
-        }
-        return res.status( _err.statusCode >= 100 && _err.statusCode < 600 ? _err.statusCode : 500 ).json( _err.output )
-      } )
-    } else {
-      // production error handler
-      // no stacktraces leaked to user
-      app.use( function ( err: any, req: Request, res: Response, next: Function ) {
-        let _err: Services.APIError
-        if ( !( err instanceof Services.APIError ) ) {
-          _err = new Services.APIError( err, err.status || err.statusCode || 500 )
-        }
-        return res.status( _err.statusCode >= 100 && _err.statusCode < 600 ? _err.statusCode : 500 ).json( _err.output )
-      } )
-    }
-    return app
+    return new ErrorHandler().handleError(app)
   }
 }

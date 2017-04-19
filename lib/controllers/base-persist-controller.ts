@@ -30,15 +30,13 @@ export class BasePersistController<T extends IBaseModel> implements IPersistCont
   public find ( req: Request, res: express.Response, next?: express.NextFunction ): Promise<T> {
     return this.collection.find( req.params.id, req.user )
       .then(( reg: T ) => {
-        delete ( reg as any ).password
+        if ( reg ) {
+          delete ( reg as any ).password
+        } else {
+          throw new APIError( 'registro não encontrado', 404, req.params )
+        }
         res.status( 200 )
         return reg
-      } )
-      .catch(( err: string ) => {
-        throw new APIError( err, 400 )
-      } )
-      .catch(( err: Error ) => {
-        throw new APIError( err.message, 400 )
       } )
   }
 

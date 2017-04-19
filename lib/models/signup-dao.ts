@@ -106,7 +106,7 @@ export class SignUpDAO {
     if ( moment( data.expiration ) >= moment( today ) ) {
       return this.userDAO.findAll( filterUser, null )
         .then(( users: Array<IBaseUser> ) => {
-          let user = this.userDAO.parseModel(obj)
+          let user = this.userDAO.parseModel( obj )
           user.email = data.email
           let errValidation = this.userDAO.schema.validate( user )
           if ( errValidation && errValidation.length ) {
