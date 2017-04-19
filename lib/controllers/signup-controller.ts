@@ -29,6 +29,7 @@ export class SignupController {
         res.status( 200 )
         return 'Email enviado'
       } )
+      .catch(( error: any ) => next( error ) )
   }
 
   /**
@@ -47,6 +48,7 @@ export class SignupController {
         res.status( 200 )
         return dados
       } )
+      .catch(( error ) => next( error ) )
   }
 
   /**
@@ -65,5 +67,6 @@ export class SignupController {
         res.status( 200 )
         return dados
       } )
+      .catch(( error ) => next( error ) )
   }
 }

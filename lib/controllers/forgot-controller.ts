@@ -1,17 +1,16 @@
 import { Request, Response, NextFunction } from 'express'
 import { ForgotDAO } from '../models/forgot-dao'
-import { APIError } from '../services'
 import { AppConfig } from '../config/app-config'
-import {DAO} from '../models/dao'
-import {IBaseUser} from '../interfaces'
+import { DAO } from '../models/dao'
+import { IBaseUser } from '../interfaces'
 import * as nodemailer from 'nodemailer'
 export class ForgotController {
   forgot: ForgotDAO
   appConfig: AppConfig
 
-  constructor (appConfig: AppConfig, userDAO: DAO<IBaseUser>, transporter?: nodemailer.Transporter) {
+  constructor ( appConfig: AppConfig, userDAO: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
     this.appConfig = appConfig
-    this.forgot = new ForgotDAO(appConfig, userDAO, transporter)
+    this.forgot = new ForgotDAO( appConfig, userDAO, transporter )
   }
 
   /**
@@ -24,15 +23,13 @@ export class ForgotController {
    *
    * @memberOf ForgotController
    */
-  public sendMail (req: Request, res: Response, next?: NextFunction): Promise<any> {
-    return this.forgot.sendForgotMail(req.body, this.appConfig.getForgotUrl())
+  public sendMail ( req: Request, res: Response, next?: NextFunction ): Promise<any> {
+    return this.forgot.sendForgotMail( req.body, this.appConfig.getForgotUrl() )
       .then(() => {
-        res.status(200)
+        res.status( 200 )
         return 'Email enviado'
-      })
-      .catch((err: any) => {
-        throw new APIError(err, 400)
-      })
+      } )
+      .catch(( error: any ) => next( error ) )
   }
 
   /**
@@ -45,15 +42,13 @@ export class ForgotController {
    *
    * @memberOf ForgotController
    */
-  public validaToken (req: Request, res: Response, next: NextFunction): Promise<any> {
-    return this.forgot.validaToken(req.params)
-      .then((dados: any) => {
-        res.status(200)
+  public validaToken ( req: Request, res: Response, next: NextFunction ): Promise<any> {
+    return this.forgot.validaToken( req.params )
+      .then(( dados: any ) => {
+        res.status( 200 )
         return dados
-      })
-      .catch((err: any) => {
-        throw new APIError(err, 401)
-      })
+      } )
+      .catch(( error ) => next( error ) )
   }
 
   /**
@@ -66,14 +61,12 @@ export class ForgotController {
    *
    * @memberOf ForgotController
    */
-  public resetPassword (req: Request, res: Response, next: NextFunction): Promise<any> {
-    return this.forgot.resetPassword(req.params, req.body)
-      .then((dados: any) => {
-        res.status(200)
+  public resetPassword ( req: Request, res: Response, next: NextFunction ): Promise<any> {
+    return this.forgot.resetPassword( req.params, req.body )
+      .then(( dados: any ) => {
+        res.status( 200 )
         return dados
-      })
-      .catch((err: any) => {
-        throw new APIError(err, 401)
-      })
+      } )
+      .catch(( error ) => next( error ) )
   }
 }
