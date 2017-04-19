@@ -210,7 +210,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public create ( obj: T, userP: any ): Promise<T> {
+  public create ( obj: any, userP: any ): Promise<T> {
     try {
       return this.collection.create( this.parseModel( obj ) )
         .then(( record: JSData.Record ) => {

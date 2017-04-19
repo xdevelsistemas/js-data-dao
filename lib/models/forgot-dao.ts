@@ -40,7 +40,7 @@ export class ForgotDAO {
       return this.userDAO.findAll(filterEmail, null)
         .then(( users: IBaseUser[] ) => {
           if ( _.isEmpty( users ) ) {
-            throw 'Usuário não encontrado'
+            throw new APIError('Usuário não encontrado', 404)
           }
           let user: IBaseUser = _.head( users )
           let token: string = this.serviceLib.generateToken( obj.email )
@@ -73,11 +73,11 @@ export class ForgotDAO {
       .then(( users: Array<IBaseUser> ) => {
         let user: IBaseUser = _.head( users )
         if ( _.isEmpty( user ) ) {
-          throw 'Token inválido'
+          throw new Error('Token inválido')
         } else if ( moment( data.expiration ) < moment( today ) ) {
-          throw 'O token expirou'
+          throw new Error('O token expirou')
         } else if ( !user.active ) {
-          throw 'A conta foi desativada'
+          throw new Error('A conta foi desativada')
         }
         delete user.password
         return user
@@ -107,15 +107,15 @@ export class ForgotDAO {
       .then(( users: Array<IBaseUser> ) => {
         let user: IBaseUser = _.head( users )
         if ( _.isEmpty( user ) ) {
-          throw 'Token inválido'
+          throw new Error('Token inválido')
         } else if ( moment( data.expiration ) < moment( today ) ) {
-          throw 'O token expirou'
+          throw new Error('O token expirou')
         } else if ( !user.active ) {
-          throw 'A conta foi desativada'
+          throw new Error('A conta foi desativada')
         } else if ( !obj.password ) {
-          throw 'A nova senha não foi definida'
+          throw new Error('A nova senha não foi definida')
         } else if ( obj.password.length < 6 ) {
-          throw 'A nova senha deve conter no mínimo 6 caracteres'
+          throw new Error('A nova senha deve conter no mínimo 6 caracteres')
         }
         user.password = ServiceLib.hashPassword( obj.password )
         return this.userDAO.update(user.id, null, user)

@@ -15,6 +15,7 @@ import { authenticate, passportJwt } from '../auth'
 import { TestUserDAO } from '../models/forgot-dao.spec'
 import { BasePersistController } from '../controllers'
 import { PersistRouter } from '../routes'
+import { ErrorHandler } from '../routes/error-router'
 const nodemailerMock = require( 'nodemailer-mock-transport' )
 chai.use( chaiAsPromised )
 chai.should()
@@ -69,7 +70,7 @@ let ctrl = new TestController( userDAO )
 let userRouter = new TestRouter( store, ctrl )
 let passport = passportJwt( store, Passport, config )
 
-let router = new SignupRouter(config, userDAO, nodemailerMock( { foo: 'bar' } ) )
+let router = new SignupRouter( config, userDAO, nodemailerMock( { foo: 'bar' } ) )
 let loginRouter = new LoginRouter( store, config )
 const app = express()
 app.use( bodyParser( { extended: true } ) )
@@ -80,6 +81,7 @@ app.use( passport.initialize() )
 app.use( '/api/v1/signup', router.getRouter() )
 app.use( '/api/v1/login', loginRouter.getRouter() )
 app.use( '/api/v1/users', authenticate( passport, config ), userRouter.getRouter() )
+new ErrorHandler().handleError( app )
 
 describe( 'SignUp Router', () => {
   /**

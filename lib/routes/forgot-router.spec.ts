@@ -14,6 +14,7 @@ import { ServiceLib } from '../services/service-lib'
 const Passport = require( 'passport' )
 import { passportJwt } from '../auth/passport'
 const nodemailerMock = require( 'nodemailer-mock-transport' )
+import { ErrorHandler } from './error-router'
 import * as path from 'path'
 chai.use( chaiAsPromised )
 chai.should()
@@ -72,7 +73,7 @@ let loginRouter = new LoginRouter( store, config )
 app.use( passport.initialize() )
 app.use( '/api/v1/forgot', router.getRouter() )
 app.use( '/api/v1/login', loginRouter.getRouter() )
-
+new ErrorHandler().handleError( app )
 /**
  * inicio dos testes
  */
@@ -90,19 +91,19 @@ describe( 'Preparando ambiente', () => {
       .and.notify( done )
   } )
   it( 'Criando Usuário de exemplo ?', ( done: Function ) => {
-    userDAO.create( {
+    userDAO.create( userDAO.parseModel({
       name: 'test',
       username: 'test',
       companyAlias: 'test',
       email: 'test@test.com',
       password: ServiceLib.hashPassword( '12345' ),
       isAdmin: true
-    }, null ).should.be.fulfilled
+    }), null ).should.be.fulfilled
       .and.notify( done )
   } )
 
   it( 'Criando Usuário (desativado) de exemplo ?', ( done: Function ) => {
-    userDAO.create( {
+    userDAO.create( userDAO.parseModel({
       name: 'test4',
       username: 'test4',
       companyAlias: 'test4',
@@ -110,7 +111,7 @@ describe( 'Preparando ambiente', () => {
       password: ServiceLib.hashPassword( '12345' ),
       isAdmin: true,
       active: false
-    }, null )
+    }), null )
       .should.be.fulfilled
       .and.notify( done )
   } )

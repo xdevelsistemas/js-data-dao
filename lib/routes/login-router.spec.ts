@@ -14,6 +14,7 @@ import { ServiceLib } from '../services/service-lib'
 import { authenticate } from '../auth/jwtAuth'
 const Passport = require( 'passport' )
 import { passportJwt } from '../auth/passport'
+import { ErrorHandler } from './error-router'
 chai.use( chaiAsPromised )
 chai.should()
 
@@ -78,6 +79,7 @@ app.use( '/api/v1/ping', authenticate( passport, config ), new PingRouter().getR
 app.use( '/api/v1/user', authenticate( passport, config ), ( req: any, res, next ) => {
   return res.json( req.user )
 } )
+new ErrorHandler().handleError( app )
 
 /**
  * inicio dos testes
