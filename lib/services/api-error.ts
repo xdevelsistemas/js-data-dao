@@ -14,14 +14,10 @@ export class APIError extends Error implements IError {
     // this.definedBoomError()
     this.showError()
   }
-
-  static fromError (error: Error, statusCode: number = 500): APIError {
-    return new APIError(error.message || 'Ops! Algo deu errado!', statusCode)
-  }
-
-  json (): string {
-    return JSON.stringify(this.output)
-  }
+   // TODO migrar chamadas manuais de APIErr para APIErr.fromError
+  // static fromError (error: Error, statusCode: number = 500): APIError {
+  //   return new APIError(error.message || 'Ops! Algo deu errado!', statusCode)
+  // }
 
   /**
    * @override

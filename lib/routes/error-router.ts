@@ -18,14 +18,18 @@ export class ErrorHandler {
 				return res.status( _err.statusCode ).json( _err )
 			} )
 		} else {
-			// production error handler
-			// no stacktraces leaked to user
+			/**
+			 * production error handler, melhorar os logs de producao em uma sprint futura
+			 * // TODO - melhorar os logs de producao
+			 */
 			app.use( function ( err: any, req: Request, res: Response, next: NextFunction ) {
 				let _err: APIError
-				if ( !( err instanceof APIError ) ) {
-					_err = new APIError( err, err.status || err.statusCode || 500 )
+				if ( err instanceof APIError ) {
+					_err = err
+				} else {
+					_err = new APIError( err, err.status || err.statusCode || 500, null )
 				}
-				return res.status( _err.statusCode >= 100 && _err.statusCode < 600 ? _err.statusCode : 500 ).json( _err.output )
+				return res.status( _err.statusCode ).json( _err )
 			} )
 		}
 		return app

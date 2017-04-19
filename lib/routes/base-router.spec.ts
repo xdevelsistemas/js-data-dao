@@ -13,9 +13,6 @@ import { ErrorHandler } from './error-router'
 chai.use( chaiAsPromised )
 chai.should()
 
-let app = express()
-app.use( bodyParser() )
-
 export class TestRouter extends PersistRouter<ITestSimpleClass, TestController> {
 }
 
@@ -42,13 +39,6 @@ let ctrl = new TestController( dao )
 let router = new TestRouter( store, ctrl )
 
 /**
- * create api/v1/test router for CRUD operation
- */
-
-app.use( '/api/v1/test', router.getRouter() )
-new ErrorHandler().handleError( app )
-
-/**
  * inicio dos testes
  */
 
@@ -59,6 +49,11 @@ describe( 'Persist Router Basic', () => {
 } )
 
 describe( 'Criando ambiente testavel para aplicar CRUD na persistencia', () => {
+  let app = express()
+  app.use( bodyParser() )
+  app.use( '/api/v1/test', router.getRouter() )
+  new ErrorHandler().handleError( app )
+
   let resp: ITestSimpleClass = null
   it( 'Create ?', ( done: Function ) => {
     request( app )
@@ -113,4 +108,42 @@ describe( 'Criando ambiente testavel para aplicar CRUD na persistencia', () => {
       .delete( `/api/v1/test/${resp.id}` )
       .expect( 200, done )
   } )
+} )
+
+describe( 'Testando rotas de persistencias com log de producao', () => {
+  process.env.NODE_ENV = 'production'
+  let app = express()
+  app.use( bodyParser() )
+  app.use( '/api/v1/test', router.getRouter() )
+  new ErrorHandler().handleError( app )
+  let resp: ITestSimpleClass = null
+  it( 'Create ?', ( done: Function ) => {
+    request( app )
+      .post( '/api/v1/test' )
+      .send( { name: 'test' } ).expect( 201 )
+      .then(( response ) => {
+        resp = response.body
+      } )
+      .then(() => done() )
+  } )
+
+  it( 'Query (invalid parser) ?', ( done: Function ) => {
+    request( app )
+      .post( `/api/v1/test/query?limit=10&page=1` )
+      .send( { where: { name: { OperadorInexistente: 1 } } } )
+      .expect( 500, done )
+  } )
+
+  it( 'Find invalid id ?', ( done: Function ) => {
+    request( app )
+      .get( `/api/v1/test/178278` )
+      .expect( 404, done )
+  } )
+
+  it( 'Delete ?', ( done: Function ) => {
+    request( app )
+      .delete( `/api/v1/test/${resp.id}` )
+      .expect( 200, done )
+  } )
+  process.env.NODE_ENV = 'development'
 } )
