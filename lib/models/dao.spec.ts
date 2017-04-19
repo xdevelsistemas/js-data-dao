@@ -59,7 +59,7 @@ export class TestSimpleClass extends BaseModel implements ITestSimpleClass {
 }
 
 /**
- * class for unit test
+ * classe simples para testes
  *
  * @class TestInvalidClass
  * @extends {BaseModel}
@@ -71,12 +71,12 @@ export class TestInvalidClass extends BaseModel implements ITestSimpleClass {
   constructor ( obj: ITestSimpleClass ) {
     super( obj )
     this.name = obj.name
-    throw new Error('provocando erro na instanciação')
+    throw new Error( 'provocando erro na instanciação' )
   }
 }
 
 /**
- *
+ * classe com dependencia da classe simples TestSimpleClass
  *
  * @class TestComplexClass
  * @extends {BaseModel}
@@ -95,6 +95,13 @@ export class TestComplexClass extends BaseModel implements ITestComplexClass {
   }
 }
 
+/**
+ * classe de teste de persistencia simples
+ *
+ * @export
+ * @class TestSimpleClassDAO
+ * @extends {DAO<ITestSimpleClass>}
+ */
 export class TestSimpleClassDAO extends DAO<ITestSimpleClass> {
   storedb: JSData.DataStore
   constructor ( store: JSData.DataStore, appConfig: AppConfig ) {
@@ -118,10 +125,17 @@ export class TestInvalidClassDAO extends DAO<TestInvalidClass> {
   }
 }
 
+/**
+ * classe para teste de persistencia com dependencia de fk
+ *
+ * @export
+ * @class TestComplexClassDAO
+ * @extends {DAO<ITestComplexClass>}
+ */
 export class TestComplexClassDAO extends DAO<ITestComplexClass> {
   storedb: JSData.DataStore
   constructor ( store: JSData.DataStore, appConfig: AppConfig ) {
-    super( store, TestComplexClass , 'complex', {
+    super( store, TestComplexClass, 'complex', {
       title: 'testSimple',
       description: 'Simple Test',
       type: 'object',
@@ -138,31 +152,46 @@ export class TestComplexClassDAO extends DAO<ITestComplexClass> {
     this.storedb = store
   }
 }
-let dao1 = new TestSimpleClassDAO( store, config )
-let instance0 = new TestSimpleClass( { name: null } )
-let instance1 = new TestSimpleClass( { name: 'test' } )
-let instance2 = instance1
-instance2.name = 'joao'
+
+/**
+ * classe para teste de criação de teste do DAO
+ *
+ * @class TestOtherSimpleClassDAO
+ * @extends {DAO<ITestSimpleClass>}
+ */
+class TestOtherSimpleClassDAO extends DAO<ITestSimpleClass> {
+  storedb: JSData.DataStore
+  constructor ( store: JSData.DataStore, appConfig: AppConfig ) {
+    super( store, TestSimpleClass, 'other' )
+    this.storedb = store
+  }
+}
+
 describe( 'Simple DAO', () => {
+  let testSimpleDAO = new TestSimpleClassDAO( store, config )
+  let testSimpleClass = new TestSimpleClass( { name: null } )
+  let testSimpleClassOriginal = new TestSimpleClass( { name: 'test' } )
+  let testSimpleClassUpdated = testSimpleClassOriginal
+  testSimpleClassUpdated.name = 'joao'
 
   it( 'Ocorre limpeza de todos os itens que estão no banco?', ( done: Function ) => {
-    dao1.collection.destroyAll( {} )
+    testSimpleDAO.collection.destroyAll( {} )
       .should.be.fulfilled
       .and.notify( done )
   } )
 
   it( 'insert inválido', ( done: Function ) => {
-    dao1.create( instance0, null )
+    testSimpleDAO.create( testSimpleClass, null )
       .should.be.rejected
       .and.notify( done )
   } )
 
   it( 'insert', ( done: Function ) => {
-    dao1.create( instance1, null )
+    testSimpleDAO.create( testSimpleClassOriginal, null )
       .then( result => {
-        return ( result.should.have.property( 'id' ).eq( instance1.id )
-          && result.should.have.property( 'name' ).eq( instance1.name )
-          && result.should.have.property( 'createdAt' ).eq( instance1.createdAt )
+        return ( result.should.have.property( 'id' ).eq( testSimpleClassOriginal.id )
+          && result.should.have.property( 'name' ).eq( testSimpleClassOriginal.name )
+          && result.should.have.property( 'createdAt' ).eq( testSimpleClassOriginal.createdAt )
           && result.should.have.property( 'updatedAt' ).eq( null ) )
       } )
       .should.be.fulfilled
@@ -170,17 +199,17 @@ describe( 'Simple DAO', () => {
   } )
 
   it( 'update inválido', ( done: Function ) => {
-    dao1.update( instance1.id, null, instance0 )
+    testSimpleDAO.update( testSimpleClassOriginal.id, null, testSimpleClass )
       .should.be.rejected
       .and.notify( done )
   } )
 
   it( 'update', ( done: Function ) => {
-    dao1.update( instance1.id, null, instance2 )
+    testSimpleDAO.update( testSimpleClassOriginal.id, null, testSimpleClassUpdated )
       .then( result => {
-        return ( result.should.have.property( 'id' ).eq( instance2.id )
-          && result.should.have.property( 'name' ).eq( instance2.name )
-          && result.should.have.property( 'createdAt' ).eq( instance2.createdAt )
+        return ( result.should.have.property( 'id' ).eq( testSimpleClassUpdated.id )
+          && result.should.have.property( 'name' ).eq( testSimpleClassUpdated.name )
+          && result.should.have.property( 'createdAt' ).eq( testSimpleClassUpdated.createdAt )
           && result.should.have.property( 'updatedAt' ).not.eq( null ) )
       } )
       .should.be.fulfilled
@@ -188,19 +217,19 @@ describe( 'Simple DAO', () => {
   } )
 
   it( 'find', ( done: Function ) => {
-    dao1.find( instance2.id, null )
+    testSimpleDAO.find( testSimpleClassUpdated.id, null )
       .then( result => {
-        return ( result.should.have.property( 'id' ).eq( instance2.id )
-          && result.should.have.property( 'name' ).eq( instance2.name )
-          && result.should.have.property( 'createdAt' ).eq( instance2.createdAt )
-          && result.should.have.property( 'updatedAt' ).eq( instance2.updatedAt ) )
+        return ( result.should.have.property( 'id' ).eq( testSimpleClassUpdated.id )
+          && result.should.have.property( 'name' ).eq( testSimpleClassUpdated.name )
+          && result.should.have.property( 'createdAt' ).eq( testSimpleClassUpdated.createdAt )
+          && result.should.have.property( 'updatedAt' ).eq( testSimpleClassUpdated.updatedAt ) )
       } )
       .should.be.fulfilled
       .and.notify( done )
   } )
 
   it( 'listAll', ( done: Function ) => {
-    dao1.findAll( {}, null )
+    testSimpleDAO.findAll( {}, null )
       .should.eventually.have.a.instanceof( Array )
       .should.eventually.have.property( 'length' ).eq( 1 )
       .should.be.fulfilled
@@ -208,55 +237,69 @@ describe( 'Simple DAO', () => {
   } )
 
   it( 'query', ( done: Function ) => {
-    dao1.paginatedQuery( {}, null, 1, 10 )
+    testSimpleDAO.paginatedQuery( {}, null, 1, 10 )
       .should.be.fulfilled
+      .and.notify( done )
+  } )
+
+  it( 'delete simple', ( done: Function ) => {
+    testSimpleDAO.delete( testSimpleClassOriginal.id, null )
+      .should.be.fulfilled
+      .should.be.eventually.equal( true )
       .and.notify( done )
   } )
 } )
 
-let dao2 = new TestComplexClassDAO( store, config )
-let instance3 = new TestComplexClass( { name: 'test', simpleClassId: instance1.id } )
-
 describe( 'Complex DAO', () => {
+  let testSimpleDAO = new TestSimpleClassDAO( store, config )
+  let testSimpleClass = new TestSimpleClass( { name: 'test' } )
+  let testComplexDAO = new TestComplexClassDAO( store, config )
+  let testComplexClass = new TestComplexClass( { name: 'test', simpleClassId: testSimpleClass.id } )
 
   it( 'Ocorre limpeza de todos os itens que estão no banco?', ( done: Function ) => {
-    dao2.collection.destroyAll( {} )
+    testComplexDAO.collection.destroyAll( {} )
+      .should.be.fulfilled
+      .and.notify( done )
+  } )
+
+  it( 'reinserindo dependencia (instancia de simpleClass)', ( done: Function ) => {
+    testSimpleDAO.create( testSimpleClass, null )
       .should.be.fulfilled
       .and.notify( done )
   } )
 
   it( 'insert', ( done: Function ) => {
-    dao2.create( instance3, null )
+    testComplexDAO.create( testComplexClass, null )
       .then( result => {
-        return ( result.should.have.property( 'id' ).eq( instance3.id )
-          && result.should.have.property( 'name' ).eq( instance3.name )
-          && result.should.have.property( 'createdAt' ).eq( instance3.createdAt )
-          && result.should.have.property( 'updatedAt' ).eq( instance3.updatedAt )
-          && result.should.have.property( 'simpleClassId' ).eq( instance1.id ) )
+        return ( result.should.have.property( 'id' ).eq( testComplexClass.id )
+          && result.should.have.property( 'name' ).eq( testComplexClass.name )
+          && result.should.have.property( 'createdAt' ).eq( testComplexClass.createdAt )
+          && result.should.have.property( 'updatedAt' ).eq( testComplexClass.updatedAt )
+          && result.should.have.property( 'simpleClassId' ).eq( testSimpleClass.id ) )
       } )
       .should.be.fulfilled
       .and.notify( done )
   } )
 
   it( 'find', ( done: Function ) => {
-    dao2.find( instance3.id, null )
+    testComplexDAO.find( testComplexClass.id, null )
       .then(( result: ITestComplexClass ) => {
         return (
-          result.should.have.property( 'id' ).eq( instance3.id )
-          && result.should.have.property( 'name' ).eq( instance3.name )
-          && result.should.have.property( 'createdAt' ).eq( instance3.createdAt )
-          && result.should.have.property( 'updatedAt' ).eq( instance3.updatedAt )
-          && result.simpleClass.should.have.property( 'id' ).eq( instance1.id )
-          && result.simpleClass.should.have.property( 'id' ).eq( instance1.id )
-          && result.simpleClass.should.have.property( 'name' ).eq( instance1.name )
-          && result.simpleClass.should.have.property( 'createdAt' ).eq( instance1.createdAt ) )
+          result.should.have.property( 'id' ).eq( testComplexClass.id )
+          && result.should.have.property( 'name' ).eq( testComplexClass.name )
+          && result.should.have.property( 'createdAt' ).eq( testComplexClass.createdAt )
+          && result.should.have.property( 'updatedAt' ).eq( testComplexClass.updatedAt )
+          && result.simpleClass.should.have.property( 'id' ).eq( testSimpleClass.id )
+          && result.simpleClass.should.have.property( 'id' ).eq( testSimpleClass.id )
+          && result.simpleClass.should.have.property( 'name' ).eq( testSimpleClass.name )
+          && result.simpleClass.should.have.property( 'createdAt' ).eq( testSimpleClass.createdAt ) )
       } )
       .should.be.fulfilled
       .and.notify( done )
   } )
 
   it( 'listAll', ( done: Function ) => {
-    dao2.findAll( {}, null )
+    testComplexDAO.findAll( {}, null )
       .should.eventually.have.a.instanceof( Array )
       .should.eventually.have.property( 'length' ).eq( 1 )
       .should.be.fulfilled
@@ -264,7 +307,7 @@ describe( 'Complex DAO', () => {
   } )
 
   it( 'query', ( done: Function ) => {
-    dao1.paginatedQuery( {}, null )
+    testSimpleDAO.paginatedQuery( {}, null )
       .then(( result: IResultSearch<ITestComplexClass> ) => {
         return (
           result.should.have.property( 'page' ).eq( 1 )
@@ -275,99 +318,79 @@ describe( 'Complex DAO', () => {
       .and.notify( done )
   } )
 
-} )
+  it( 'delete complex', ( done: Function ) => {
+    testComplexDAO.delete( testComplexClass.id, null )
+      .should.be.fulfilled
+      .should.be.eventually.equal( true )
+      .and.notify( done )
+  } )
 
-let instance4 = new TestComplexClass( { name: 'invalid', simpleClassId: instance1.id } )
+} )
 
 describe( 'Incomplete DAO', () => {
-  delete instance4.name
+  let testComplexDAO = new TestComplexClassDAO( store, config )
+  let testSimpleClass = new TestSimpleClass( { name: 'test' } )
+  let testComplexClassForceIncomplete = new TestComplexClass( { name: 'invalid', simpleClassId: testSimpleClass.id } )
+  /**
+   * forçando a deleção da propriedade `name`
+   */
+  delete testComplexClassForceIncomplete.name
   it( 'add invalida complex', ( done: Function ) => {
-    dao2.create( instance4, null )
+    testComplexDAO.create( testComplexClassForceIncomplete, null )
       .should.be.rejected
-      .and.notify( done )
-  } )
-} )
-
-describe( 'Clean DAO ops', () => {
-  it( 'delete complex', ( done: Function ) => {
-    dao2.delete( instance3.id, null )
-      .should.be.fulfilled
-      .should.be.eventually.equal( true )
-      .and.notify( done )
-  } )
-
-  // TODO pendente teste de delete invalido por problemas da resposta do js-data
-  // it( 'delete invalid', ( done: Function ) => {
-  //   dao1.delete( instance1.id + 'blabla', null )
-  //     .should.be.rejected
-  //     .and.notify( done )
-  // } )
-
-  it( 'delete simple', ( done: Function ) => {
-    dao1.delete( instance1.id, null )
-      .should.be.fulfilled
-      .should.be.eventually.equal( true )
       .and.notify( done )
   } )
 } )
 
 describe( 'Instance new same DAO', () => {
-  let dao3 = new TestSimpleClassDAO( store, config )
   it( 'listAll', ( done: Function ) => {
-    dao3.findAll( {}, null )
+    ( new TestSimpleClassDAO( store, config ) ).findAll( {}, null )
       .should.be.fulfilled
       .and.notify( done )
   } )
 
 } )
-
-class TestOtherSimpleClassDAO extends DAO<ITestSimpleClass> {
-  storedb: JSData.DataStore
-  constructor ( store: JSData.DataStore, appConfig: AppConfig ) {
-    super( store, TestSimpleClass , 'other' )
-    this.storedb = store
-  }
-
-}
 
 describe( 'install minimal config', () => {
-  let dao4 = new TestOtherSimpleClassDAO( store, config )
-  let instance5 = new TestSimpleClass( { name: 'invalid' } )
+  let testSimpleClassDAOMinimalConfig = new TestOtherSimpleClassDAO( store, config )
 
   it( 'Ocorre limpeza de todos os itens que estão no banco?', ( done: Function ) => {
-    dao4.collection.destroyAll( {} )
+    testSimpleClassDAOMinimalConfig.collection.destroyAll( {} )
       .should.be.fulfilled
       .and.notify( done )
   } )
 
   it( 'insert', ( done: Function ) => {
-    dao4.create( instance5, null )
+    testSimpleClassDAOMinimalConfig.create( { name: 'invalid' }, null )
       .should.be.fulfilled
       .and.notify( done )
   } )
 
   it( 'listAll', ( done: Function ) => {
-    dao4.findAll( {}, null )
+    testSimpleClassDAOMinimalConfig.findAll( {}, null )
       .should.be.fulfilled
       .and.notify( done )
   } )
 
 } )
 
-// let instanceInvalid = new TestInvalidClass( { name: 'test invalid' } )
-let daoInvalid = new TestInvalidClassDAO( store, config )
-
 describe( 'Invalid DAO', () => {
+  let testInvalidClassDAO = new TestInvalidClassDAO( store, config )
+
+  it( 'Ocorre limpeza de todos os itens que estão no banco?', ( done: Function ) => {
+    testInvalidClassDAO.collection.destroyAll( {} )
+      .should.be.fulfilled
+      .and.notify( done )
+  } )
 
   it( 'insert', ( done: Function ) => {
-    // let a = GenericDeserialize({ name: 'test invalid' }, TestInvalidClass)
-    daoInvalid.create( { name: 'test invalid' }, null )
+    testInvalidClassDAO.create( { name: 'test invalid' }, null )
       .should.be.rejected
       .and.notify( done )
   } )
 
   it( 'find all em tabela vazia', ( done: Function ) => {
-    daoInvalid.findAll( {}, null )
+    testInvalidClassDAO.findAll( {}, null )
       .should.eventually.have.a.instanceof( Array )
       .should.eventually.have.property( 'length' ).eq( 0 )
       .and.notify( done )
@@ -382,4 +405,93 @@ describe( 'Construtor Inválido', () => {
     done()
   } )
 
+} )
+
+describe( 'query com operações do "query-syntax"', () => {
+  let testSimpleDAO = new TestSimpleClassDAO( store, config )
+  it( 'Limpeza da tabela', ( done: Function ) => {
+    testSimpleDAO.collection.destroyAll( {} )
+      .should.be.fulfilled
+      .and.notify( done )
+  } )
+
+  it( 'inserts', ( done: Function ) => {
+    testSimpleDAO.create( { name: 'joao' }, null )
+      .then(() => testSimpleDAO.create( { name: 'zzz_maria' }, null ) )
+      .should.be.fulfilled
+      .and.notify( done )
+  } )
+
+  it( 'orderBy existem resultados?', ( done: Function ) => {
+    testSimpleDAO.paginatedQuery( { orderBy: [ [ 'name', 'DESC' ] ] }, null )
+      .should.eventually.have.property( 'result' ).have.property( 'length' ).eq( 2 )
+      .should.be.fulfilled
+      .and.notify( done )
+  } )
+
+  it( 'paginatedQuery orderBy by name (asc)', ( done: Function ) => {
+    testSimpleDAO.paginatedQuery( { orderBy: [ [ 'name', 'ASC' ] ] }, null )
+      .then(( r ) => {
+        return r
+      } )
+      .should.eventually.have.deep.property( 'result[0].name', 'joao' )
+      .should.be.fulfilled
+      .and.notify( done )
+  } )
+
+  it( 'paginatedQuery orderBy by name (desc)', ( done: Function ) => {
+    testSimpleDAO.paginatedQuery( { orderBy: [ [ 'name', 'DESC' ] ] }, null )
+      .then(( r ) => {
+        return r
+      } )
+      .should.eventually.have.deep.property( 'result[0].name', 'zzz_maria' )
+      .should.be.fulfilled
+      .and.notify( done )
+  } )
+
+  it( 'findAll orderBy by name (asc)', ( done: Function ) => {
+    testSimpleDAO.findAll( { orderBy: [ [ 'name', 'ASC' ] ] }, null )
+      .then(( r ) => {
+        return r
+      } )
+      .should.eventually.have.deep.property( '[0].name', 'joao' )
+      .should.be.fulfilled
+      .and.notify( done )
+  } )
+
+  it( 'findAll orderBy by name (desc)', ( done: Function ) => {
+    testSimpleDAO.findAll( { orderBy: [ [ 'name', 'DESC' ] ] }, null )
+      .then(( r ) => {
+        return r
+      } )
+      .should.eventually.have.deep.property( '[0].name', 'zzz_maria' )
+      .should.be.fulfilled
+      .and.notify( done )
+  } )
+
+  it( 'findAll orderBy by createdAt (asc)', ( done: Function ) => {
+    testSimpleDAO.findAll( { orderBy: [ [ 'createdAt', 'ASC' ] ] }, null )
+      .then(( r ) => {
+        return r
+      } )
+      .should.eventually.have.deep.property( '[0].name', 'joao' )
+      .should.be.fulfilled
+      .and.notify( done )
+  } )
+
+  it( 'findAll orderBy by createdAt (desc)', ( done: Function ) => {
+    testSimpleDAO.findAll( { orderBy: [ [ 'createdAt', 'DESC' ] ] }, null )
+      .then(( r ) => {
+        return r
+      } )
+      .should.eventually.have.deep.property( '[0].name', 'zzz_maria' )
+      .should.be.fulfilled
+      .and.notify( done )
+  } )
+
+  it( 'limpando após os testes', ( done: Function ) => {
+    testSimpleDAO.collection.destroyAll( {} )
+      .should.be.fulfilled
+      .and.notify( done )
+  } )
 } )

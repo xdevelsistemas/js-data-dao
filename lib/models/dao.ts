@@ -4,6 +4,18 @@ import * as JSData from 'js-data'
 import { IBaseUser } from '../interfaces/ibase-user'
 import { IBaseModel } from '../interfaces/ibase-model'
 import * as _ from 'lodash'
+
+/**
+ * interface que define os erros customizados de validação
+ * deve ser criado uma interface separado futuramente
+ * //TODO tirar do dao e deixar de forma compartilhavel na estrutura de interfaces do projeto
+ * @export
+ * @interface IValidateError
+ * @extends {Error}
+ */
+export interface IValidateError extends Error {
+  errors: JSData.SchemaValidationError[]
+}
 /**
  * Foi projetado a classe para ser operada como classe generica para ser aplicavel em qualquer classe de persistencia, de forma montar as seguintes operacoes
  *
@@ -98,7 +110,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
       },
       updatedAt: {
         description: 'date of last update',
-        type: ['string', 'null']
+        type: [ 'string', 'null' ]
       }
     }
 
@@ -200,13 +212,17 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    */
   public create ( obj: T, userP: any ): Promise<T> {
     try {
-      // let a = GenericDeserialize(obj, this.modelClass)
-      return this.collection.create( this.parseModel( obj ) )
+      let a = this.parseModel( obj )
+      return this.collection.create( a )
         .then(( record: JSData.Record ) => {
           return record.toJSON( this.opts )
         } )
-        .catch(( reject: JSData.SchemaValidationError[] ) => {
-          throw new APIError( 'erro de entrada', 400, reject )
+        .catch(( reject: IValidateError ) => {
+          if ( reject.errors ) {
+            throw new APIError( reject.message, 400, reject.errors )
+          } else {
+            throw new APIError( 'erro de entrada', 400, reject.message )
+          }
         } )
     } catch ( e ) {
       return Promise.reject( new APIError( 'Erro de implementacao da classe', 500, { message: e.message } ) )
@@ -258,6 +274,14 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * http://www.js-data.io/v3.0/docs/query-syntax#section-filtering-where
    * js-data-dao use js-data query syntax
    *
+   * a priodidade dos operadores é em caso de consumo pelos parametros:
+   * - 1) as propriedades descritas em search
+   * - 2) as propriedades aplicadas nos parametros limit,order,page
+   * caso a mesma propriedade estiver nos dois parametros como no exemplo abaixo
+   *  paginatedQuery({ page : 2 } , 1 )
+   * a prioridade é do page dentro do primeiro parametro para em seguida o do segundo parametro, logo será o mesmo que
+   *  paginatedQuery({ } , 2 )
+   * o mesmo segue para as propriedades `limit` e `order`
    * @param {Object} search
    * @param {*} user
    * @param {number} [page]
@@ -268,17 +292,17 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @memberOf DAO
    */
   paginatedQuery (
-    search: Object, user: IBaseUser, page?: number, limit?: number, order?: Array<string>, options?: any ): Promise<IResultSearch<T>> {
-    let _page: number = page || 1
-    let _limit: number = limit || 10
-    let _order: string[] = []
-    let params = Object.assign( {}, search, {
-      orderBy: _order,
+    search: any = {}, user: IBaseUser, page?: number, limit?: number, order?: Array<string> | Array<Array<string>>, options?: any ): Promise<IResultSearch<T>> {
+    let _page: number = search.page || page || 1
+    let _limit: number = search.limit || limit || 10
+    let _order: Array<string> | Array<Array<string>> = search.orderBy || order || []
+    let params = Object.assign( {}, {
       offset: _limit * ( _page - 1 ),
-      limit: _limit
-    } )
+      limit: _limit,
+      orderBy: _order
+    }, search )
 
-    return this.collection.findAll( search )
+    return this.collection.count( search.where || {} )
       .then(( countResult ) => {
         return this.collection.findAll( params, options || this.opts )
           .then(( results: JSData.Record[] ) => {

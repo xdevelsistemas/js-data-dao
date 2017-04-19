@@ -8,5 +8,5 @@ export interface IDAO<T extends IBaseModel> {
   findAll (query: Object, user: IBaseUser, options?: any): Promise<T[]>
   update (id: string, user: IBaseUser, t: T): Promise<T>
   delete (id: string, user: IBaseUser): Promise<boolean>
-  paginatedQuery (search: Object, user: IBaseUser, page?: number, limit?: number, options?: any): Promise<IResultSearch<T>>
+  paginatedQuery (search: any, user: IBaseUser, page?: number, limit?: number, options?: any): Promise<IResultSearch<T>>
 }
