@@ -2,8 +2,8 @@ import { DAO } from '../models/dao'
 import { LoginRouter, PingRouter } from './'
 import { AppConfig } from '../config'
 import * as JSData from 'js-data'
-import * as chai from 'chai'
 import * as assert from 'assert'
+import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import * as express from 'express'
 import * as request from 'supertest'
@@ -14,6 +14,7 @@ import { ServiceLib } from '../services/service-lib'
 import { authenticate } from '../auth/jwtAuth'
 const Passport = require( 'passport' )
 import { passportJwt } from '../auth/passport'
+import { ErrorHandler } from './error-router'
 chai.use( chaiAsPromised )
 chai.should()
 
@@ -58,14 +59,9 @@ export class TestUser extends BaseModel implements IBaseUser {
 export class TestUserDAO extends DAO<IBaseUser> {
   storedb: JSData.DataStore
   constructor ( store: JSData.DataStore, appConfig: AppConfig ) {
-    super( store, 'users' )
+    super( store, TestUser, 'users' )
     this.storedb = store
   }
-
-  parseModel ( obj: any ) {
-    return new TestUser( obj )
-  }
-
 }
 
 let store: JSData.DataStore = handleJSData( config )
@@ -80,6 +76,10 @@ let router = new LoginRouter( store, config )
 app.use( passport.initialize() )
 app.use( '/api/v1/login', router.getRouter() )
 app.use( '/api/v1/ping', authenticate( passport, config ), new PingRouter().getRouter() )
+app.use( '/api/v1/user', authenticate( passport, config ), ( req: any, res, next ) => {
+  return res.json( req.user )
+} )
+new ErrorHandler().handleError( app )
 
 /**
  * inicio dos testes
@@ -119,14 +119,22 @@ describe( 'Logando com usuário', () => {
       .send( { email: 'test@test.com', password: '12345' } ).expect( 200 )
       .then(( response ) => {
         resp = response.body
+        return done()
       } )
-      .then(() => done() )
   } )
   it( 'ping seguro autenticado', ( done: Function ) => {
     request( app )
       .get( '/api/v1/ping' )
       .set( 'Authorization', resp )
       .expect( 200, done )
+  } )
+
+  it( 'rota req user autenticada', ( done: Function ) => {
+    request( app )
+      .get( '/api/v1/user' )
+      .set( 'Authorization', resp )
+      .should.eventually.to.eventually.have.property( 'body' ).have.property( 'email' ).equal( 'test@test.com' )
+      .and.notify( done )
   } )
 
   it( 'ping seguro usando token expirado', ( done: Function ) => {

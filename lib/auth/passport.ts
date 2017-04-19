@@ -51,7 +51,7 @@ export const passportJwt = ( store: JSData.DataStore, passport: any, appConfig: 
   return passport
 }
 
-export const jwtGenerator = ( store: JSData.DataStore, appConfig: AppConfig ) => ( req: Request, res: Response, nex: Function ): Promise<Response> => {
+export const jwtGenerator = ( store: JSData.DataStore, appConfig: AppConfig ) => ( req: Request, res: Response, next: Function ): Promise<Response> => {
   let { email, password } = req.body
   if ( email && password ) {
     let options = {
@@ -81,9 +81,7 @@ export const jwtGenerator = ( store: JSData.DataStore, appConfig: AppConfig ) =>
         throw new APIError( 'Senha inválida', 401 )
       } )
       .catch(( err: Error ) => {
-        // throw new APIError(err, 401)
-        let { statusCode, output } = new APIError( err.message, 401 )
-        return res.status( statusCode >= 100 && statusCode < 600 ? statusCode : 500 ).json( output )
+        return next(err)
       } )
   } else {
     throw new APIError( 'Invalid fields', 401 )

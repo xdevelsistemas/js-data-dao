@@ -4,6 +4,18 @@ import * as JSData from 'js-data'
 import { IBaseUser } from '../interfaces/ibase-user'
 import { IBaseModel } from '../interfaces/ibase-model'
 import * as _ from 'lodash'
+
+/**
+ * interface que define os erros customizados de validação
+ * deve ser criado uma interface separado futuramente
+ * //TODO tirar do dao e deixar de forma compartilhavel na estrutura de interfaces do projeto
+ * @export
+ * @interface IValidateError
+ * @extends {Error}
+ */
+export interface IValidateError extends Error {
+  errors: JSData.SchemaValidationError[]
+}
 /**
  * Foi projetado a classe para ser operada como classe generica para ser aplicavel em qualquer classe de persistencia, de forma montar as seguintes operacoes
  *
@@ -13,6 +25,7 @@ import * as _ from 'lodash'
  * - alterar
  * - deletar
  * - fazer uma busca paginada
+ *
  *
  * os metodos buscar todos ( findAll ) e query paginada (paginatedQuery) utilizam do sistema de sintaxe de query de busca do js-data, para mais detalhes de como utilizar,
  * entre no seguinte link:
@@ -58,6 +71,16 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
   public opts: any
 
   /**
+   * classe da implementacao da Persistencia, ela deve ter a assinatura  do tipo
+   * constructor ( obj: any ) : T  => gerando o tipo da classe generico
+   *
+   * @private
+   *
+   * @memberOf DAO
+   */
+  private tpClass: new ( obj: any ) => T
+
+  /**
    * Creates an instance of DAO.
    * @param {JSData.DataStore} store
    * @param {string} collectionName
@@ -67,7 +90,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  constructor ( store: JSData.DataStore, collectionName: string, schema: any = null, relations: any = null, joins: string[] = [] ) {
+  constructor ( store: JSData.DataStore, tpClass: new ( obj: any ) => T, collectionName: string, schema: any = null, relations: any = null, joins: string[] = [] ) {
     if ( !store ) {
       throw Error( 'store is not defined' )
     }
@@ -87,7 +110,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
       },
       updatedAt: {
         description: 'date of last update',
-        type: 'string'
+        type: [ 'string', 'null' ]
       }
     }
 
@@ -122,21 +145,23 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
       with: joins,
       debug: true
     }
+
+    this.tpClass = tpClass
   }
 
   /**
-   * this method is used to "normalize" models, typescript cannot run new instance of
-   * Generic Type like Class<T> { public method() { new T() } } , so parseModel is used in the
-   * class and ALL models have to implement parseModel
+   * funcao responsável por obter o dado do objeto e parsear gerando a classe instanciada dentro do DAO
+   * elementos desnecessários serão descartados e elementos necessários para geração da classe serão utilizados
+   * nessa parte pode ser feito verificacoes no construtor da classe impedindo a criaçao do registro caso alguma propriedade não entre
+   * em adequação com as regras do sistema.
+   * por padrão ele trabalha com construtor da classe que o instancia exemplo:
    *
-   * @param {*} val
-   * @returns {T}
+   *  new CarDAO = new DAO<ICar>(store, Car, 'car')
    *
-   * @memberOf DAO
+   * @param obj  objeto a ser "parseado"
    */
-
-  public parseModel ( val: any ): T {
-    throw new Error( 'not implemented' )
+  public parseModel ( obj: any ): T {
+    return new this.tpClass( obj )
   }
 
   /**
@@ -185,14 +210,18 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public create ( obj: T, userP: any ): Promise<T> {
+  public create ( obj: any, userP: any ): Promise<T> {
     try {
       return this.collection.create( this.parseModel( obj ) )
         .then(( record: JSData.Record ) => {
           return record.toJSON( this.opts )
         } )
-        .catch(( reject: JSData.SchemaValidationError[] ) => {
-          throw new APIError( 'erro de entrada', 400, reject )
+        .catch(( reject: IValidateError ) => {
+          if ( reject.errors ) {
+            throw new APIError( reject.message, 400, reject.errors )
+          } else {
+            throw new APIError( 'erro de entrada', 400, reject.message )
+          }
         } )
     } catch ( e ) {
       return Promise.reject( new APIError( 'Erro de implementacao da classe', 500, { message: e.message } ) )
@@ -210,6 +239,8 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @memberOf DAO
    */
   public update ( id: string, user: IBaseUser, obj: T ): Promise<T> {
+    let updatedObj = obj
+    updatedObj.updatedAt = new Date().toISOString()
     return this.collection.update( id, obj )
       .then(( record: JSData.Record ) => {
         return record.toJSON( this.opts ) as T
@@ -242,6 +273,14 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * http://www.js-data.io/v3.0/docs/query-syntax#section-filtering-where
    * js-data-dao use js-data query syntax
    *
+   * a priodidade dos operadores é em caso de consumo pelos parametros:
+   * - 1) as propriedades descritas em search
+   * - 2) as propriedades aplicadas nos parametros limit,order,page
+   * caso a mesma propriedade estiver nos dois parametros como no exemplo abaixo
+   *  paginatedQuery({ page : 2 } , 1 )
+   * a prioridade é do page dentro do primeiro parametro para em seguida o do segundo parametro, logo será o mesmo que
+   *  paginatedQuery({ } , 2 )
+   * o mesmo segue para as propriedades `limit` e `order`
    * @param {Object} search
    * @param {*} user
    * @param {number} [page]
@@ -252,17 +291,17 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    * @memberOf DAO
    */
   paginatedQuery (
-    search: Object, user: IBaseUser, page?: number, limit?: number, order?: Array<string>, options?: any ): Promise<IResultSearch<T>> {
-    let _page: number = page || 1
-    let _limit: number = limit || 10
-    let _order: string[] = []
-    let params = Object.assign( {}, search, {
-      orderBy: _order,
+    search: any = {}, user: IBaseUser, page?: number, limit?: number, order?: Array<string> | Array<Array<string>>, options?: any ): Promise<IResultSearch<T>> {
+    let _page: number = search.page || page || 1
+    let _limit: number = search.limit || limit || 10
+    let _order: Array<string> | Array<Array<string>> = search.orderBy || order || []
+    let params = Object.assign( {}, {
       offset: _limit * ( _page - 1 ),
-      limit: _limit
-    } )
+      limit: _limit,
+      orderBy: _order
+    }, search )
 
-    return this.collection.findAll( search )
+    return this.collection.count( search.where || {} )
       .then(( countResult ) => {
         return this.collection.findAll( params, options || this.opts )
           .then(( results: JSData.Record[] ) => {
