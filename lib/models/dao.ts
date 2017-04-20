@@ -143,7 +143,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
 
     this.opts = {
       with: joins,
-      debug: true
+      debug: false
     }
 
     this.tpClass = tpClass
