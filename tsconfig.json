@@ -2,17 +2,17 @@
     "declaration": true,
     "compilerOptions": {
         "emitDecoratorMetadata": true,
-        "experimentalDecorators":true,
+        "experimentalDecorators": true,
         "target": "es6",
         "rootDir": ".",
         "module": "commonjs",
         "moduleResolution": "node",
         "sourceMap": true,
         "noImplicitAny": true,
-        "noImplicitThis" : true,
+        "noImplicitThis": true,
         "noImplicitReturns": true,
         "noUnusedLocals": true,
-        "noUnusedParameters" : false,
+        "noUnusedParameters": false,
         "skipLibCheck": true
     },
     "exclude": [

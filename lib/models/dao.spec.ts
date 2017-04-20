@@ -142,13 +142,13 @@ export class TestComplexClassDAO extends DAO<ITestComplexClass> {
       properties: { simpleClassId: { type: 'string' }, name: { type: 'string' } },
       required: [ 'name', 'simpleClassId' ]
     }, {
-        belongsTo: {
-          simple: {
-            localKey: 'simpleClassId',
-            localField: 'simpleClass'
-          }
+      belongsTo: {
+        simple: {
+          localKey: 'simpleClassId',
+          localField: 'simpleClass'
         }
-      }, [ 'simple' ] )
+      }
+    }, [ 'simple' ] )
     this.storedb = store
   }
 }
@@ -293,6 +293,20 @@ describe( 'Complex DAO', () => {
           && result.simpleClass.should.have.property( 'id' ).eq( testSimpleClass.id )
           && result.simpleClass.should.have.property( 'name' ).eq( testSimpleClass.name )
           && result.simpleClass.should.have.property( 'createdAt' ).eq( testSimpleClass.createdAt ) )
+      } )
+      .should.be.fulfilled
+      .and.notify( done )
+  } )
+
+  it( 'find sem join', ( done: Function ) => {
+    testComplexDAO.find( testComplexClass.id, null, { joins: [] } )
+      .then(( result: ITestComplexClass ) => {
+        return (
+          result.should.have.property( 'id' ).eq( testComplexClass.id )
+          && result.should.have.property( 'name' ).eq( testComplexClass.name )
+          && result.should.have.property( 'createdAt' ).eq( testComplexClass.createdAt )
+          && result.should.have.property( 'updatedAt' ).eq( testComplexClass.updatedAt )
+          && result.should.not.have.property( 'simpleClass' ) )
       } )
       .should.be.fulfilled
       .and.notify( done )
@@ -480,7 +494,7 @@ describe( 'query com operações do "query-syntax"', () => {
   } )
 
   it( 'findAll orderBy by createdAt (desc)', ( done: Function ) => {
-    testSimpleDAO.findAll( { orderBy: [ [ 'createdAt', 'DESC' ] ] }, null )
+    testSimpleDAO.findAll( { orderBy: [ [ 'createdAt', 'DESC' ] ] }, null, { joins: [] } )
       .then(( r ) => {
         return r
       } )
