@@ -143,7 +143,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
 
     this.opts = {
       with: joins,
-      debug: true
+      debug: false
     }
 
     this.tpClass = tpClass
@@ -174,8 +174,8 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public findAll ( query: Object = {}, user: IBaseUser ): Promise<Array<T>> {
-    return this.collection.findAll( query, this.opts )
+  public findAll ( query: Object = {}, user: IBaseUser, options?: any ): Promise<Array<T>> {
+    return this.collection.findAll( query, options || this.opts )
       .then(( records: JSData.Record[] ) => {
         return records.map( d => d.toJSON( this.opts ) ) as T[]
       } )
@@ -190,8 +190,8 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public find ( id: string, user: IBaseUser ): Promise<T> {
-    return this.collection.find( id, this.opts )
+  public find ( id: string, user: IBaseUser, options?: any ): Promise<T> {
+    return this.collection.find( id, options || this.opts )
       .then(( record: JSData.Record ) => {
         if ( record ) {
           return record.toJSON( this.opts ) as T
@@ -210,11 +210,11 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  public create ( obj: any, userP: any ): Promise<T> {
+  public create ( obj: any, userP: any, options?: any ): Promise<T> {
     try {
       return this.collection.create( this.parseModel( obj ) )
         .then(( record: JSData.Record ) => {
-          return record.toJSON( this.opts )
+          return record.toJSON( options || this.opts )
         } )
         .catch(( reject: IValidateError ) => {
           if ( reject.errors ) {
