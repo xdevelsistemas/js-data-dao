@@ -102,13 +102,13 @@
 					<a name="respond" class="tsd-anchor"></a>
 					<h3>respond</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">respond<span class="tsd-signature-symbol">(</span>t<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">respond<span class="tsd-signature-symbol">(</span>t<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NextFunction</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/routes/base-router.ts#L8">routes/base-router.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/routes/base-router.ts#L7">routes/base-router.ts:7</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -118,6 +118,9 @@
 								</li>
 								<li>
 									<h5>res: <span class="tsd-signature-type">Response</span></h5>
+								</li>
+								<li>
+									<h5>next: <span class="tsd-signature-type">NextFunction</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -136,24 +139,6 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum">
-						<a href="../enums/tpemail.html" class="tsd-kind-icon">TpEMail</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="apierror.html" class="tsd-kind-icon">APIError</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="appconfig.html" class="tsd-kind-icon">App<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="application.html" class="tsd-kind-icon">Application</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="basemodel.html" class="tsd-kind-icon">Base<wbr>Model</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="basepersistcontroller.html" class="tsd-kind-icon">Base<wbr>Persist<wbr>Controller</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
@@ -166,102 +151,6 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="dao.html" class="tsd-kind-icon">DAO</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="databaseconfig.html" class="tsd-kind-icon">Database<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="forgotcontroller.html" class="tsd-kind-icon">Forgot<wbr>Controller</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="forgotdao.html" class="tsd-kind-icon">ForgotDAO</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="forgotrouter.html" class="tsd-kind-icon">Forgot<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="loginrouter.html" class="tsd-kind-icon">Login<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="mailconfig.html" class="tsd-kind-icon">Mail<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="persistrouter.html" class="tsd-kind-icon">Persist<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="pingrouter.html" class="tsd-kind-icon">Ping<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="sendmail.html" class="tsd-kind-icon">Send<wbr>Mail</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="servicelib.html" class="tsd-kind-icon">Service<wbr>Lib</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="signupdao.html" class="tsd-kind-icon">Sign<wbr>UpDAO</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="signupcontroller.html" class="tsd-kind-icon">Signup<wbr>Controller</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="signuprouter.html" class="tsd-kind-icon">Signup<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/ibasemodel.html" class="tsd-kind-icon">IBase<wbr>Model</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/ibaseuser.html" class="tsd-kind-icon">IBase<wbr>User</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="../interfaces/idao.html" class="tsd-kind-icon">IDAO</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/idefaultadapteroptions.html" class="tsd-kind-icon">IDefault<wbr>Adapter<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/iforgot.html" class="tsd-kind-icon">IForgot</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="../interfaces/ipersistcontroller.html" class="tsd-kind-icon">IPersist<wbr>Controller</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="../interfaces/iresultsearch.html" class="tsd-kind-icon">IResult<wbr>Search</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/irethinkconfig.html" class="tsd-kind-icon">IRethink<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/request.html" class="tsd-kind-icon">Request</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#extractjwt" class="tsd-kind-icon">Extract<wbr>Jwt</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#strategy" class="tsd-kind-icon">Strategy</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#bcrypt" class="tsd-kind-icon">bcrypt</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#bcryptjs" class="tsd-kind-icon">bcryptjs</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#crypto" class="tsd-kind-icon">crypto</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#passport" class="tsd-kind-icon">passport</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="../globals.html#authenticate" class="tsd-kind-icon">authenticate</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="../globals.html#jwtgenerator" class="tsd-kind-icon">jwt<wbr>Generator</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="../globals.html#passportjwt" class="tsd-kind-icon">passport<wbr>Jwt</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
