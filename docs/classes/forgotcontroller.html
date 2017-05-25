@@ -85,6 +85,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="forgotcontroller.html#appconfig" class="tsd-kind-icon">app<wbr>Config</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="forgotcontroller.html#forgot" class="tsd-kind-icon">forgot</a></li>
 							</ul>
 						</section>
@@ -105,22 +106,22 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Forgot<wbr>Controller<span class="tsd-signature-symbol">(</span>store<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DataStore</span>, appConfig<span class="tsd-signature-symbol">: </span><a href="appconfig.html" class="tsd-signature-type">AppConfig</a>, transporter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Transporter</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="forgotcontroller.html" class="tsd-signature-type">ForgotController</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Forgot<wbr>Controller<span class="tsd-signature-symbol">(</span>appConfig<span class="tsd-signature-symbol">: </span><a href="appconfig.html" class="tsd-signature-type">AppConfig</a>, userDAO<span class="tsd-signature-symbol">: </span><a href="dao.html" class="tsd-signature-type">DAO</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ibaseuser.html" class="tsd-signature-type">IBaseUser</a><span class="tsd-signature-symbol">&gt;</span>, transporter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Transporter</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="forgotcontroller.html" class="tsd-signature-type">ForgotController</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/controllers/forgot-controller.ts#L9">controllers/forgot-controller.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/controllers/forgot-controller.ts#L9">controllers/forgot-controller.ts:9</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>store: <span class="tsd-signature-type">DataStore</span></h5>
+									<h5>appConfig: <a href="appconfig.html" class="tsd-signature-type">AppConfig</a></h5>
 								</li>
 								<li>
-									<h5>appConfig: <a href="appconfig.html" class="tsd-signature-type">AppConfig</a></h5>
+									<h5>userDAO: <a href="dao.html" class="tsd-signature-type">DAO</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ibaseuser.html" class="tsd-signature-type">IBaseUser</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transporter: <span class="tsd-signature-type">Transporter</span></h5>
@@ -134,12 +135,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="appconfig" class="tsd-anchor"></a>
+					<h3>app<wbr>Config</h3>
+					<div class="tsd-signature tsd-kind-icon">app<wbr>Config<span class="tsd-signature-symbol">:</span> <a href="appconfig.html" class="tsd-signature-type">AppConfig</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/controllers/forgot-controller.ts#L9">controllers/forgot-controller.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="forgot" class="tsd-anchor"></a>
 					<h3>forgot</h3>
 					<div class="tsd-signature tsd-kind-icon">forgot<span class="tsd-signature-symbol">:</span> <a href="forgotdao.html" class="tsd-signature-type">ForgotDAO</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/controllers/forgot-controller.ts#L9">controllers/forgot-controller.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/controllers/forgot-controller.ts#L8">controllers/forgot-controller.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -156,7 +167,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/controllers/forgot-controller.ts#L67">controllers/forgot-controller.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/controllers/forgot-controller.ts#L62">controllers/forgot-controller.ts:62</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -195,7 +206,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/controllers/forgot-controller.ts#L25">controllers/forgot-controller.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/controllers/forgot-controller.ts#L26">controllers/forgot-controller.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -234,7 +245,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/controllers/forgot-controller.ts#L46">controllers/forgot-controller.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/controllers/forgot-controller.ts#L44">controllers/forgot-controller.ts:44</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -275,33 +286,6 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum">
-						<a href="../enums/tpemail.html" class="tsd-kind-icon">TpEMail</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="apierror.html" class="tsd-kind-icon">APIError</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="appconfig.html" class="tsd-kind-icon">App<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="application.html" class="tsd-kind-icon">Application</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="basemodel.html" class="tsd-kind-icon">Base<wbr>Model</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="basepersistcontroller.html" class="tsd-kind-icon">Base<wbr>Persist<wbr>Controller</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="baserouter.html" class="tsd-kind-icon">Base<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="dao.html" class="tsd-kind-icon">DAO</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="databaseconfig.html" class="tsd-kind-icon">Database<wbr>Config</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
@@ -309,6 +293,9 @@
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="forgotcontroller.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="forgotcontroller.html#appconfig" class="tsd-kind-icon">app<wbr>Config</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="forgotcontroller.html#forgot" class="tsd-kind-icon">forgot</a>
@@ -326,93 +313,6 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class">
-						<a href="forgotdao.html" class="tsd-kind-icon">ForgotDAO</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="forgotrouter.html" class="tsd-kind-icon">Forgot<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="loginrouter.html" class="tsd-kind-icon">Login<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="mailconfig.html" class="tsd-kind-icon">Mail<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="persistrouter.html" class="tsd-kind-icon">Persist<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="pingrouter.html" class="tsd-kind-icon">Ping<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="sendmail.html" class="tsd-kind-icon">Send<wbr>Mail</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="servicelib.html" class="tsd-kind-icon">Service<wbr>Lib</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="signupdao.html" class="tsd-kind-icon">Sign<wbr>UpDAO</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="signupcontroller.html" class="tsd-kind-icon">Signup<wbr>Controller</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="signuprouter.html" class="tsd-kind-icon">Signup<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/ibasemodel.html" class="tsd-kind-icon">IBase<wbr>Model</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/ibaseuser.html" class="tsd-kind-icon">IBase<wbr>User</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="../interfaces/idao.html" class="tsd-kind-icon">IDAO</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/idefaultadapteroptions.html" class="tsd-kind-icon">IDefault<wbr>Adapter<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/iforgot.html" class="tsd-kind-icon">IForgot</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="../interfaces/ipersistcontroller.html" class="tsd-kind-icon">IPersist<wbr>Controller</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="../interfaces/iresultsearch.html" class="tsd-kind-icon">IResult<wbr>Search</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/irethinkconfig.html" class="tsd-kind-icon">IRethink<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/request.html" class="tsd-kind-icon">Request</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#extractjwt" class="tsd-kind-icon">Extract<wbr>Jwt</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#strategy" class="tsd-kind-icon">Strategy</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#bcrypt" class="tsd-kind-icon">bcrypt</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#bcryptjs" class="tsd-kind-icon">bcryptjs</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#crypto" class="tsd-kind-icon">crypto</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#passport" class="tsd-kind-icon">passport</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="../globals.html#authenticate" class="tsd-kind-icon">authenticate</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="../globals.html#jwtgenerator" class="tsd-kind-icon">jwt<wbr>Generator</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="../globals.html#passportjwt" class="tsd-kind-icon">passport<wbr>Jwt</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

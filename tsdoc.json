@@ -12,7 +12,8 @@
         "noImplicitThis" : true,
         "noImplicitReturns": true,
         "noUnusedLocals": true,
-        "noUnusedParameters" : false
+        "noUnusedParameters" : false,
+        "skipLibCheck": true
     },
     "exclude": [
         "gulpfile.ts",

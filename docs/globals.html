@@ -82,6 +82,7 @@
 								<li class="tsd-kind-class"><a href="classes/baserouter.html" class="tsd-kind-icon">Base<wbr>Router</a></li>
 								<li class="tsd-kind-class tsd-has-type-parameter"><a href="classes/dao.html" class="tsd-kind-icon">DAO</a></li>
 								<li class="tsd-kind-class"><a href="classes/databaseconfig.html" class="tsd-kind-icon">Database<wbr>Config</a></li>
+								<li class="tsd-kind-class"><a href="classes/errorhandler.html" class="tsd-kind-icon">Error<wbr>Handler</a></li>
 								<li class="tsd-kind-class"><a href="classes/forgotcontroller.html" class="tsd-kind-icon">Forgot<wbr>Controller</a></li>
 								<li class="tsd-kind-class"><a href="classes/forgotdao.html" class="tsd-kind-icon">ForgotDAO</a></li>
 								<li class="tsd-kind-class"><a href="classes/forgotrouter.html" class="tsd-kind-icon">Forgot<wbr>Router</a></li>
@@ -103,10 +104,13 @@
 								<li class="tsd-kind-interface"><a href="interfaces/ibaseuser.html" class="tsd-kind-icon">IBase<wbr>User</a></li>
 								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/idao.html" class="tsd-kind-icon">IDAO</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/idefaultadapteroptions.html" class="tsd-kind-icon">IDefault<wbr>Adapter<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ierror.html" class="tsd-kind-icon">IError</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/iforgot.html" class="tsd-kind-icon">IForgot</a></li>
 								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/ipersistcontroller.html" class="tsd-kind-icon">IPersist<wbr>Controller</a></li>
 								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/iresultsearch.html" class="tsd-kind-icon">IResult<wbr>Search</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/irethinkconfig.html" class="tsd-kind-icon">IRethink<wbr>Config</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/isignup.html" class="tsd-kind-icon">ISign<wbr>Up</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/ivalidateerror.html" class="tsd-kind-icon">IValidate<wbr>Error</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/request.html" class="tsd-kind-icon">Request</a></li>
 							</ul>
 						</section>
@@ -115,9 +119,6 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-variable tsd-is-not-exported"><a href="globals.html#extractjwt" class="tsd-kind-icon">Extract<wbr>Jwt</a></li>
 								<li class="tsd-kind-variable tsd-is-not-exported"><a href="globals.html#strategy" class="tsd-kind-icon">Strategy</a></li>
-								<li class="tsd-kind-variable tsd-is-not-exported"><a href="globals.html#bcrypt" class="tsd-kind-icon">bcrypt</a></li>
-								<li class="tsd-kind-variable tsd-is-not-exported"><a href="globals.html#bcryptjs" class="tsd-kind-icon">bcryptjs</a></li>
-								<li class="tsd-kind-variable tsd-is-not-exported"><a href="globals.html#crypto" class="tsd-kind-icon">crypto</a></li>
 								<li class="tsd-kind-variable tsd-is-not-exported"><a href="globals.html#passport" class="tsd-kind-icon">passport</a></li>
 							</ul>
 						</section>
@@ -125,6 +126,7 @@
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function"><a href="globals.html#authenticate" class="tsd-kind-icon">authenticate</a></li>
+								<li class="tsd-kind-function"><a href="globals.html#getenv" class="tsd-kind-icon">get<wbr>Env</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#jwtgenerator" class="tsd-kind-icon">jwt<wbr>Generator</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#passportjwt" class="tsd-kind-icon">passport<wbr>Jwt</a></li>
 							</ul>
@@ -137,70 +139,30 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-is-not-exported">
 					<a name="extractjwt" class="tsd-anchor"></a>
 					<h3>Extract<wbr>Jwt</h3>
-					<div class="tsd-signature tsd-kind-icon">Extract<wbr>Jwt<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require(&#x27;passport-jwt&#x27;).ExtractJwt</span></div>
+					<div class="tsd-signature tsd-kind-icon">Extract<wbr>Jwt<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require( &#x27;passport-jwt&#x27; ).ExtractJwt</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/auth/passport.ts#L10">auth/passport.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/auth/passport.ts#L10">auth/passport.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-is-not-exported">
 					<a name="strategy" class="tsd-anchor"></a>
 					<h3>Strategy</h3>
-					<div class="tsd-signature tsd-kind-icon">Strategy<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require(&#x27;passport-jwt&#x27;).Strategy</span></div>
+					<div class="tsd-signature tsd-kind-icon">Strategy<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require( &#x27;passport-jwt&#x27; ).Strategy</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/auth/passport.ts#L11">auth/passport.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/auth/passport.ts#L11">auth/passport.ts:11</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-is-not-exported">
-					<a name="bcrypt" class="tsd-anchor"></a>
-					<h3>bcrypt</h3>
-					<div class="tsd-signature tsd-kind-icon">bcrypt<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require( &#x27;bcrypt-then&#x27; )</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/services/service-lib.ts#L8">services/service-lib.ts:8</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>passwordCrypto</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-is-not-exported">
-					<a name="bcryptjs" class="tsd-anchor"></a>
-					<h3>bcryptjs</h3>
-					<div class="tsd-signature tsd-kind-icon">bcryptjs<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require( &#x27;bcryptjs&#x27; )</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/services/service-lib.ts#L9">services/service-lib.ts:9</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-is-not-exported">
-					<a name="crypto" class="tsd-anchor"></a>
-					<h3>crypto</h3>
-					<div class="tsd-signature tsd-kind-icon">crypto<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require( &#x27;crypto&#x27; )</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/services/service-lib.ts#L13">services/service-lib.ts:13</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Cripto</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-is-not-exported">
 					<a name="passport" class="tsd-anchor"></a>
 					<h3>passport</h3>
-					<div class="tsd-signature tsd-kind-icon">passport<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require(&#x27;passport&#x27;)</span></div>
+					<div class="tsd-signature tsd-kind-icon">passport<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require( &#x27;passport&#x27; )</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/application.ts#L7">application.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/application.ts#L7">application.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -211,13 +173,13 @@
 					<a name="authenticate" class="tsd-anchor"></a>
 					<h3>authenticate</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">authenticate<span class="tsd-signature-symbol">(</span>passport<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, appConfig<span class="tsd-signature-symbol">: </span><a href="classes/appconfig.html" class="tsd-signature-type">AppConfig</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+						<li class="tsd-signature tsd-kind-icon">authenticate<span class="tsd-signature-symbol">(</span>passport<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, appConfig<span class="tsd-signature-symbol">: </span><a href="classes/appconfig.html" class="tsd-signature-type">AppConfig</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">(Anonymous function)</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/auth/jwtAuth.ts#L3">auth/jwtAuth.ts:3</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/auth/jwtAuth.ts#L3">auth/jwtAuth.ts:3</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -227,6 +189,29 @@
 								</li>
 								<li>
 									<h5>appConfig: <a href="classes/appconfig.html" class="tsd-signature-type">AppConfig</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="getenv" class="tsd-anchor"></a>
+					<h3>get<wbr>Env</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Env<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/config/utils.ts#L1">config/utils.ts:1</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
@@ -243,7 +228,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/auth/passport.ts#L48">auth/passport.ts:48</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/auth/passport.ts#L54">auth/passport.ts:54</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -269,7 +254,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/auth/passport.ts#L13">auth/passport.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/auth/passport.ts#L13">auth/passport.ts:13</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -328,6 +313,9 @@
 						<a href="classes/databaseconfig.html" class="tsd-kind-icon">Database<wbr>Config</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/errorhandler.html" class="tsd-kind-icon">Error<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/forgotcontroller.html" class="tsd-kind-icon">Forgot<wbr>Controller</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -376,6 +364,9 @@
 						<a href="interfaces/idefaultadapteroptions.html" class="tsd-kind-icon">IDefault<wbr>Adapter<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/ierror.html" class="tsd-kind-icon">IError</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/iforgot.html" class="tsd-kind-icon">IForgot</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
@@ -388,6 +379,12 @@
 						<a href="interfaces/irethinkconfig.html" class="tsd-kind-icon">IRethink<wbr>Config</a>
 					</li>
 					<li class=" tsd-kind-interface">
+						<a href="interfaces/isignup.html" class="tsd-kind-icon">ISign<wbr>Up</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ivalidateerror.html" class="tsd-kind-icon">IValidate<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-interface">
 						<a href="interfaces/request.html" class="tsd-kind-icon">Request</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
@@ -397,19 +394,13 @@
 						<a href="globals.html#strategy" class="tsd-kind-icon">Strategy</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="globals.html#bcrypt" class="tsd-kind-icon">bcrypt</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="globals.html#bcryptjs" class="tsd-kind-icon">bcryptjs</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="globals.html#crypto" class="tsd-kind-icon">crypto</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
 						<a href="globals.html#passport" class="tsd-kind-icon">passport</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#authenticate" class="tsd-kind-icon">authenticate</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getenv" class="tsd-kind-icon">get<wbr>Env</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#jwtgenerator" class="tsd-kind-icon">jwt<wbr>Generator</a>

@@ -105,16 +105,20 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="signupdao.html#_appconfig" class="tsd-kind-icon">_app<wbr>Config</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="signupdao.html#_mailconfig" class="tsd-kind-icon">_mail<wbr>Config</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="signupdao.html#_servicelib" class="tsd-kind-icon">_service<wbr>Lib</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="signupdao.html#appconfig" class="tsd-kind-icon">app<wbr>Config</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="signupdao.html#mailconfig" class="tsd-kind-icon">mail<wbr>Config</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="signupdao.html#sendmail" class="tsd-kind-icon">send<wbr>Mail</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="signupdao.html#servicelib" class="tsd-kind-icon">service<wbr>Lib</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="signupdao.html#storedb" class="tsd-kind-icon">storedb</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="signupdao.html#userdao" class="tsd-kind-icon">userDAO</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="signupdao.html#createemptyuser" class="tsd-kind-icon">create<wbr>Empty<wbr>User</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="signupdao.html#registerpassword" class="tsd-kind-icon">register<wbr>Password</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="signupdao.html#sendsignupmail" class="tsd-kind-icon">send<wbr>Sign<wbr>UpMail</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="signupdao.html#validatoken" class="tsd-kind-icon">valida<wbr>Token</a></li>
 							</ul>
 						</section>
@@ -127,22 +131,22 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Sign<wbr>UpDAO<span class="tsd-signature-symbol">(</span>store<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DataStore</span>, appConfig<span class="tsd-signature-symbol">: </span><a href="appconfig.html" class="tsd-signature-type">AppConfig</a>, transporter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Transporter</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="signupdao.html" class="tsd-signature-type">SignUpDAO</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Sign<wbr>UpDAO<span class="tsd-signature-symbol">(</span>appConfig<span class="tsd-signature-symbol">: </span><a href="appconfig.html" class="tsd-signature-type">AppConfig</a>, userDao<span class="tsd-signature-symbol">: </span><a href="dao.html" class="tsd-signature-type">DAO</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ibaseuser.html" class="tsd-signature-type">IBaseUser</a><span class="tsd-signature-symbol">&gt;</span>, transporter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Transporter</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="signupdao.html" class="tsd-signature-type">SignUpDAO</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/models/signup-dao.ts#L34">models/signup-dao.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/models/signup-dao.ts#L38">models/signup-dao.ts:38</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>store: <span class="tsd-signature-type">DataStore</span></h5>
+									<h5>appConfig: <a href="appconfig.html" class="tsd-signature-type">AppConfig</a></h5>
 								</li>
 								<li>
-									<h5>appConfig: <a href="appconfig.html" class="tsd-signature-type">AppConfig</a></h5>
+									<h5>userDao: <a href="dao.html" class="tsd-signature-type">DAO</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ibaseuser.html" class="tsd-signature-type">IBaseUser</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transporter: <span class="tsd-signature-type">Transporter</span></h5>
@@ -156,32 +160,42 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_appconfig" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _app<wbr>Config</h3>
-					<div class="tsd-signature tsd-kind-icon">_app<wbr>Config<span class="tsd-signature-symbol">:</span> <a href="appconfig.html" class="tsd-signature-type">AppConfig</a></div>
+					<a name="appconfig" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> app<wbr>Config</h3>
+					<div class="tsd-signature tsd-kind-icon">app<wbr>Config<span class="tsd-signature-symbol">:</span> <a href="appconfig.html" class="tsd-signature-type">AppConfig</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/models/signup-dao.ts#L34">models/signup-dao.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/models/signup-dao.ts#L38">models/signup-dao.ts:38</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_mailconfig" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _mail<wbr>Config</h3>
-					<div class="tsd-signature tsd-kind-icon">_mail<wbr>Config<span class="tsd-signature-symbol">:</span> <a href="mailconfig.html" class="tsd-signature-type">MailConfig</a></div>
+					<a name="mailconfig" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> mail<wbr>Config</h3>
+					<div class="tsd-signature tsd-kind-icon">mail<wbr>Config<span class="tsd-signature-symbol">:</span> <a href="mailconfig.html" class="tsd-signature-type">MailConfig</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/models/signup-dao.ts#L32">models/signup-dao.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/models/signup-dao.ts#L34">models/signup-dao.ts:34</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_servicelib" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _service<wbr>Lib</h3>
-					<div class="tsd-signature tsd-kind-icon">_service<wbr>Lib<span class="tsd-signature-symbol">:</span> <a href="servicelib.html" class="tsd-signature-type">ServiceLib</a></div>
+					<a name="sendmail" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> send<wbr>Mail</h3>
+					<div class="tsd-signature tsd-kind-icon">send<wbr>Mail<span class="tsd-signature-symbol">:</span> <a href="sendmail.html" class="tsd-signature-type">SendMail</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/models/signup-dao.ts#L33">models/signup-dao.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/models/signup-dao.ts#L35">models/signup-dao.ts:35</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="servicelib" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> service<wbr>Lib</h3>
+					<div class="tsd-signature tsd-kind-icon">service<wbr>Lib<span class="tsd-signature-symbol">:</span> <a href="servicelib.html" class="tsd-signature-type">ServiceLib</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/models/signup-dao.ts#L36">models/signup-dao.ts:36</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -191,24 +205,71 @@
 					<div class="tsd-signature tsd-kind-icon">storedb<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DataStore</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/models/signup-dao.ts#L31">models/signup-dao.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/models/signup-dao.ts#L33">models/signup-dao.ts:33</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="userdao" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> userDAO</h3>
+					<div class="tsd-signature tsd-kind-icon">userDAO<span class="tsd-signature-symbol">:</span> <a href="dao.html" class="tsd-signature-type">DAO</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ibaseuser.html" class="tsd-signature-type">IBaseUser</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/models/signup-dao.ts#L37">models/signup-dao.ts:37</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="registerpassword" class="tsd-anchor"></a>
-					<h3>register<wbr>Password</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">register<wbr>Password<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, matchFilter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="createemptyuser" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> create<wbr>Empty<wbr>User</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Empty<wbr>User<span class="tsd-signature-symbol">(</span>email<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ibaseuser.html" class="tsd-signature-type">IBaseUser</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/models/signup-dao.ts#L85">models/signup-dao.ts:85</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/models/signup-dao.ts#L139">models/signup-dao.ts:139</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>metodo para criar um usuário vazio para terminar de preencher na conclusão do SignUp</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>memberof</dt>
+									<dd><p>SignUpDAO</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>email: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>email informado na entrada do signup ou quando recebe convite</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ibaseuser.html" class="tsd-signature-type">IBaseUser</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>retorna o objeto basico do usuario com os campos em branco para manter consistencia com o antigo modelo</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="registerpassword" class="tsd-anchor"></a>
+					<h3>register<wbr>Password</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">register<wbr>Password<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, matchFilter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ibaseuser.html" class="tsd-signature-type">IBaseUser</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/models/signup-dao.ts#L96">models/signup-dao.ts:96</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -239,8 +300,44 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> matchFilter: <span class="tsd-signature-type">Object</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ibaseuser.html" class="tsd-signature-type">IBaseUser</a><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>retorna booleano indicando ok do processo</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="sendsignupmail" class="tsd-anchor"></a>
+					<h3>send<wbr>Sign<wbr>UpMail</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">send<wbr>Sign<wbr>UpMail<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><a href="../interfaces/isignup.html" class="tsd-signature-type">ISignUp</a>, appUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/models/signup-dao.ts#L55">models/signup-dao.ts:55</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Envia um email para o usuário</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>memberof</dt>
+									<dd><p>SignUpDAO</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>obj: <a href="../interfaces/isignup.html" class="tsd-signature-type">ISignUp</a></h5>
+								</li>
+								<li>
+									<h5>appUrl: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -254,7 +351,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/628800d/lib/models/signup-dao.ts#L49">models/signup-dao.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/xdevelsistemas/js-data-dao/blob/1244fd1/lib/models/signup-dao.ts#L72">models/signup-dao.ts:72</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -271,6 +368,9 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>params: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>parametros de rota predefinidos na querystring da rota ( /signup/token =&gt; /signup/1234 =&gt; token = 1234 )</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/ibaseuser.html" class="tsd-signature-type">IBaseUser</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -289,60 +389,6 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum">
-						<a href="../enums/tpemail.html" class="tsd-kind-icon">TpEMail</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="apierror.html" class="tsd-kind-icon">APIError</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="appconfig.html" class="tsd-kind-icon">App<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="application.html" class="tsd-kind-icon">Application</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="basemodel.html" class="tsd-kind-icon">Base<wbr>Model</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="basepersistcontroller.html" class="tsd-kind-icon">Base<wbr>Persist<wbr>Controller</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="baserouter.html" class="tsd-kind-icon">Base<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="dao.html" class="tsd-kind-icon">DAO</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="databaseconfig.html" class="tsd-kind-icon">Database<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="forgotcontroller.html" class="tsd-kind-icon">Forgot<wbr>Controller</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="forgotdao.html" class="tsd-kind-icon">ForgotDAO</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="forgotrouter.html" class="tsd-kind-icon">Forgot<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="loginrouter.html" class="tsd-kind-icon">Login<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="mailconfig.html" class="tsd-kind-icon">Mail<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="persistrouter.html" class="tsd-kind-icon">Persist<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="pingrouter.html" class="tsd-kind-icon">Ping<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="sendmail.html" class="tsd-kind-icon">Send<wbr>Mail</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="servicelib.html" class="tsd-kind-icon">Service<wbr>Lib</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
@@ -352,19 +398,31 @@
 								<a href="signupdao.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="signupdao.html#_appconfig" class="tsd-kind-icon">_app<wbr>Config</a>
+								<a href="signupdao.html#appconfig" class="tsd-kind-icon">app<wbr>Config</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="signupdao.html#_mailconfig" class="tsd-kind-icon">_mail<wbr>Config</a>
+								<a href="signupdao.html#mailconfig" class="tsd-kind-icon">mail<wbr>Config</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="signupdao.html#_servicelib" class="tsd-kind-icon">_service<wbr>Lib</a>
+								<a href="signupdao.html#sendmail" class="tsd-kind-icon">send<wbr>Mail</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="signupdao.html#servicelib" class="tsd-kind-icon">service<wbr>Lib</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="signupdao.html#storedb" class="tsd-kind-icon">storedb</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="signupdao.html#userdao" class="tsd-kind-icon">userDAO</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="signupdao.html#createemptyuser" class="tsd-kind-icon">create<wbr>Empty<wbr>User</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="signupdao.html#registerpassword" class="tsd-kind-icon">register<wbr>Password</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="signupdao.html#sendsignupmail" class="tsd-kind-icon">send<wbr>Sign<wbr>UpMail</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="signupdao.html#validatoken" class="tsd-kind-icon">valida<wbr>Token</a>
@@ -373,66 +431,6 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class">
-						<a href="signupcontroller.html" class="tsd-kind-icon">Signup<wbr>Controller</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="signuprouter.html" class="tsd-kind-icon">Signup<wbr>Router</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/ibasemodel.html" class="tsd-kind-icon">IBase<wbr>Model</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/ibaseuser.html" class="tsd-kind-icon">IBase<wbr>User</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="../interfaces/idao.html" class="tsd-kind-icon">IDAO</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/idefaultadapteroptions.html" class="tsd-kind-icon">IDefault<wbr>Adapter<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/iforgot.html" class="tsd-kind-icon">IForgot</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="../interfaces/ipersistcontroller.html" class="tsd-kind-icon">IPersist<wbr>Controller</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="../interfaces/iresultsearch.html" class="tsd-kind-icon">IResult<wbr>Search</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/irethinkconfig.html" class="tsd-kind-icon">IRethink<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="../interfaces/request.html" class="tsd-kind-icon">Request</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#extractjwt" class="tsd-kind-icon">Extract<wbr>Jwt</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#strategy" class="tsd-kind-icon">Strategy</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#bcrypt" class="tsd-kind-icon">bcrypt</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#bcryptjs" class="tsd-kind-icon">bcryptjs</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#crypto" class="tsd-kind-icon">crypto</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#passport" class="tsd-kind-icon">passport</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="../globals.html#authenticate" class="tsd-kind-icon">authenticate</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="../globals.html#jwtgenerator" class="tsd-kind-icon">jwt<wbr>Generator</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="../globals.html#passportjwt" class="tsd-kind-icon">passport<wbr>Jwt</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
