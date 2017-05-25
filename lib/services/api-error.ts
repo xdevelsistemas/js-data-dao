@@ -7,10 +7,13 @@ export class APIError extends Error implements IError {
   objectResponse: Object
   private error: Boom.BoomError
 
-  constructor (message: string, statusCode: number, objectResponse?: Object) {
+  constructor (message: string, statusCode: number, objectResponse?: Object, originalStack?: string) {
     super(message)
     this.statusCode = statusCode
     this.objectResponse = objectResponse
+    if (originalStack) {
+      this.stack = originalStack
+    }
     // this.definedBoomError()
     this.showError()
   }

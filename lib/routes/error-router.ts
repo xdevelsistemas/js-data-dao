@@ -13,9 +13,9 @@ export class ErrorHandler {
         if ( err instanceof APIError ) {
           _err = err
         } else {
-          _err = new APIError( err, err.status || err.statusCode || 500, null )
+          _err = new APIError( err.message || err, err.status || err.statusCode || 500, null, err.stack )
         }
-        return res.status( _err.statusCode ).json( _err )
+        return res.status( _err.statusCode ).json( _err.output )
       } )
     } else {
 			/**
@@ -27,9 +27,9 @@ export class ErrorHandler {
         if ( err instanceof APIError ) {
           _err = err
         } else {
-          _err = new APIError( err, err.status || err.statusCode || 500, null )
+          _err = new APIError( err.message || err, err.status || err.statusCode || 500, null, err.stack )
         }
-        return res.status( _err.statusCode ).json( _err )
+        return res.status( _err.statusCode ).json( _err.output )
       } )
     }
     return app
