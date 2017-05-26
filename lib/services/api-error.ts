@@ -33,7 +33,7 @@ export class APIError extends Error implements IError {
     return {
       statusCode: this.statusCode,
       objectResponse: this.objectResponse || { },
-      message: this.error.message
+      message: this.message
     }
   }
 
