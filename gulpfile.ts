@@ -1,4 +1,7 @@
-import * as gulp from 'gulp'
+/**
+ * remove import gulp, because @types/gulp is wrong :(
+ */
+let gulp = require('gulp')
 import * as ts from 'gulp-typescript'
 let clean = require( 'gulp-clean' )
 let coveralls = require( 'gulp-coveralls' )
