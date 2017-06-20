@@ -24,7 +24,7 @@ export class ForgotController {
    * @memberOf ForgotController
    */
   public sendMail ( req: Request, res: Response, next?: NextFunction ): Promise<any> {
-    return this.forgot.sendForgotMail( req.body, this.appConfig.getForgotUrl() )
+    return this.forgot.sendForgotMail( req.body, this.appConfig.forgotUrl )
       .then(() => {
         res.status( 200 )
         return 'Email enviado'

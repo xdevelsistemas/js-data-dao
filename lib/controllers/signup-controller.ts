@@ -24,7 +24,7 @@ export class SignupController {
    * @memberOf ForgotController
    */
   public sendMail ( req: Request, res: Response, next?: NextFunction ): Promise<any> {
-    return this.signUpDAO.sendSignUpMail( req.body, this.config.getSignUpUrl() )
+    return this.signUpDAO.sendSignUpMail( req.body, this.config.signUpUrl )
       .then(() => {
         res.status( 200 )
         return 'Email enviado'

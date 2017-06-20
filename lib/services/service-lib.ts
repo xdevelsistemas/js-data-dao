@@ -96,7 +96,7 @@ export class ServiceLib {
    * @memberOf ServiceLib
    */
   encrypt ( text: string ): string {
-    let cipher = crypto.createCipher( this.config.getCryptoAlgorithm(), this.config.getCryptoPassword() )
+    let cipher = crypto.createCipher( this.config.cryptoAlgorithm, this.config.cryptoPassword )
     let crypted = cipher.update( text, 'utf8', 'hex' )
     crypted += cipher.final( 'hex' )
     return crypted
@@ -112,7 +112,7 @@ export class ServiceLib {
    */
   decrypt ( text: string ): string {
     try {
-      let decipher = crypto.createDecipher( this.config.getCryptoAlgorithm(), this.config.getCryptoPassword() )
+      let decipher = crypto.createDecipher( this.config.cryptoAlgorithm, this.config.cryptoPassword )
       let dec = decipher.update( text, 'hex', 'utf8' )
       dec += decipher.final( 'utf8' )
       return dec
@@ -139,7 +139,7 @@ export class ServiceLib {
       expiration: expireDate || new Date()
     }
     // Expire on confg days
-    data.expiration.setDate( data.expiration.getDate() + this.config.getExpirationDays() )
+    data.expiration.setDate( data.expiration.getDate() + this.config.expirationDays )
     return this.encrypt( JSON.stringify( data ) )
   }
 }

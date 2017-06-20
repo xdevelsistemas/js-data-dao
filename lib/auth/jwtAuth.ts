@@ -8,7 +8,7 @@ export const authenticate: Function = ( passport: any, appConfig: AppConfig ) =>
    * - user como falso
    * - err com valor e user como falso
    */
-  return passport.authenticate( appConfig.getJwtConfig().strategy, appConfig.getJwtConfig().session,
+  return passport.authenticate( appConfig.jwtConfig.strategy, appConfig.jwtConfig.session,
     ( err: any, user: any, info: any ) => {
       if ( err || !user ) {
         /**

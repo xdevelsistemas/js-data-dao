@@ -25,8 +25,8 @@ let handleJSData = ( config: AppConfig ): JSData.DataStore => {
    * Definindo o adaptador JSData para o projeto
    */
   const store: JSData.DataStore = new JSData.DataStore()
-  store.registerAdapter( config.dbConfig.getDatabase(),
-    config.dbConfig.getAdapter(),
+  store.registerAdapter( config.dbConfig.database,
+    config.dbConfig.adapter,
     { 'default': true }
   )
   return store
@@ -51,7 +51,7 @@ describe( 'Persist Router Basic', () => {
 describe( 'Criando ambiente testavel para aplicar CRUD na persistencia', () => {
   let app = express()
   app.use( bodyParser() )
-  app.use( '/api/v1/test', router.getRouter() )
+  app.use( '/api/v1/test', router.router )
   new ErrorHandler().handleError( app )
 
   let resp: ITestSimpleClass = null
@@ -114,7 +114,7 @@ describe( 'Testando rotas de persistencias com log de producao', () => {
   process.env.NODE_ENV = 'production'
   let app = express()
   app.use( bodyParser() )
-  app.use( '/api/v1/test', router.getRouter() )
+  app.use( '/api/v1/test', router.router )
   new ErrorHandler().handleError( app )
   let resp: ITestSimpleClass = null
   it( 'Create ?', ( done: Function ) => {

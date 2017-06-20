@@ -21,13 +21,13 @@ export class DatabaseConfig {
     this._database = 'rethinkdb'
     this._adapter = new JSDataRethink.RethinkDBAdapter(opts)
   }
-  getAdapterOptions () {
+  get adapterOptions () {
     return this._adapterOptions
   }
-  getDatabase () {
+  get database () {
     return this._database
   }
-  getAdapter () {
+  get adapter () {
     return this._adapter
   }
 }

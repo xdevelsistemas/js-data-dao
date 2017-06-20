@@ -1,11 +1,11 @@
-import * as Boom from 'boom'
+// import * as Boom from 'boom'
 import { IError } from '../interfaces'
 
 export class APIError extends Error implements IError {
 
   statusCode: number
   objectResponse: Object
-  private error: Boom.BoomError
+  // private error: Boom.BoomError
 
   constructor (message: string, statusCode: number, objectResponse?: Object, originalStack?: string) {
     super(message)

@@ -10,29 +10,29 @@ import * as nodemailer from 'nodemailer'
 export class ForgotRouter extends BaseRouter {
   controller: ForgotController
   store: JSData.DataStore
-  router: Router
+  private _router: Router
 
   constructor ( appConfig: AppConfig, userDAO: DAO<IBaseUser>, transporter?: nodemailer.Transporter ) {
     super()
     this.controller = new ForgotController( appConfig, userDAO, transporter )
-    this.router = Router()
+    this._router = Router()
     this.routers()
   }
 
   public routers () {
     let ctrl = this
 
-    this.router.post( '/', ( req: Request, res: Response, next: NextFunction ) =>
+    this._router.post( '/', ( req: Request, res: Response, next: NextFunction ) =>
       this.respond( ctrl.controller.sendMail( req, res, next ), res, next ) )
 
-    this.router.get( '/:token', ( req: Request, res: Response, next: NextFunction ) =>
+    this._router.get( '/:token', ( req: Request, res: Response, next: NextFunction ) =>
       this.respond( ctrl.controller.validaToken( req, res, next ), res, next ) )
 
-    this.router.post( '/:token', ( req: Request, res: Response, next: NextFunction ) =>
+    this._router.post( '/:token', ( req: Request, res: Response, next: NextFunction ) =>
       this.respond( ctrl.controller.resetPassword( req, res, next ), res, next ) )
   }
 
-  public getRouter (): Router {
-    return this.router
+  public get router (): Router {
+    return this._router
   }
 }

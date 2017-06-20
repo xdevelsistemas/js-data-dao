@@ -11,11 +11,11 @@ export class SendMail {
   constructor ( mailConfig: MailConfig, transporter?: nodemailer.Transporter ) {
     this.mailConfig = mailConfig
     const options = {
-      host: this.mailConfig.getHost(),
-      port: this.mailConfig.getPort(),
+      host: this.mailConfig.host,
+      port: this.mailConfig.port,
       auth: {
-        user: this.mailConfig.getUser(),
-        pass: this.mailConfig.getPassword()
+        user: this.mailConfig.user,
+        pass: this.mailConfig.password
       }
     }
     this.transporter = nodemailer.createTransport( transporter || smtpTransport( options ) )
@@ -40,7 +40,7 @@ export class SendMail {
   private sendMail ( to: string, subject: string, html: string ): Bluebird<nodemailer.SentMessageInfo> {
     const options: nodemailer.SendMailOptions = {
       // from === nome da empresa
-      from: `${this.mailConfig.getFrom()} <${this.mailConfig.getEmail()}>`,
+      from: `${this.mailConfig.from} <${this.mailConfig.email}>`,
       // para quem o email será enviado
       to,
       // assunto do email
@@ -54,9 +54,9 @@ export class SendMail {
   private generateHtml ( name: string, email: string, url: string, type: TpEMail ) {
     let chooseTemplate = ( t: TpEMail ) => {
       if ( t === TpEMail.confirmation ) {
-        return path.join( this.mailConfig.getLayoutPath(), `confirmation.hbs` )
+        return path.join( this.mailConfig.layoutPath, `confirmation.hbs` )
       } else {
-        return path.join( this.mailConfig.getLayoutPath(), `forgot.hbs` )
+        return path.join( this.mailConfig.layoutPath, `forgot.hbs` )
       }
     }
 

@@ -12,12 +12,12 @@ const Strategy = require( 'passport-jwt' ).Strategy
 
 export const passportJwt = ( store: JSData.DataStore, passport: any, appConfig: AppConfig ): any => {
   let params = {
-    secretOrKey: appConfig.getJwtConfig().secret,
+    secretOrKey: appConfig.jwtConfig.secret,
     jwtFromRequest: ExtractJwt.fromAuthHeader()
   }
 
   passport.use( new Strategy( params, ( token: any, done: Function ) => {
-    store.findAll( appConfig.getUsersTable(), { where: { id: token.id } } )
+    store.findAll( appConfig.usersTable, { where: { id: token.id } } )
       .then(( users: IBaseUser[] ) => {
         if ( !users.length ) {
           throw new APIError( 'Usuário não encontrado', 401 )
@@ -28,7 +28,7 @@ export const passportJwt = ( store: JSData.DataStore, passport: any, appConfig: 
           throw new APIError( 'Cliente ou usuário desabilitado', 401 )
         } else {
           let u = user
-          u.isAdmin = u.companyAlias === appConfig.getMainCompany()
+          u.isAdmin = u.companyAlias === appConfig.mainCompany
           return done( null, {
             id: u.id,
             name: u.name,
@@ -59,7 +59,7 @@ export const jwtGenerator = ( store: JSData.DataStore, appConfig: AppConfig ) =>
         email: email
       }
     }
-    return store.findAll( appConfig.getUsersTable(), options )
+    return store.findAll( appConfig.usersTable, options )
       .then(( users: Array<IBaseUser> ) => {
         let user: IBaseUser = _.head( users )
         if ( !user ) {
@@ -75,8 +75,8 @@ export const jwtGenerator = ( store: JSData.DataStore, appConfig: AppConfig ) =>
         let encryptedPassword: boolean = resp[ 1 ]
         if ( encryptedPassword ) {
           delete user.password
-          let days: string = appConfig.getExpirationDays() ? appConfig.getExpirationDays().toString( 10 ) : '3'
-          return res.status( 200 ).json( `JWT ${jwt.sign( user, appConfig.getJwtConfig().secret, { expiresIn: `${days} days` } )}` )
+          let days: string = appConfig.expirationDays ? appConfig.expirationDays.toString( 10 ) : '3'
+          return res.status( 200 ).json( `JWT ${jwt.sign( user, appConfig.jwtConfig.secret, { expiresIn: `${days} days` } )}` )
         }
         throw new APIError( 'Senha inválida', 401 )
       } )

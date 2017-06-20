@@ -35,8 +35,8 @@ let handleJSData = ( config: AppConfig ): JSData.DataStore => {
    * Definindo o adaptador JSData para o projeto
    */
   const store: JSData.DataStore = new JSData.DataStore()
-  store.registerAdapter( config.dbConfig.getDatabase(),
-    config.dbConfig.getAdapter(),
+  store.registerAdapter( config.dbConfig.database,
+    config.dbConfig.adapter,
     { 'default': true }
   )
   return store
@@ -71,8 +71,8 @@ let loginRouter = new LoginRouter( store, config )
  * create api/v1/test router for CRUD operation
  */
 app.use( passport.initialize() )
-app.use( '/api/v1/forgot', router.getRouter() )
-app.use( '/api/v1/login', loginRouter.getRouter() )
+app.use( '/api/v1/forgot', router.router )
+app.use( '/api/v1/login', loginRouter.router )
 new ErrorHandler().handleError( app )
 /**
  * inicio dos testes

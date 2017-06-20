@@ -19,8 +19,8 @@ let handleJSData = (config: AppConfig): JSData.DataStore => {
    * Definindo o adaptador JSData para o projeto
    */
   const store: JSData.DataStore = new JSData.DataStore()
-  store.registerAdapter(config.dbConfig.getDatabase(),
-    config.dbConfig.getAdapter(),
+  store.registerAdapter(config.dbConfig.database,
+    config.dbConfig.adapter,
     { 'default': true }
   )
   return store
@@ -61,7 +61,7 @@ export class TestUserDAO extends DAO<IBaseUser> {
       },
       required: ['id', 'name', 'username', 'email', 'password', 'active']
     }
-    super(store, TestUser , appConfig.getUsersTable(), schema)
+    super(store, TestUser , appConfig.usersTable, schema)
   }
 }
 

@@ -8,87 +8,87 @@ import { MailConfig } from './mail-config'
 export class AppConfig {
   public mailConfig: MailConfig
   public dbConfig: DatabaseConfig
-  private mainCompany: string
-  private isProd: boolean
-  private cryptoAlgorithm: string
-  private cryptoPassword: string
-  private expirationDays: number
-  private jwtConfig: any
-  private usersTable: string
-  private signUpUrl: string
-  private forgotUrl: string
+  private _mainCompany: string
+  private _isProd: boolean
+  private _cryptoAlgorithm: string
+  private _cryptoPassword: string
+  private _expirationDays: number
+  private _jwtConfig: any
+  private _usersTable: string
+  private _signUpUrl: string
+  private _forgotUrl: string
 
-  private corsAllowed: string
-  private corsAllowMethods: string
-  private corsAllowHeaders: string
+  private _corsAllowed: string
+  private _corsAllowMethods: string
+  private _corsAllowHeaders: string
 
   constructor () {
-    this.corsAllowed = getEnv('CORSALLOWED') || '*'
-    this.corsAllowMethods = getEnv('CORS_ALLOW_METHODS') || 'GET,PUT,POST,DELETE,OPTIONS,PATCH'
-    this.corsAllowHeaders = getEnv('CORS_ALLOW_HEADERS') || 'Origin, X-Requested-With, Content-Type, Accept, Authorization, If-Modified-Since, Cache-Control, enctype, Pragma'
-    this.mainCompany = getEnv('MAIN_COMPANY')
-    this.isProd = ( getEnv('NODE_ENV') === 'production' )
-    this.cryptoAlgorithm = getEnv('CRYPTO_ALGORITHM') || 'aes192'
-    this.cryptoPassword = getEnv('CRYPTO_PASSWORD')
-    this.expirationDays = Number.parseInt( getEnv('EXPIRATION_DAYS'), 10 ) || 3
-    this.usersTable = getEnv('USERS_TABLE') || 'users'
-    this.signUpUrl = getEnv('SIGNUP_URL') || 'http://foo.bar/auth/signup'
-    this.forgotUrl = getEnv('FORGOT_URL') || 'http://foo.bar/auth/forgot'
-    this.jwtConfig = {
+    this._corsAllowed = getEnv('CORSALLOWED') || '*'
+    this._corsAllowMethods = getEnv('CORS_ALLOW_METHODS') || 'GET,PUT,POST,DELETE,OPTIONS,PATCH'
+    this._corsAllowHeaders = getEnv('CORS_ALLOW_HEADERS') || 'Origin, X-Requested-With, Content-Type, Accept, Authorization, If-Modified-Since, Cache-Control, enctype, Pragma'
+    this._mainCompany = getEnv('MAIN_COMPANY')
+    this._isProd = ( getEnv('NODE_ENV') === 'production' )
+    this._cryptoAlgorithm = getEnv('CRYPTO_ALGORITHM') || 'aes192'
+    this._cryptoPassword = getEnv('CRYPTO_PASSWORD')
+    this._expirationDays = Number.parseInt( getEnv('EXPIRATION_DAYS'), 10 ) || 3
+    this._usersTable = getEnv('USERS_TABLE') || 'users'
+    this._signUpUrl = getEnv('SIGNUP_URL') || 'http://foo.bar/auth/signup'
+    this._forgotUrl = getEnv('FORGOT_URL') || 'http://foo.bar/auth/forgot'
+    this._jwtConfig = {
       strategy: 'jwt',
       secret: getEnv('APP_JWT_SECRET'),
-      session: { session: ( getEnv('APP_JWT_SESSION') || false as boolean ) }
+      session: { session: ( getEnv('APP_JWT_SESSION') || false ) as boolean }
     }
     this.mailConfig = new MailConfig()
     this.dbConfig = new DatabaseConfig()
 
   }
 
-  getMainCompany (): string {
-    return this.mainCompany
+  get mainCompany (): string {
+    return this._mainCompany
   }
 
-  getIsProd (): boolean {
-    return this.isProd
+  get isProd (): boolean {
+    return this._isProd
   }
 
-  getCryptoAlgorithm (): string {
-    return this.cryptoAlgorithm
+  get cryptoAlgorithm (): string {
+    return this._cryptoAlgorithm
   }
 
-  getCryptoPassword (): string {
-    return this.cryptoPassword
+  get cryptoPassword (): string {
+    return this._cryptoPassword
   }
 
-  getExpirationDays (): number {
-    return this.expirationDays
+  get expirationDays (): number {
+    return this._expirationDays
   }
 
-  getUsersTable (): string {
-    return this.usersTable
+  get usersTable (): string {
+    return this._usersTable
   }
 
-  getJwtConfig (): any {
-    return this.jwtConfig
+  get jwtConfig (): any {
+    return this._jwtConfig
   }
 
-  getSignUpUrl (): string {
-    return this.signUpUrl
+  get signUpUrl (): string {
+    return this._signUpUrl
   }
 
-  getForgotUrl (): string {
-    return this.forgotUrl
+  get forgotUrl (): string {
+    return this._forgotUrl
   }
 
-  getCorsAllowed (): string {
-    return this.corsAllowed
+  get corsAllowed (): string {
+    return this._corsAllowed
   }
-  getCorsAllowMethods (): string {
-    return this.corsAllowMethods
+  get corsAllowMethods (): string {
+    return this._corsAllowMethods
   }
 
-  getCorsAllowHeaders (): string {
-    return this.corsAllowHeaders
+  get corsAllowHeaders (): string {
+    return this._corsAllowHeaders
   }
 
 }
