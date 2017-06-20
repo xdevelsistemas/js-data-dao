@@ -325,11 +325,10 @@ export abstract class DAO<T extends IBaseModel> implements IDAO<T> {
    */
   public validateRequiredFields (obj: any, required: string[] = []): boolean {
     let allCorrect: boolean = true
-    const fields = Object.keys(obj)
-    fields.forEach(el => {
-      if (_.indexOf(required, el) !== -1) {
-        allCorrect = allCorrect && !_.isEmpty(_.toString(obj[el]))
-      }
+    required.some(key => {
+      const field = obj[key]
+      allCorrect = !!field || _.isArray(field) || _.isBoolean(field)
+      return !allCorrect
     })
     return allCorrect
   }
