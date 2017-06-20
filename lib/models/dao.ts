@@ -32,11 +32,12 @@ export interface IValidateError extends Error {
  *
  * http://www.js-data.io/docs/query-syntax
  * @export
+ * @abstract
  * @class DAO
  * @implements {IDAO<T>}
  * @template T
  */
-export class DAO<T extends IBaseModel> implements IDAO<T> {
+export abstract class DAO<T extends IBaseModel> implements IDAO<T> {
   /**
    * propriedade que permite navegar e realizar as funcoes nativas da collection do js-data na entidade definida em T
    *
@@ -290,7 +291,7 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
    *
    * @memberOf DAO
    */
-  paginatedQuery (
+  public paginatedQuery (
     search: any = {}, user: IBaseUser, page?: number, limit?: number, order?: Array<string> | Array<Array<string>>, options?: any ): Promise<IResultSearch<T>> {
     let _page: number = search.page || page || 1
     let _limit: number = search.limit || limit || 10
@@ -312,6 +313,25 @@ export class DAO<T extends IBaseModel> implements IDAO<T> {
             } as IResultSearch<T>
           } )
       } )
+  }
+
+  /**
+   * Método para validar campos obrigatórios
+   *
+   * @param {*} obj
+   * @param {string[]} [required=[]]
+   * @returns {boolean}
+   * @memberof DAO
+   */
+  public validateRequiredFields (obj: any, required: string[] = []): boolean {
+    let allCorrect: boolean = true
+    const fields = Object.keys(obj)
+    fields.forEach(el => {
+      if (_.indexOf(required, el) !== -1) {
+        allCorrect = allCorrect && !_.isEmpty(_.toString(obj[el]))
+      }
+    })
+    return allCorrect
   }
 
 }
