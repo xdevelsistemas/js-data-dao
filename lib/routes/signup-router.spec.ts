@@ -32,8 +32,8 @@ let handleJSData = ( config: AppConfig ): JSData.DataStore => {
    * Definindo o adaptador JSData para o projeto
    */
   const store: JSData.DataStore = new JSData.DataStore()
-  store.registerAdapter( config.dbConfig.getDatabase(),
-    config.dbConfig.getAdapter(),
+  store.registerAdapter( config.dbConfig.database,
+    config.dbConfig.adapter,
     { 'default': true }
   )
   return store
@@ -78,9 +78,9 @@ app.use( bodyParser( { extended: true } ) )
  * create api/v1/test router for CRUD operation
  */
 app.use( passport.initialize() )
-app.use( '/api/v1/signup', router.getRouter() )
-app.use( '/api/v1/login', loginRouter.getRouter() )
-app.use( '/api/v1/users', authenticate( passport, config ), userRouter.getRouter() )
+app.use( '/api/v1/signup', router.router )
+app.use( '/api/v1/login', loginRouter.router )
+app.use( '/api/v1/users', authenticate( passport, config ), userRouter.router )
 new ErrorHandler().handleError( app )
 
 describe( 'SignUp Router', () => {

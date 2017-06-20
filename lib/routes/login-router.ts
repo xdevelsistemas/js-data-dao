@@ -5,22 +5,22 @@ import * as JSData from 'js-data'
 
 export class LoginRouter {
   store: JSData.DataStore
-  router: Router
   appConfig: AppConfig
+  private _router: Router
 
   constructor (store: JSData.DataStore, appConfig: AppConfig) {
     this.store = store
-    this.router = Router()
+    this._router = Router()
     this.appConfig = appConfig
     this.routers()
   }
 
   public routers () {
-    this.router.post('/', (req: Request, res: Response, next: NextFunction): Promise<Response> =>
+    this._router.post('/', (req: Request, res: Response, next: NextFunction): Promise<Response> =>
       jwtGenerator(this.store, this.appConfig)(req, res, next))
   }
 
-  public getRouter (): Router {
-    return this.router
+  public get router (): Router {
+    return this._router
   }
 }

@@ -50,9 +50,9 @@ export class Application {
 
   handleEnableCORS ( app: express.Application ): express.Application {
     app.use(( req, res, next ) => {
-      res.header( 'Access-Control-Allow-Origin', this.appConfig.getCorsAllowed() )
-      res.header( 'Access-Control-Allow-Methods', this.appConfig.getCorsAllowMethods() )
-      res.header( 'Access-Control-Allow-Headers', this.appConfig.getCorsAllowHeaders() )
+      res.header( 'Access-Control-Allow-Origin', this.appConfig.corsAllowed )
+      res.header( 'Access-Control-Allow-Methods', this.appConfig.corsAllowMethods )
+      res.header( 'Access-Control-Allow-Headers', this.appConfig.corsAllowHeaders )
       if ( 'OPTIONS' === req.method ) {
         return res.sendStatus( 200 )
       } else {
@@ -73,9 +73,9 @@ export class Application {
      * Definindo o adaptador JSData para o projeto
      */
     const store: JSData.DataStore = new JSData.DataStore()
-    store.registerAdapter( this.appConfig.dbConfig.getDatabase(),
-      this.appConfig.dbConfig.getAdapter(),
-      this.appConfig.dbConfig.getAdapterOptions()
+    store.registerAdapter( this.appConfig.dbConfig.database,
+      this.appConfig.dbConfig.adapter,
+      this.appConfig.dbConfig.adapterOptions
     )
     return store
   }

@@ -6,6 +6,7 @@ import { AppConfig } from '../config'
 import * as JSData from 'js-data'
 import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
+import * as assert from 'assert'
 chai.use( chaiAsPromised )
 chai.should()
 /**
@@ -17,8 +18,8 @@ let handleJSData = ( config: AppConfig ): JSData.DataStore => {
    * Definindo o adaptador JSData para o projeto
    */
   const store: JSData.DataStore = new JSData.DataStore()
-  store.registerAdapter( config.dbConfig.getDatabase(),
-    config.dbConfig.getAdapter(),
+  store.registerAdapter( config.dbConfig.database,
+    config.dbConfig.adapter,
     { 'default': true }
   )
   return store
@@ -507,5 +508,23 @@ describe( 'query com operações do "query-syntax"', () => {
     testSimpleDAO.collection.destroyAll( {} )
       .should.be.fulfilled
       .and.notify( done )
+  } )
+} )
+
+describe( 'Validations', () => {
+  const testSimpleDAO = new TestSimpleClassDAO( store, config )
+
+  it( 'required fields', () => {
+    const obj = { name: 'It\'s certainly not a test', keywords: ['a', 'b', 'c'], number: 154 }
+    const obj2 = { name: 'It\'s certainly not a test', keywords: [] as string[] }
+    const obj3 = { name: 'It\'s certainly not a test', isAdmin: false }
+    const obj4 = { name: 'It\'s certainly not a test', isAdmin: null as any }
+
+    assert(testSimpleDAO.validateRequiredFields(obj, ['name', 'keywords', 'number']), 'required validations fail')
+    assert(testSimpleDAO.validateRequiredFields(obj, ['name']), 'required validations fail')
+    assert(testSimpleDAO.validateRequiredFields(obj, ['keywords']), 'required validations fail')
+    assert(!testSimpleDAO.validateRequiredFields(obj2, ['name', 'number']), 'undefined is valid on required field')
+    assert(testSimpleDAO.validateRequiredFields(obj3, ['name', 'isAdmin']), 'required validations fail')
+    assert(!testSimpleDAO.validateRequiredFields(obj4, ['name', 'isAdmin']), 'null is valid on required fild')
   } )
 } )

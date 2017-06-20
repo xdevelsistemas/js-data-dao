@@ -51,7 +51,7 @@ export class UserDAO extends DAO<IBaseUser> {
       },
       required: ['id', 'name', 'username', 'email', 'password', 'active']
     }
-    super(store, User , appConfig.getUsersTable(), schema)
+    super(store, User , appConfig.usersTable, schema)
   }
 }
 
@@ -60,8 +60,8 @@ let handleJSData = (config: AppConfig): JSData.DataStore => {
    * Definindo o adaptador JSData para o projeto
    */
   const store: JSData.DataStore = new JSData.DataStore()
-  store.registerAdapter(config.dbConfig.getDatabase(),
-    config.dbConfig.getAdapter(),
+  store.registerAdapter(config.dbConfig.database,
+    config.dbConfig.adapter,
     { 'default': true }
   )
   return store

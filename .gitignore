@@ -1,7 +1,8 @@
-yarn.lock
 node_modules/
 rethinkdb_data/
-.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 .idea
 gulpfile.js
 gulpfile.js.map
