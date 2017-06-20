@@ -11,7 +11,7 @@ export class DatabaseConfig {
     let opts: JSDataRethink.IBaseRethinkDBAdapter = {
       rOpts: {
         servers: [
-          { host: getEnv('SERVER_RETHINKDB_HOST') || 'localhost' }
+          { host: getEnv('SERVER_RETHINKDB_HOST') || 'localhost', port: getEnv('SERVER_RETHINKDB_PORT') || 28015 }
         ],
         db: getEnv('SERVER_RETHINKDB_DB') || 'appserver'
       }
