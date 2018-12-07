@@ -17,7 +17,7 @@
     "xdevel"
   ],
   "files": [
-    "lib/**/*.ts",
+    "lib/**/*.d.ts",
     "lib/**/*.js",
     "lib/**/*.js.map"
   ],
