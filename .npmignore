@@ -1,0 +1,10 @@
+.github/
+.env*
+.DS_Store
+Thumbs.db
+.vscode/
+coverage/
+docs/
+*.log
+lib/**/*.ts
+!lib/**/*.d.ts

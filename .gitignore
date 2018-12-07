@@ -49,5 +49,6 @@ jspm_packages
 out
 lib/**/*.js
 lib/**/*.js.map
+lib/**/*.d.ts
 index.d.ts
 npm-shrinkwrap.json
